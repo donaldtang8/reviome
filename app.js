@@ -17,6 +17,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const categoryRouter = require('./routes/categoryRoutes');
 const notificationRouter = require('./routes/notificationRoutes');
 const postRouter = require('./routes/postRoutes');
+const reportRouter = require('./routes/reportRoutes');
 const userRouter = require('./routes/userRoutes');
 
 /* GLOBAL MIDDLEWARES */
@@ -61,6 +62,7 @@ app.use((req, res, next) => {
 app.use('/api/categories', categoryRouter);
 app.use('/api/notifications', notificationRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/reports', reportRouter);
 app.use('/api/users', userRouter);
 
 // for any routes that we have not caught
