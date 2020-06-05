@@ -15,6 +15,7 @@ const globalErrorHandler = require('./controllers/errorController');
 
 /* ROUTE IMPORTS*/
 const categoryRouter = require('./routes/categoryRoutes');
+const notificationRouter = require('./routes/notificationRoutes');
 const postRouter = require('./routes/postRoutes');
 const userRouter = require('./routes/userRoutes');
 
@@ -58,6 +59,7 @@ app.use((req, res, next) => {
 
 /* ROUTES */
 app.use('/api/categories', categoryRouter);
+app.use('/api/notifications', notificationRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/users', userRouter);
 

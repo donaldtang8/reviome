@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('./../controllers/authController');
 const postController = require('./../controllers/postController');
 const userController = require('./../controllers/userController');
+const notificationController = require('./../controllers/notificationController');
 const Post = require('./../models/postModel');
 
 const router = express.Router();
@@ -15,7 +16,12 @@ router.use(authController.protect);
 router
   .route('/')
   .get(postController.getAll)
-  .post(userController.setMe, postController.createOne);
+  .post(
+    userController.setMe,
+    notificationController.setNotif,
+    postController.createOne,
+    notificationController.addPostNotification
+  );
 
 router.route('/user/:userId/saves').get(postController.getSavedPostsByUser);
 router.route('/user/:userId').get(postController.getPostsByUser);
@@ -28,8 +34,18 @@ router
   .route('/category/slug/:slug*')
   .get(postController.getPostsByCategorySlug);
 
-router.route('/:id/like').patch(postController.likePostById);
-router.route('/:id/unlike').patch(postController.unlikePostById);
+router
+  .route('/:id/like')
+  .patch(
+    postController.likePostById,
+    notificationController.addLikeNotification
+  );
+router
+  .route('/:id/unlike')
+  .patch(
+    postController.unlikePostById,
+    notificationController.removeLikeNotification
+  );
 
 router.route('/saves').get(postController.getSavedPosts);
 router.route('/:id/save').patch(postController.savePostById);
@@ -40,8 +56,10 @@ router
   .get(postController.getOne)
   .delete(
     authController.restrictToMe(Post),
+    notificationController.setNotif,
     postController.removePostComments,
-    postController.deleteOne
+    postController.deleteOne,
+    notificationController.removePostNotification
   );
 
 module.exports = router;
