@@ -7,76 +7,76 @@ const userSchema = new mongoose.Schema(
   {
     fName: {
       type: String,
-      required: [true, 'First name is required']
+      required: [true, 'First name is required'],
     },
     lName: {
       type: String,
-      required: [true, 'Last name is required']
+      required: [true, 'Last name is required'],
     },
     uName: {
       type: String,
       required: [true, 'Username is required'],
       unique: true,
       lowercase: true,
-      minlength: 3
+      minlength: 3,
     },
     email: {
       type: String,
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
-      validate: [validator.isEmail, 'Please provide a valid email']
+      validate: [validator.isEmail, 'Please provide a valid email'],
     },
     photo: {
       type: String,
-      default: 'default.jpg'
+      default: 'default.jpg',
     },
     role: {
       type: String,
       enum: {
         values: ['user', 'creator', 'admin'],
-        message: 'Role is either: user or creator'
+        message: 'Role is either: user or creator',
       },
-      default: 'user'
+      default: 'user',
     },
     followers: {
       type: Number,
-      default: 0
+      default: 0,
     },
     following: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     block_from: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     block_to: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     pass: {
       type: String,
       required: [true, 'Please provide a password'],
       minlength: 8,
-      select: false
+      select: false,
     },
     passConfirm: {
       type: String,
       required: [true, 'Please provide a password'],
       validate: {
         // 'this' only works on create and save because password object will not refer to updated password if not saved
-        validator: function(pass) {
+        validator: function (pass) {
           return pass === this.passConfirm;
         },
-        message: 'Passwords do not match'
-      }
+        message: 'Passwords do not match',
+      },
     },
     passChangedAt: Date,
     passResetToken: String,
@@ -84,24 +84,24 @@ const userSchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
-      select: false
-    }
+      select: false,
+    },
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
 /* INDEX */
 userSchema.index({ uName: 1 });
 
-/* VIRTUALS MIDDLEWARE */
+/* VIRTUALS */
 /**
  * @function  Virtual fullName Getter
  * @description
  **/
-userSchema.virtual('fullName').get(function() {
+userSchema.virtual('fullName').get(function () {
   return this.fName + ' ' + this.lName;
 });
 
@@ -112,7 +112,7 @@ userSchema.virtual('fullName').get(function() {
 userSchema.virtual('posts', {
   ref: 'Post',
   foreignField: 'user',
-  localField: '_id'
+  localField: '_id',
 });
 
 /* DOCUMENT MIDDLEWARE */
@@ -121,7 +121,7 @@ userSchema.virtual('posts', {
  * @description Automatically hash passwords if password is being created or modified
  * @this Current document being created or modified
  **/
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // only run this function if password was modified
   if (!this.isModified('pass')) return next();
   // encrypt this password with a "cost" - salt of 12
@@ -136,7 +136,7 @@ userSchema.pre('save', async function(next) {
  * @description Set passwordChangedAt time if password is being modified
  * @this Current document being created or modified
  **/
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   // only run this function if password was modified
   if (!this.isModified('pass') || this.isNew) return next();
   // update passwordChangedAt
@@ -150,7 +150,7 @@ userSchema.pre('save', function(next) {
  * @description Only query active=true users
  * @this Current query
  **/
-userSchema.pre(/^find/, function(next) {
+userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
@@ -160,10 +160,10 @@ userSchema.pre(/^find/, function(next) {
  * @description Populate followers and following
  * @this Current query
  **/
-userSchema.pre(/^find/, function() {
+userSchema.pre(/^find/, function () {
   this.populate({
     path: 'following',
-    select: '-__v -passChangedAt -role -email'
+    select: '-__v -passChangedAt -role -email',
   });
 });
 
@@ -175,7 +175,7 @@ userSchema.pre(/^find/, function() {
  * @param userPassword - Password of user
  * @return True if password correct, false otherwise
  **/
-userSchema.methods.correctPassword = async function(
+userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
@@ -188,7 +188,7 @@ userSchema.methods.correctPassword = async function(
  * @param JWTTimestamp Timestamp of when JWT was created (milliseconds)
  * @return True if password changed after token issued, false otherwise
  **/
-userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   let changedTimestamp;
   if (this.passChangedAt) {
     // convert date object to time in milliseconds
@@ -203,7 +203,7 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
  * @description Create a password reset token
  * @return Reset Token
  **/
-userSchema.methods.createPasswordResetToken = function() {
+userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
   // save the encrypted version of the reset token in the database
   this.passResetToken = crypto
@@ -221,8 +221,8 @@ userSchema.methods.createPasswordResetToken = function() {
  * @description Checks if user is already being followed
  * @return True if already following, false if not followed yet
  **/
-userSchema.methods.isFollowingUser = function(userId) {
-  return this.following.some(user => user.id === userId);
+userSchema.methods.isFollowingUser = function (userId) {
+  return this.following.some((user) => user.id === userId);
 };
 
 /**
@@ -230,8 +230,8 @@ userSchema.methods.isFollowingUser = function(userId) {
  * @description Checks if user is already being blocked
  * @return True if already blocking, false if not blocked yet
  **/
-userSchema.methods.isBlockingUser = function(userId) {
-  return this.block_to.some(user => user.toString() === userId);
+userSchema.methods.isBlockingUser = function (userId) {
+  return this.block_to.some((user) => user.toString() === userId);
 };
 
 const User = mongoose.model('User', userSchema);

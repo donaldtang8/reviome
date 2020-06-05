@@ -14,6 +14,8 @@ const AppError = require('./utils/appError.js');
 const globalErrorHandler = require('./controllers/errorController');
 
 /* ROUTE IMPORTS*/
+const categoryRouter = require('./routes/categoryRoutes');
+const postRouter = require('./routes/postRoutes');
 const userRouter = require('./routes/userRoutes');
 
 /* GLOBAL MIDDLEWARES */
@@ -55,6 +57,8 @@ app.use((req, res, next) => {
 });
 
 /* ROUTES */
+app.use('/api/categories', categoryRouter);
+app.use('/api/posts', postRouter);
 app.use('/api/users', userRouter);
 
 // for any routes that we have not caught
