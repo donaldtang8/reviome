@@ -46,7 +46,6 @@ export const login = (formData, history) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data.data.user,
     });
-    dispatch(getNotifications());
     history.push('/');
   } catch (err) {
     dispatch({

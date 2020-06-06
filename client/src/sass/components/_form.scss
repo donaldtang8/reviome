@@ -1,0 +1,65 @@
+.form__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 5vh;
+  }
+
+  input {
+    font-family: inherit;
+    padding: 0.5rem 1rem;
+    border: none;
+  }
+
+  input:not([type='submit']) {
+    &:focus {
+      outline: none;
+      box-shadow: 0 1rem 2rem rgba(black, 0.1);
+    }
+
+    // &:focus:valid {
+    //   border-bottom-left-radius: 0;
+    //   border-bottom-right-radius: 0;
+    //   border-bottom: 3px solid var(--color-success);
+    // }
+
+    // &:focus:invalid {
+    //   border-bottom-left-radius: 0;
+    //   border-bottom-right-radius: 0;
+    //   border-bottom: 3px solid var(--color-danger);
+    // }
+
+    &:not(:last-child) {
+      margin-bottom: 1vh;
+    }
+  }
+
+  input[type='file'] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  input[type='file'] + label {
+    text-align: center;
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+  }
+
+  input[type='file'] + label:hover {
+    cursor: pointer;
+    background-color: var(--color-button-hover);
+  }
+
+  input[type='file']:focus + label {
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+}

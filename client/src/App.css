@@ -1,38 +1,222 @@
-.App {
-  text-align: center;
-}
+* {
+  margin: 0;
+  padding: 0; }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+*,
+*::before,
+*::after {
+  box-sizing: inherit; }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+:root {
+  --color-text: #000;
+  --color-light: #fff;
+  --color-dark: #000;
+  --color-success: #2ada64;
+  --color-danger: #ff2119;
+  --color-primary: #eb2f64;
+  --color-primary-light: #ff3366;
+  --color-primary-dark: #e32259;
+  --color-header-shadow: #d8d8d8;
+  --color-body: #f0f2f5;
+  --color-card-background: #fff;
+  --color-input-background: #f0f2f5;
+  --color-card-item: #7e848a;
+  --color-card-item-hover: #f2f2f2;
+  --color-input-text: #a7a9ad;
+  --color-input-caret: #000;
+  --color-button: #e4e6eb;
+  --color-button-hover: #d8dadf;
+  --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
+    inset 0 0 0 1px var(--shadow-inset);
+  --color-hover-light: #f2f2f2;
+  --color-hover-dark: #d0d0d0;
+  --shadow-1: rgba(0, 0, 0, 0.1);
+  --shadow-2: rgba(0, 0, 0, 0.2);
+  --shadow-inset: rgba(255, 255, 255, 0.5); }
 
-.App-header {
-  background-color: #282c34;
+[data-theme='dark'] {
+  --color-text: #fff;
+  --color-light: #242526;
+  --color-primary: #eb2f64;
+  --color-primary-light: #ff3366;
+  --color-primary-dark: #ee205b;
+  --color-header-shadow: #3a3b3c;
+  --color-body: #18191a;
+  --color-card-background: #242526;
+  --color-card-item: #94989a;
+  --color-card-item-hover: #3a3b3c;
+  --color-input-background: #3a3b3c;
+  --color-input-caret: #fff;
+  --color-button: #3a3b3c;
+  --color-button-hover: #4e4f50;
+  --color-dropdown-button: #3e4042;
+  --color-dropdown-button-hover: #525355;
+  --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
+    inset 0 0 0 1px var(--shadow-inset);
+  --color-hover-light: #3a3b3c;
+  --color-hover-dark: #303031;
+  --shadow-1: rgba(0, 0, 0, 0.1);
+  --shadow-2: rgba(0, 0, 0, 0.2);
+  --shadow-inset: rgba(255, 255, 255, 0.05); }
+
+html {
+  margin: 0;
+  font-size: 62.5%; }
+  @media only screen and (min-width: 112.5em) {
+    html {
+      font-size: 100%; } }
+  @media only screen and (max-width: 112.5em) {
+    html {
+      font-size: 90%; } }
+  @media only screen and (max-width: 75rem) {
+    html {
+      font-size: 80%; } }
+  @media only screen and (max-width: 56.25em) {
+    html {
+      font-size: 70%; } }
+
+body {
+  margin: 0;
+  box-sizing: border-box;
   min-height: 100vh;
+  color: var(--color-text); }
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem); }
+  80% {
+    transform: translateX(1rem); }
+  100% {
+    opacity: 1;
+    transform: translate(0); } }
+
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem); }
+  80% {
+    transform: translateX(-1rem); }
+  100% {
+    opacity: 1;
+    transform: translate(0); } }
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px); }
+  100% {
+    opacity: 1;
+    transform: translate(0); } }
+
+@keyframes moveInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px); }
+  100% {
+    opacity: 1;
+    transform: translate(0); } }
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    box-shadow: none; }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.25); }
+  100% {
+    transform: scale(1);
+    box-shadow: none; } }
+
+.form__container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100%; }
+  .form__container:not(:last-child) {
+    margin-bottom: 5vh; }
+  .form__container input {
+    font-family: inherit;
+    padding: 0.5rem 1rem;
+    border: none; }
+  .form__container input:not([type='submit']):focus {
+    outline: none;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1); }
+  .form__container input:not([type='submit']):not(:last-child) {
+    margin-bottom: 1vh; }
+  .form__container input[type='file'] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1; }
+  .form__container input[type='file'] + label {
+    text-align: center;
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 0.8rem; }
+  .form__container input[type='file'] + label:hover {
+    cursor: pointer;
+    background-color: var(--color-button-hover); }
+  .form__container input[type='file']:focus + label {
+    outline: -webkit-focus-ring-color auto 5px; }
+
+.spinner__overlay {
+  grid-column: center-start / center-end;
+  height: 10rem;
+  width: 100%;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  align-items: center; }
 
-.App-link {
-  color: #61dafb;
-}
+.spinner__container {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(195, 195, 195, 0.6);
+  border-radius: 50%;
+  border-top-color: #636767;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite; }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+@keyframes spin {
   to {
-    transform: rotate(360deg);
-  }
-}
+    -webkit-transform: rotate(360deg); } }
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg); } }
+
+.container {
+  height: 100vh; }
+
+.body__container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-body); }
+
+.main__container {
+  height: 100%;
+  display: flex;
+  flex: auto;
+  flex-direction: row; }
+
+.content__container {
+  display: grid;
+  grid-template-columns: [full-padding-start] repeat(2, minmax(min-content, 1fr)) [full-start] minmax(min-content, 1fr) [large-start] minmax(8rem, 1fr) [medium-start] minmax(min-content, 10rem) [center-start] repeat(4, [col-start] minmax(min-content, 10rem) [col-end]) [center-end] minmax(min-content, 10rem) [medium-end] minmax(8rem, 1fr) [large-end] minmax(min-content, 1fr) [full-end] repeat(2, minmax(min-content, 1fr)) [full-padding-end];
+  height: 93vh;
+  overflow-y: auto;
+  overflow-x: hidden; }
+
+.section__container {
+  grid-column: center-start / center-end; }
+  @media only screen and (max-width: 1200px) {
+    .section__container .section__container {
+      grid-column: 3 / 13; } }
+
+.card__container {
+  background-color: var(--color-card-background); }
