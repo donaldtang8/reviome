@@ -12,6 +12,9 @@ import Spinner from './components/spinner/spinner';
 
 // Pages
 const Login = lazy(() => import('./pages/auth/login'));
+const Register = lazy(() => import('./pages/auth/register'));
+const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
+const ResetPassword = lazy(() => import('./pages/auth/reset-password'));
 
 const App = () => {
   return (
@@ -22,7 +25,18 @@ const App = () => {
             <div className="content__container">
               <Suspense fallback={<Spinner />}>
                 <Switch>
-                  <Route exact path="/" component={Login} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/register" component={Register} />
+                  <Route
+                    exact
+                    path="/forgot-password"
+                    component={ForgotPassword}
+                  />
+                  <Route
+                    exact
+                    path="/reset-password"
+                    component={ResetPassword}
+                  />
                 </Switch>
               </Suspense>
             </div>
