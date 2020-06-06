@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:root {
+  // main colors
+  --color-text: #000;
+  --color-light: #fff;
+  --color-dark: #000;
+  --color-success: #2ada64;
+  --color-danger: #ff2119;
+  // theme colors
+  --color-primary: #eb2f64;
+  --color-primary-light: #ff3366;
+  --color-primary-dark: #e32259;
+  // layout colors
+  --color-header-shadow: #d8d8d8;
+  --color-body: #f0f2f5;
+  --color-card-background: #fff;
+  --color-input-background: #f0f2f5;
+  --color-card-item: #7e848a;
+  --color-card-item-hover: #f2f2f2;
+  --color-input-text: #a7a9ad;
+  --color-input-caret: #000;
+  // component colors
+  --color-button: #e4e6eb;
+  --color-button-hover: #d8dadf;
+  // utility colors
+  --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
+    inset 0 0 0 1px var(--shadow-inset);
+  --color-hover-light: #f2f2f2;
+  --color-hover-dark: #d0d0d0;
+  // shadows
+  --shadow-1: rgba(0, 0, 0, 0.1);
+  --shadow-2: rgba(0, 0, 0, 0.2);
+  --shadow-inset: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='dark'] {
+  // main colors
+  --color-text: #fff;
+  --color-light: #242526;
+  // theme colors
+  --color-primary: #eb2f64;
+  --color-primary-light: #ff3366;
+  --color-primary-dark: #ee205b;
+  // layout colors
+  --color-header-shadow: #3a3b3c;
+  --color-body: #18191a;
+  --color-card-background: #242526;
+  --color-card-item: #94989a;
+  --color-card-item-hover: #3a3b3c;
+  --color-input-background: #3a3b3c;
+  --color-input-caret: #fff;
+  // component colors
+  --color-button: #3a3b3c;
+  --color-button-hover: #4e4f50;
+  --color-dropdown-button: #3e4042;
+  --color-dropdown-button-hover: #525355;
+  // utility colors
+  --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
+    inset 0 0 0 1px var(--shadow-inset);
+  --color-hover-light: #3a3b3c;
+  --color-hover-dark: #303031;
+  // shadows
+  --shadow-1: rgba(0, 0, 0, 0.1);
+  --shadow-2: rgba(0, 0, 0, 0.2);
+  --shadow-inset: rgba(255, 255, 255, 0.05);
+}
+
+html {
+  margin: 0;
+  font-size: 62.5%;
+
+  @include respond(big-desktop) {
+    font-size: 100%;
+  }
+
+  @include respond(med-desktop) {
+    font-size: 90%;
+  }
+
+  @include respond(tab-land) {
+    font-size: 80%;
+  }
+
+  @include respond(tab-port) {
+    font-size: 70%;
+  }
+}
+
+body {
+  margin: 0;
+  // background styles
+  box-sizing: border-box;
+  min-height: 100vh;
+  color: var(--color-text);
+}
