@@ -61,7 +61,6 @@ export default function (state = initialState, action) {
         user: { ...state.user, following: payload },
         loading: false,
       };
-
     case AUTH_ERROR:
       return state;
     default:
