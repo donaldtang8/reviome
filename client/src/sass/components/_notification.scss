@@ -1,0 +1,116 @@
+.notification {
+  &__dropdown {
+    width: 15rem;
+  }
+
+  &__item {
+    position: relative;
+
+    &--img {
+      margin-right: 1rem;
+      img {
+        height: 3rem;
+        width: 3rem;
+        border-radius: 50%;
+      }
+    }
+
+    &--main {
+      height: 100%;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      display: flex;
+      border-radius: 0.8rem;
+    }
+
+    &--main:hover {
+      cursor: pointer;
+      background-color: var(--color-hover-light);
+    }
+
+    &--main:hover &--action {
+      visibility: visible;
+    }
+
+    &--action {
+      position: absolute;
+      top: 0.5rem;
+      right: 0;
+    }
+
+    &--action:hover {
+      cursor: pointer;
+      background-color: #242526;
+    }
+
+    &--bubble {
+      @include flexCenter();
+      font-size: 0.85rem;
+      position: absolute;
+      background-color: red;
+      height: 1.2rem;
+      width: 1.2rem;
+      border-radius: 0.8rem;
+      top: -0.2rem;
+      right: -0.5rem;
+    }
+
+    &--error {
+      text-align: center;
+    }
+
+    &--error:hover {
+      cursor: default;
+    }
+  }
+
+  &__action {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0;
+    border-radius: 0.8rem;
+  }
+
+  &__action:hover {
+    cursor: pointer;
+    background-color: var(--color-hover-light);
+  }
+
+  &__error {
+    padding: 0.5rem 0;
+    text-align: center;
+  }
+
+  /* Notification Item */
+  &__container {
+    background-color: var(--color-light);
+    border-radius: 3px;
+    display: flex;
+  }
+
+  &__container:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__header {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--img {
+      border-radius: 50%;
+      height: 3rem;
+      width: 3rem;
+    }
+
+    &--name {
+      white-space: nowrap;
+    }
+  }
+
+  &__body {
+    width: 100%;
+    padding: 1rem;
+  }
+}

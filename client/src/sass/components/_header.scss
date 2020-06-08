@@ -1,0 +1,60 @@
+.header {
+  background-color: var(--color-light);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 7vh;
+  padding: 2rem 0;
+  width: 100%;
+  box-shadow: 0px 1.5px 1px var(--color-header-shadow);
+  z-index: 5;
+
+  &__nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+  }
+
+  &__logo > a {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+
+  &__item {
+    position: relative;
+
+    &--img {
+      border-radius: 50%;
+      height: 2.5rem;
+      width: 2.5rem;
+      margin-right: 0.5rem;
+    }
+
+    &--notification {
+      font-size: 0.8rem;
+      height: 1.75rem;
+      width: 1.75rem;
+      border-radius: 50%;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.1rem;
+
+      // use flexbox to center text inside notification bubble
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &__item:not(:last-child) {
+    margin-right: 1rem;
+  }
+}

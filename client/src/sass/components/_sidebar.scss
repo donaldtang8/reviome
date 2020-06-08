@@ -1,0 +1,38 @@
+.sidebar {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    height: 93vh;
+    min-width: min-content;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 0.1rem;
+
+    a {
+      padding: 0.5rem 1rem;
+    }
+
+    &--item {
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: inline-block;
+      border-radius: 0.8rem;
+      width: 18rem;
+      padding: 1rem 3rem;
+    }
+
+    &--item:hover {
+      cursor: pointer;
+      background-color: var(--color-hover-dark);
+    }
+
+    // &--selected {
+    //   border-right: 3px solid var(--color-primary);
+    //   color: var(--color-primary);
+    // }
+  }
+}

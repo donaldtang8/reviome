@@ -10,6 +10,8 @@ import Spinner from './components/spinner/spinner';
 import AuthRoute from './utils/routes/AuthRoute';
 
 // Layout components
+import Header from './components/header/header';
+import Sidebar from './components/sidebar/sidebar';
 
 // Pages
 const Login = lazy(() => import('./pages/auth/login'));
@@ -24,7 +26,9 @@ const App = () => {
     <div className="App">
       <div className="container">
         <div className="body__container">
+          <Header />
           <div className="main__container">
+            <Sidebar />
             <div className="content__container">
               <Suspense fallback={<Spinner />}>
                 <Switch>

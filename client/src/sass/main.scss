@@ -7,12 +7,20 @@
 @import 'base/typography';
 @import 'base/utilities';
 
+@import 'components/header';
+@import 'components/sidebar';
+@import 'components/input';
 @import 'components/form';
+@import 'components/button';
 @import 'components/spinner';
 @import 'components/dropdown';
 @import 'components/post';
 @import 'components/comment';
+@import 'components/notification';
+@import 'components/popup';
+@import 'components/toggle-switch';
 
 @import 'pages/auth';
+@import 'pages/feed';
 
 @import 'layout/containers';
