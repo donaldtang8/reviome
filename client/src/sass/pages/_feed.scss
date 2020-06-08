@@ -1,0 +1,37 @@
+.posts__container {
+  padding: 3rem 0;
+
+  &--form {
+    background-color: var(--color-card-background);
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+
+    img {
+      height: 3.5rem;
+      width: 3.5rem;
+      border-radius: 50%;
+    }
+  }
+
+  &--end {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .input__btn {
+    background-color: var(--color-input-background);
+    color: var(--color-input-text);
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    width: 100%;
+    margin-left: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.8rem;
+  }
+
+  .input__btn:hover {
+    cursor: pointer;
+  }
+}

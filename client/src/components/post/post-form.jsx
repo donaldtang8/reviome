@@ -26,6 +26,21 @@ const PostForm = ({
 
   const { title, text, link } = formData;
 
+  const [visible, setVisible] = useState(true);
+  const [refs, setRefs] = useState({
+    popupRef: React.createRef(),
+  });
+
+  const { popupRef } = refs;
+
+  useEffect(() => {
+    if (visible) {
+      document.addEventListener('mousedown', handleCheckPopup);
+    } else {
+      document.removeEventListener('mousedown', handleCheckPopup);
+    }
+  }, [visible]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -38,63 +53,98 @@ const PostForm = ({
     history.push('/');
   };
 
-  return (
-    <div className="post-form__container">
-      <form className="form__container" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={title}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="text"
-          placeholder="Description"
-          value={text}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="link"
-          placeholder="Link"
-          value={link}
-          onChange={handleChange}
-          required
-        />
+  const handlePopup = (e) => {
+    const popup = document.querySelector('#popup');
+    const popupContent = document.querySelector('#popupContent');
+    popup.style.opacity = '0';
+    popup.style.visibility = 'hidden';
+    setVisible(false);
+    // popupContent.opacity = "0";
+    // popupContent.transform = "translate(0, 0) scale(0)";
+  };
 
-        <label htmlFor="categories">Choose a category:</label>
-        <select
-          id="categories"
-          name="category"
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled selected>
-            Choose a genre
-          </option>
-          {categories.map(
-            (cat) =>
-              cat.parent === null && (
-                <optgroup key={cat._id} label={cat.name}>
-                  {categories.map(
-                    (subcat) =>
-                      subcat.parent &&
-                      subcat.parent._id === cat._id && (
-                        <option key={subcat._id} value={subcat._id}>
-                          {subcat.name}
-                        </option>
-                      )
-                  )}
-                </optgroup>
-              )
-          )}
-        </select>
-        <input type="submit" value="Submit" />
-      </form>
+  const handleCheckPopup = (e) => {
+    if (popupRef.current) {
+      if (popupRef.current.contains(e.target)) {
+        return;
+      }
+      handlePopup();
+    }
+  };
+
+  return (
+    <div className="popup" id="popup">
+      <div ref={popupRef} className="popup__content" id="popup__content">
+        <div className="popup__header">
+          <div className="popup__header--title">Create Post</div>
+          <div className="popup__close" id="popup__close" onClick={handlePopup}>
+            &times;
+          </div>
+        </div>
+        <div className="popup__main post-form__container">
+          <form className="post-form__container--form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              value={title}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="text"
+              placeholder="Description"
+              value={text}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="link"
+              placeholder="Link"
+              value={link}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="categories">Choose a category:</label>
+            <select
+              className="post-form__container--select"
+              id="categories"
+              name="category"
+              onChange={handleChange}
+              defaultValue=""
+              required
+            >
+              <option value="" disabled>
+                Choose a genre
+              </option>
+              {categories.map(
+                (cat) =>
+                  cat.parent === null && (
+                    <optgroup key={cat._id} label={cat.name}>
+                      {categories.map(
+                        (subcat) =>
+                          subcat.parent &&
+                          subcat.parent._id === cat._id && (
+                            <option
+                              className="post-form__container--option"
+                              key={subcat._id}
+                              value={subcat._id}
+                            >
+                              {subcat.name}
+                            </option>
+                          )
+                      )}
+                    </optgroup>
+                  )
+              )}
+            </select>
+            <input className="input__submit" type="submit" value="Post" />
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

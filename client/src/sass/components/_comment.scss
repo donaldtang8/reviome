@@ -13,8 +13,31 @@
     }
 
     &--main {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-input-background);
+      border-radius: 0.8rem;
       flex: 1 1 auto;
-      margin-left: 2rem;
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    &--name {
+      font-weight: 800;
+    }
+
+    &--actions {
+      margin-left: 0.5rem;
+    }
+
+    &--action {
+      padding: 1rem;
+      border-radius: 0.8rem;
+    }
+
+    &--action:hover {
+      cursor: pointer;
+      background-color: var(--color-hover-light);
     }
   }
 
@@ -22,6 +45,7 @@
     &__container {
       display: flex;
       align-items: center;
+      padding: 1rem 0;
 
       img {
         height: 3.5rem;
@@ -31,15 +55,8 @@
     }
 
     &__form {
-      margin-left: 2rem;
-
-      input {
-        border: none;
-        background-color: var(--color-grey-dark-3);
-        border-radius: 3px;
-        padding: 0.5rem 1rem;
-        width: 100%;
-      }
+      margin-left: 1rem;
+      width: 100%;
     }
   }
 }

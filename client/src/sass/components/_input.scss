@@ -1,0 +1,49 @@
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+  background-color: var(--color-input-background);
+  color: var(--color-text);
+  border: none;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  width: 100%;
+  caret-color: var(--color-input-caret);
+}
+
+input:focus {
+  outline: none;
+}
+
+input[type='submit'] {
+  background-color: var(--color-primary);
+  color: var(--color-light);
+  border: none;
+  border-radius: 1rem;
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+input[type='submit']:hover {
+  background-color: var(--color-primary-dark);
+  cursor: pointer;
+}
+
+// create post button
+// .input {
+//   &__submit {
+//     background-color: var(--color-primary);
+//     color: var(--color-light);
+//     border: none;
+//     border-radius: 1rem;
+//     padding: 1rem;
+//     border-radius: 1rem;
+//     margin-top: 1rem;
+//     font-weight: 600;
+//   }
+
+//   &__submit:hover {
+//     background-color: var(--color-primary-dark);
+//     cursor: pointer;
+//   }
+// }

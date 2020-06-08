@@ -1,8 +1,8 @@
 .post {
   &-item {
     &__container {
+      background-color: var(--color-card-background);
       margin: 2rem auto;
-      border: 1px solid black;
       border-radius: 5px;
       padding: 2rem;
     }
@@ -14,8 +14,8 @@
 
       &--img {
         border-radius: 50%;
-        height: 7rem;
-        width: 7rem;
+        height: 3.5rem;
+        width: 3.5rem;
       }
 
       &--info {
@@ -24,10 +24,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        time {
+          font-size: 0.9rem;
+        }
       }
 
       &--name {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
     }
 
@@ -35,28 +39,77 @@
       margin-top: 2rem;
 
       &--title {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         text-align: center;
       }
 
       &--desc {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         margin: 2rem 1rem;
       }
     }
 
     &__actions {
       display: flex;
+      border-top: 1px solid var(--color-header-shadow);
+      border-bottom: 1px solid var(--color-header-shadow);
+      padding: 0.3rem 0;
 
       &--button {
+        @include flexCenter();
         width: 33%;
         text-align: center;
+        padding: 0.5rem 0;
+        border-radius: 0.5rem;
+      }
+
+      &--button:hover {
+        cursor: pointer;
+        background-color: var(--color-card-item-hover);
       }
     }
 
     &__comments {
       &--error {
         text-align: center;
+      }
+    }
+  }
+
+  &-form {
+    &__container {
+      &--form {
+        display: flex;
+        flex-direction: column;
+
+        input:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+      }
+
+      &--select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: var(--color-input-background);
+        color: var(--color-text);
+        border: none;
+        padding: 1rem;
+      }
+
+      &--select:focus {
+        outline: none;
+      }
+
+      &--option {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        padding: 1rem;
+      }
+
+      &--option:hover {
+        background-color: var(--color-hover-light);
       }
     }
   }
