@@ -10,6 +10,8 @@ import {
   deleteNotificationById,
 } from '../../redux/actions/notifications';
 
+import sprite from '../../assets/sprite.svg';
+
 const NotificationDropdownItem = ({
   setOpen,
   setRead,
@@ -18,29 +20,42 @@ const NotificationDropdownItem = ({
   history,
 }) => {
   return (
-    <Link
-      to={notification.link}
+    <div
       className={
         !notification.opened
           ? 'notification__item notification__item--unopened'
           : 'notification__item notification__item--opened'
       }
-      onClick={() => setOpen(notification._id)}
     >
-      <div className="notification__item--img">
-        <img
-          src={notification.user_from.photo}
-          alt={notification.user_from.fullName}
-        />
-      </div>
-      <div className="notification__item--message">{notification.message}</div>
+      <Link
+        to={notification.link}
+        className="notification__item--main"
+        onClick={() => setOpen(notification._id)}
+      >
+        <div className="notification__item--top">
+          <div className="notification__item--img">
+            <img
+              src={notification.user_from.photo}
+              alt={notification.user_from.fullName}
+            />
+          </div>
+          <div className="notification__item--message">
+            {notification.message}
+          </div>
+        </div>
+        <div className="notification__item--bottom">Time</div>
+      </Link>
       <div
         className="notification__item--action"
         onClick={() => deleteNotificationById(notification._id)}
       >
-        X
+        <div className="btn__dropdownAction">
+          <svg className="btn__dropdownAction--svg">
+            <use xlinkHref={`${sprite}#icon-cross`}></use>
+          </svg>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

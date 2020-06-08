@@ -7,16 +7,6 @@ import {
 } from './types';
 
 /**
- * @action    resetCategories
- * @description Reset category state
- **/
-export const resetCategories = () => (dispatch) => {
-  dispatch({
-    type: RESET_CATEGORIES,
-  });
-};
-
-/**
  * @action    setGenre
  * @description Set genre to be used to retrieve posts
  **/

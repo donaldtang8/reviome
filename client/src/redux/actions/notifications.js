@@ -38,10 +38,6 @@ export const getNotifications = (page) => async (dispatch) => {
           total: res.data.total,
         },
       });
-    } else {
-      dispatch({
-        type: FETCH_NOTIFICATIONS_END,
-      });
     }
   } catch (err) {
     dispatch({

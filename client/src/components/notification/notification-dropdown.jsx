@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
-  getNotifications,
   resetNotifications,
+  getNotifications,
+  setRead,
 } from './../../redux/actions/notifications';
 
 import Spinner from './../spinner/spinner';
 
 import NotificationDropdownItem from './notification-dropdown-item';
 
+import sprite from '../../assets/sprite.svg';
+
 const NotificationDropdown = ({
-  getNotifications,
   resetNotifications,
-  notifications: { notifications, loading, page, nextPage, errors },
+  getNotifications,
+  setRead,
+  notifications: { notifications, loading, page, nextPage, count, errors },
 }) => {
   const [visible, setVisible] = useState(false);
   const [refs, setRefs] = useState({
@@ -33,26 +37,34 @@ const NotificationDropdown = ({
     }
   }, [visible]);
 
+  const setNotificationRead = () => {
+    for (let i = 0; i < notifications.length; i++) {
+      if (!notifications[i].read) {
+        setRead(notifications[i]._id);
+      }
+    }
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
     if (!visible) {
       setVisible(true);
-      getNotifications(page);
+      setNotificationRead();
     } else {
       setVisible(false);
     }
   };
 
   const hideDropdown = (e) => {
-    if (
-      btnRef.current.contains(e.target) ||
-      menuRef.current.contains(e.target)
-    ) {
-      return;
+    if (btnRef.current || menuRef.current) {
+      if (
+        btnRef.current.contains(e.target) ||
+        menuRef.current.contains(e.target)
+      ) {
+        return;
+      }
+      setVisible(false);
     }
-    setVisible(false);
-    // RESET NOTIFICATIONS
-    resetNotifications();
   };
 
   return (
@@ -63,7 +75,12 @@ const NotificationDropdown = ({
         className="dropdown__btn"
         onClick={handleClick}
       >
-        Notifs
+        <div className="btn__icon">
+          <svg className="btn__icon--svg">
+            <use xlinkHref={`${sprite}#icon-bell1`}></use>
+          </svg>
+        </div>
+        {count > 0 && <div className="notification__item--bubble">{count}</div>}
       </div>
       <div
         ref={menuRef}
@@ -79,16 +96,26 @@ const NotificationDropdown = ({
             <NotificationDropdownItem key={notif._id} notification={notif} />
           ))
         ) : (
-          <div className="notification__item--error">No notifications</div>
+          <div className="notification__error">No notifications</div>
         )}
-        {nextPage && (
-          <Link to="/notifications" className="notification__action">
-            See All
-          </Link>
+        {notifications.length > 0 && (
+          <Fragment>
+            <hr />
+            <div className="notification__action">
+              <Link to="/notifications">See All</Link>
+            </div>
+          </Fragment>
         )}
       </div>
     </div>
   );
+};
+
+NotificationDropdown.propTypes = {
+  getNotifications: PropTypes.func.isRequired,
+  resetNotifications: PropTypes.func.isRequired,
+  setRead: PropTypes.func.isRequired,
+  notifications: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -98,4 +125,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getNotifications,
   resetNotifications,
+  setRead,
 })(NotificationDropdown);
