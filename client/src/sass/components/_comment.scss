@@ -1,0 +1,45 @@
+.comment {
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+
+    &--header {
+      img {
+        height: 3.5rem;
+        width: 3.5rem;
+        border-radius: 50%;
+      }
+    }
+
+    &--main {
+      flex: 1 1 auto;
+      margin-left: 2rem;
+    }
+  }
+
+  &-form {
+    &__container {
+      display: flex;
+      align-items: center;
+
+      img {
+        height: 3.5rem;
+        width: 3.5rem;
+        border-radius: 50%;
+      }
+    }
+
+    &__form {
+      margin-left: 2rem;
+
+      input {
+        border: none;
+        background-color: var(--color-grey-dark-3);
+        border-radius: 3px;
+        padding: 0.5rem 1rem;
+        width: 100%;
+      }
+    }
+  }
+}

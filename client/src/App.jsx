@@ -7,6 +7,7 @@ import './App.css';
 
 // Utility components
 import Spinner from './components/spinner/spinner';
+import AuthRoute from './utils/routes/AuthRoute';
 
 // Layout components
 
@@ -15,6 +16,8 @@ const Login = lazy(() => import('./pages/auth/login'));
 const Register = lazy(() => import('./pages/auth/register'));
 const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
 const ResetPassword = lazy(() => import('./pages/auth/reset-password'));
+
+const Feed = lazy(() => import('./pages/feed/feed'));
 
 const App = () => {
   return (
@@ -25,6 +28,11 @@ const App = () => {
             <div className="content__container">
               <Suspense fallback={<Spinner />}>
                 <Switch>
+                  <AuthRoute
+                    exact
+                    path="/"
+                    component={() => <Feed pageType="feed" />}
+                  />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
                   <Route
