@@ -38,13 +38,15 @@ const PostDropdown = ({
   };
 
   const hideDropdown = (e) => {
-    if (
-      btnRef.current.contains(e.target) ||
-      menuRef.current.contains(e.target)
-    ) {
-      return;
+    if (btnRef.current || menuRef.current) {
+      if (
+        btnRef.current.contains(e.target) ||
+        menuRef.current.contains(e.target)
+      ) {
+        return;
+      }
+      setVisible(false);
     }
-    setVisible(false);
   };
 
   const handleBlock = (e) => {
