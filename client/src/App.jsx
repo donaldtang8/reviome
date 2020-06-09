@@ -20,15 +20,17 @@ const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
 const ResetPassword = lazy(() => import('./pages/auth/reset-password'));
 
 const Feed = lazy(() => import('./pages/feed/feed'));
+const Account = lazy(() => import('./pages/account/account'));
+const Profile = lazy(() => import('./pages/profile/profile'));
 
-const App = () => {
+const App = ({ auth: { isAuthenticated } }) => {
   return (
     <div className="App">
       <div className="container">
         <div className="body__container">
           <Header />
           <div className="main__container">
-            <Sidebar />
+            {isAuthenticated && <Sidebar />}
             <div className="content__container">
               <Suspense fallback={<Spinner />}>
                 <Switch>
@@ -37,6 +39,13 @@ const App = () => {
                     path="/"
                     component={() => <Feed pageType="feed" />}
                   />
+                  <AuthRoute
+                    exact
+                    path="/favorites"
+                    component={() => <Feed pageType="favorites" />}
+                  />
+                  <AuthRoute exact path="/account" component={Account} />
+                  <AuthRoute exact path="/profile/:user" component={Profile} />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
                   <Route
@@ -59,4 +68,12 @@ const App = () => {
   );
 };
 
-export default App;
+App.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, {})(App);
