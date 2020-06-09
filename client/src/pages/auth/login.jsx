@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { login } from './../../redux/actions/auth';
 
-const Login = ({ login, history }) => {
+const Login = ({ auth: { isAuthenticated }, login, history }) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -54,6 +60,11 @@ const Login = ({ login, history }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
-export default connect(null, { login })(withRouter(Login));
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { login })(withRouter(Login));
