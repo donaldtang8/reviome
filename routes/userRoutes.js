@@ -33,9 +33,11 @@ router.patch('/updatePassword', authController.updatePassword);
 
 router.use(authController.restrictTo('admin'));
 
+router.route('/id/:id').get(userController.getUserById);
+router.route('/user/:username').get(userController.getUserByUsername);
+
 router
   .route('/:id')
-  .get(userController.getUserById)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 

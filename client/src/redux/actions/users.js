@@ -103,7 +103,26 @@ export const deleteMe = () => async (dispatch) => {
  **/
 export const getUserById = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/users/${id}`);
+    const res = await axios.get(`/api/users/id/${id}`);
+    dispatch({
+      type: GET_USER,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: USER_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
+ * @action    getUserByUsername
+ * @description Get user by username
+ **/
+export const getUserByUsername = (user) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/users/user/${user}`);
     dispatch({
       type: GET_USER,
       payload: res.data.data.doc,

@@ -103,6 +103,25 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @function  getUserByUsername
+ * @description Retrieve user document given username
+ **/
+exports.getUserByUsername = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ uName: req.params.username });
+
+  if (!user) {
+    return next(new AppError('No document found with that username'));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: user,
+    },
+  });
+});
+
+/**
  * @function  followUserById
  * @description Follow user by id
  **/
