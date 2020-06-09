@@ -96,7 +96,7 @@ const HeaderDropdown = ({ logout, user, match }) => {
         aria-labelledby="dropdown-btn"
         aria-hidden="true"
       >
-        <Link to={`/profile/${user._id}`} className="dropdown__menu--item">
+        <Link to={`/profile/${user.uName}`} className="dropdown__menu--item">
           <div className="btn__dropdown">
             <svg className="btn__dropdown--svg">
               <use xlinkHref={`${sprite}#icon-user`}></use>

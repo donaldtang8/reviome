@@ -20,7 +20,7 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
           {isAuthenticated ? (
             <Fragment>
               <div className="nav__item">
-                <Link to={`/profile/${user._id}`}>
+                <Link to={`/profile/${user.uName}`}>
                   <img className="nav__item--img" src={user.photo} />
                 </Link>
               </div>

@@ -20,7 +20,7 @@ const CommentItem = ({
   return (
     <div className="comment__container">
       <div className="comment__container--header">
-        <Link to={`/profile/${comment.user._id}`}>
+        <Link to={`/profile/${comment.user.uName}`}>
           <img src={comment.user.photo} alt={comment.user.fullName} />
         </Link>
       </div>

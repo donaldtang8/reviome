@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import PropTypes from 'prop-types';
 
 import Moment from 'react-moment';
 
-import CommentForm from '../comment/comment-form';
-import CommentItem from '../comment/comment-item';
+import CommentForm from './../comment/comment-form';
+import CommentItem from './../comment/comment-item';
 import PostDropdown from './post-dropdown';
 
 import {
+  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
   unsavePostById,
 } from '../../redux/actions/posts';
 
+import sprite from '../../assets/sprite.svg';
+
 const PostItem = ({
+  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
@@ -29,24 +34,26 @@ const PostItem = ({
   return (
     <div className="post-item__container">
       <div className="post-item__header">
-        <img className="post-item__header--img" src={post.user.photo} />
+        <Link to={`/profile/${post.user.uName}`}>
+          <img className="post-item__header--img" src={post.user.photo} />
+        </Link>
         <div className="post-item__header--info">
-          <div>
+          <Link to={`/profile/${post.user.uName}`}>
             <div className="post-item__header--name">{post.user.fullName}</div>
             <Moment fromNow>{post.createdAt}</Moment>
-          </div>
+          </Link>
           <PostDropdown post={post} />
         </div>
       </div>
       <div className="post-item__body">
         <div className="post-item__body--title">{post.title}</div>
         <div className="post-item__body--desc">{post.text}</div>
-        <blockquote className="embedly-card">
+        {/* <blockquote className="embedly-card">
           <h4>
             <a href={post.link}>{post.title.length > 0 && post.title}</a>
           </h4>
           <p>{post.text && post.text}</p>
-        </blockquote>
+        </blockquote> */}
       </div>
       <div className="post-item__actions">
         {post.likes.some((userLiked) => userLiked._id === user._id) ? (
@@ -54,6 +61,11 @@ const PostItem = ({
             className="post-item__actions--button"
             onClick={() => unlikePostById(post._id)}
           >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-heart`}></use>
+              </svg>
+            </div>
             Unlike
           </div>
         ) : (
@@ -61,6 +73,11 @@ const PostItem = ({
             className="post-item__actions--button"
             onClick={() => likePostById(post._id)}
           >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-heart-outlined`}></use>
+              </svg>
+            </div>
             Like
           </div>
         )}
@@ -70,13 +87,23 @@ const PostItem = ({
             toggleShowComments(!showComments);
           }}
         >
-          Show Comments
+          <div className="btn__dropdown">
+            <svg className="btn__dropdown--svg">
+              <use xlinkHref={`${sprite}#icon-message`}></use>
+            </svg>
+          </div>
+          Comments
         </div>
         {post.saves.some((postSaved) => postSaved._id === user._id) ? (
           <div
             className="post-item__actions--button"
             onClick={() => unsavePostById(post._id)}
           >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-bookmark`}></use>
+              </svg>
+            </div>
             Unsave
           </div>
         ) : (
@@ -84,12 +111,17 @@ const PostItem = ({
             className="post-item__actions--button"
             onClick={() => savePostById(post._id)}
           >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-bookmark`}></use>
+              </svg>
+            </div>
             Save
           </div>
         )}
       </div>
       {showComments && (
-        <div className="post-item__comments">
+        <div className="post-item__body--comments">
           <div className="comment-form__container">
             <img src={user.photo} alt={user.fullName} />
             <CommentForm postId={post._id} />
@@ -109,6 +141,7 @@ const PostItem = ({
 };
 
 PostItem.propTypes = {
+  deletePostById: PropTypes.func.isRequired,
   likePostById: PropTypes.func.isRequired,
   unlikePostById: PropTypes.func.isRequired,
   savePostById: PropTypes.func.isRequired,
@@ -121,6 +154,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
+  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
