@@ -26,7 +26,7 @@ export const register = (formData, history) => async (dispatch) => {
       type: REGISTER_SUCCESS,
       payload: res.data.data.user,
     });
-    // history.push('/');
+    history.push('/');
   } catch (err) {
     dispatch({
       type: REGISTER_FAIL,
@@ -47,7 +47,7 @@ export const login = (formData, history) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data.data.user,
     });
-    // history.push('/');
+    history.push('/');
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,
