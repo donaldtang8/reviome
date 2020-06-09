@@ -1,0 +1,19 @@
+.account__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &--img {
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+
+    img {
+      border-radius: 50%;
+      height: 8rem;
+      width: 8rem;
+      text-align: center;
+    }
+  }
+}
