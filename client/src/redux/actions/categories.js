@@ -1,10 +1,17 @@
 import axios from 'axios';
 import {
   GET_CATEGORIES,
+  GET_CATEGORY,
   CATEGORY_ERROR,
   FETCH_CATEGORIES_START,
   SET_GENRE,
 } from './types';
+
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
 
 /**
  * @action    setGenre
@@ -78,7 +85,12 @@ export const getSubcategoriesById = (category) => async (dispatch) => {
       type: GET_CATEGORIES,
       payload: res.data.data.doc,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
 };
 
 /**
@@ -96,5 +108,33 @@ export const getSubcategoriesBySlug = (category) => async (dispatch) => {
       type: GET_CATEGORIES,
       payload: res.data.data.doc,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
+ * @action    getCategoryBySlug
+ * @description Retrieve category given category slug
+ **/
+export const getCategoryBySlug = (category) => async (dispatch) => {
+  try {
+    let formData = {};
+    formData.slug = category;
+    const body = JSON.stringify(formData);
+    const res = await axios.post(`/api/categories/slug`, body, config);
+    // Dispatch get action to update categories
+    dispatch({
+      type: GET_CATEGORY,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
 };

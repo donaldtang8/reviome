@@ -73,7 +73,7 @@ exports.getOneById = catchAsync(async (req, res, next) => {
  **/
 exports.getOneBySlug = catchAsync(async (req, res, next) => {
   // 1. Find category with given slug
-  const category = await Category.findOne({ slug: req.params.slug });
+  const category = await Category.findOne({ slug: req.body.slug });
   // 2. Throw error if no category found
   if (!category)
     return next(new AppError('There is no document with that slug', 404));

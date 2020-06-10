@@ -2,12 +2,14 @@ import {
   RESET_CATEGORIES,
   FETCH_CATEGORIES_START,
   GET_CATEGORIES,
+  GET_CATEGORY,
   SET_GENRE,
   CATEGORY_ERROR,
 } from './../actions/types';
 
 const initialState = {
   categories: [],
+  category: null,
   genre: null,
   loading: false,
   errors: [],
@@ -35,6 +37,12 @@ export default function (state = initialState, action) {
         ...state,
         categories: payload,
         genre: null,
+        loading: false,
+      };
+    case GET_CATEGORY:
+      return {
+        ...state,
+        category: payload,
         loading: false,
       };
     case SET_GENRE:

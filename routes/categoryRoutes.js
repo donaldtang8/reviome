@@ -9,6 +9,8 @@ router.route('/topcategories').get(categoryController.getTopCategories);
 router.route('/sub/id/:id').get(categoryController.getSubcategoriesById);
 router.route('/sub/slug/:slug*').get(categoryController.getSubcategoriesBySlug);
 
+router.route('/slug').post(categoryController.getOneBySlug);
+
 router
   .route('/')
   .get(categoryController.getAll)
