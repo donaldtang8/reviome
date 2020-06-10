@@ -19,6 +19,7 @@ const Register = lazy(() => import('./pages/auth/register'));
 const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
 const ResetPassword = lazy(() => import('./pages/auth/reset-password'));
 
+const Explore = lazy(() => import('./pages/explore/explore'));
 const Feed = lazy(() => import('./pages/feed/feed'));
 const Account = lazy(() => import('./pages/account/account'));
 const Profile = lazy(() => import('./pages/profile/profile'));
@@ -39,6 +40,7 @@ const App = ({ auth: { isAuthenticated } }) => {
                     path="/"
                     component={() => <Feed pageType="feed" />}
                   />
+                  <AuthRoute path="/explore" component={Explore} />
                   <AuthRoute
                     exact
                     path="/favorites"

@@ -1,0 +1,19 @@
+.explore {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+
+    &--title {
+      font-size: 2rem;
+    }
+  }
+
+  &__categories {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 2rem 0;
+  }
+}
