@@ -17,7 +17,6 @@ import {
   INCREMENT_POSTS_PAGE,
   RESET_POSTS,
   FETCH_POSTS_START,
-  SET_GENRE,
 } from './types';
 
 const config = {

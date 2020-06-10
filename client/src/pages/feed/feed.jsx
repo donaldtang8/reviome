@@ -52,9 +52,9 @@ const Feed = ({
     ) {
       if (loading || errors.length > 0) return;
       if (pageType === 'feed') {
-        getFeed();
+        getFeed(page);
       } else if (pageType === 'favorites') {
-        getSavedPosts();
+        getSavedPosts(page);
       } else if (pageType === 'profilePosts') {
         getPostsByUser(page, userId);
       } else if (pageType === 'profileFavorites') {
