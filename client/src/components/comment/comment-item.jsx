@@ -5,16 +5,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
+  deleteCommentById,
   likeCommentById,
   unlikeCommentById,
-  deleteCommentById,
 } from '../../redux/actions/posts';
+
+import sprite from '../../assets/sprite.svg';
 
 const CommentItem = ({
   auth: { user },
+  deleteCommentById,
   likeCommentById,
   unlikeCommentById,
-  deleteCommentById,
   comment,
 }) => {
   return (
@@ -25,7 +27,12 @@ const CommentItem = ({
         </Link>
       </div>
       <div className="comment__container--main">
-        {(comment.post, comment.text)}
+        <div className="comment__container--name">
+          <Link to={`/profile/${comment.user.uName}`}>
+            {comment.user.fullName}
+          </Link>
+        </div>
+        <div className="comment__container--text">{comment.text}</div>
       </div>
       <div className="comment__container--actions">
         {user._id === comment.user._id ? (
@@ -33,21 +40,31 @@ const CommentItem = ({
             className="comment__container--action"
             onClick={() => deleteCommentById(comment.post, comment._id)}
           >
-            Delete
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-trash`}></use>
+              </svg>
+            </div>
           </div>
         ) : comment.likes.some((userLiked) => userLiked._id === user._id) ? (
           <div className="comment__container--action">
-            <button
-              onClick={() => unlikeCommentById(comment.post, comment._id)}
-            >
-              Unike
-            </button>
+            <div onClick={() => unlikeCommentById(comment.post, comment._id)}>
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-heart`}></use>
+                </svg>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="comment__container--action">
-            <button onClick={() => likeCommentById(comment.post, comment._id)}>
-              Like
-            </button>
+            <div onClick={() => likeCommentById(comment.post, comment._id)}>
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-heart-outlined`}></use>
+                </svg>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -56,9 +73,9 @@ const CommentItem = ({
 };
 
 CommentItem.propTypes = {
+  deleteCommentById: PropTypes.func.isRequired,
   likeCommentById: PropTypes.func.isRequired,
   unlikeCommentById: PropTypes.func.isRequired,
-  deleteCommentById: PropTypes.func.isRequired,
   comment: PropTypes.object.isRequired,
 };
 
@@ -67,7 +84,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
+  deleteCommentById,
   likeCommentById,
   unlikeCommentById,
-  deleteCommentById,
 })(CommentItem);

@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     padding: 1rem 0;
+    font-size: 0.95rem;
 
     &--header {
       img {
@@ -23,7 +24,6 @@
     }
 
     &--name {
-      font-weight: 800;
     }
 
     &--actions {
