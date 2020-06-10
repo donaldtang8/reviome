@@ -6,6 +6,7 @@
 
     &--active {
       background-color: var(--color-primary);
+      color: var(--color-light);
     }
 
     &--active:hover {
@@ -46,7 +47,6 @@
 
   &__dropdown {
     @include flexCenter();
-    margin-right: 0.5rem;
     height: 1.5rem;
     width: 1.5rem;
     // background-color: var(--color-button);

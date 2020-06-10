@@ -5,6 +5,7 @@
       margin: 2rem auto;
       border-radius: 5px;
       padding: 2rem;
+      font-size: 1rem;
     }
 
     &__header {
@@ -31,7 +32,7 @@
       }
 
       &--name {
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
     }
 
@@ -39,12 +40,10 @@
       margin-top: 2rem;
 
       &--title {
-        font-size: 1.2rem;
         text-align: center;
       }
 
       &--desc {
-        font-size: 1.1rem;
         margin: 2rem 1rem;
       }
     }
