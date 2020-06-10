@@ -175,7 +175,7 @@ exports.followUserById = catchAsync(async (req, res, next) => {
 exports.unfollowUserById = catchAsync(async (req, res, next) => {
   // 1. Check to see if we are already following user
   let self = await User.findById(req.user.id);
-  self.following.map((user) => console.log(user));
+
   if (!self.isFollowingUser(req.params.id)) {
     return next(new AppError('Not following user', 400));
   }

@@ -31,8 +31,6 @@ exports.createOne = catchAsync(async (req, res, next) => {
   // 2. Find post given id, populate with comments, and return as response
   const post = await Post.findById(req.params.postId).populate('comments');
 
-  console.log(post);
-
   res.status(200).json({
     status: 'success',
     total: post.comments.length,

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { updateMe } from "./../../redux/actions/users";
-import { updatePassword } from "./../../redux/actions/auth";
+import { updateMe } from './../../redux/actions/users';
+import { updatePassword } from './../../redux/actions/auth';
 
 const Account = ({
   updateMe,
@@ -22,9 +22,9 @@ const Account = ({
   const [modified, setModified] = useState(false);
 
   const [passwordData, setPasswordData] = useState({
-    passwordCurrent: "",
-    password: "",
-    passwordConfirm: "",
+    passwordCurrent: '',
+    password: '',
+    passwordConfirm: '',
   });
 
   const { firstName, lastName, username, photo } = formData;
@@ -33,14 +33,14 @@ const Account = ({
 
   const handleUserChange = (e) => {
     setModified(true);
-    if (e.target.name === "photo") {
-      if (!e.target.files[0].type.startsWith("image")) {
-        alert("Only image files are allowed");
+    if (e.target.name === 'photo') {
+      if (!e.target.files[0].type.startsWith('image')) {
+        alert('Only image files are allowed');
       } else {
         setFormData({ ...formData, photo: e.target.files[0] });
         let reader = new FileReader();
         reader.onload = function (ev) {
-          let img = document.getElementById("form__image");
+          let img = document.getElementById('form__image');
           img.src = ev.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
@@ -56,7 +56,6 @@ const Account = ({
 
   const handleUserSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     if (modified) {
       updateMe(formData);
     }
@@ -66,7 +65,7 @@ const Account = ({
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     updatePassword(passwordData);
-    setPasswordData({ passwordCurrent: "", password: "", passwordConfirm: "" });
+    setPasswordData({ passwordCurrent: '', password: '', passwordConfirm: '' });
   };
 
   return (
@@ -105,7 +104,7 @@ const Account = ({
           onChange={handleUserChange}
         />
         <label className="form__container--label" htmlFor="photo">
-          {!photo ? "Choose a photo" : photo.name}
+          {!photo ? 'Choose a photo' : photo.name}
         </label>
         <input className="input__submit" type="submit" value="Submit" />
       </form>

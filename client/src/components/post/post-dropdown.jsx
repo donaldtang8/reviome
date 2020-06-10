@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { deletePostById } from './../../redux/actions/posts';
 import { blockUserById } from './../../redux/actions/users';
 
+import sprite from '../../assets/sprite.svg';
+
 const PostDropdown = ({
   deletePostById,
   blockUserById,
@@ -74,12 +76,29 @@ const PostDropdown = ({
         aria-hidden="true"
       >
         <Link to={`/post/${post._id}`} className="dropdown__menu--item">
+          <div className="btn__dropdown">
+            <svg className="btn__dropdown--svg">
+              <use xlinkHref={`${sprite}#icon-share-alternitive`}></use>
+            </svg>
+          </div>
           Open
         </Link>
         {user._id !== post.user._id ? (
           <Fragment>
-            <div className="dropdown__menu--item">Report</div>
+            <div className="dropdown__menu--item">
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-flag`}></use>
+                </svg>
+              </div>
+              Report
+            </div>
             <div className="dropdown__menu--item" onClick={handleBlock}>
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-block`}></use>
+                </svg>
+              </div>
               Block
             </div>
           </Fragment>
@@ -88,6 +107,11 @@ const PostDropdown = ({
             className="dropdown__menu--item"
             onClick={() => deletePostById(post._id)}
           >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-trash`}></use>
+              </svg>
+            </div>
             Delete
           </div>
         )}

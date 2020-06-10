@@ -178,7 +178,6 @@ export const getPostsByCategorySlug = (page, category) => async (dispatch) => {
     const res = await axios.get(
       `/api/posts/category/slug/${category}?page=${page}`
     );
-    console.log(res.data);
     // Dispatch get action to update posts
     dispatch({
       type: GET_POSTS,
@@ -310,7 +309,6 @@ export const deleteCommentById = (postId, commentId) => async (dispatch) => {
     const res = await axios.delete(
       `/api/posts/${postId}/comments/${commentId}`
     );
-    console.log(res.data.data.doc);
     dispatch({
       type: DELETE_COMMENT,
       payload: { postId, comments: res.data.data.doc },

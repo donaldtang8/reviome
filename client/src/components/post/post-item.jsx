@@ -11,7 +11,6 @@ import CommentItem from './../comment/comment-item';
 import PostDropdown from './post-dropdown';
 
 import {
-  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
@@ -21,7 +20,6 @@ import {
 import sprite from '../../assets/sprite.svg';
 
 const PostItem = ({
-  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
@@ -141,7 +139,6 @@ const PostItem = ({
 };
 
 PostItem.propTypes = {
-  deletePostById: PropTypes.func.isRequired,
   likePostById: PropTypes.func.isRequired,
   unlikePostById: PropTypes.func.isRequired,
   savePostById: PropTypes.func.isRequired,
@@ -154,7 +151,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  deletePostById,
   likePostById,
   unlikePostById,
   savePostById,
