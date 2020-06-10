@@ -265,7 +265,8 @@ input[type='submit']:hover {
   border-radius: 0.8rem;
   width: min-content; }
   .btn__action--active {
-    background-color: var(--color-primary); }
+    background-color: var(--color-primary);
+    color: var(--color-light); }
   .btn__action--active:hover {
     background-color: var(--color-primary-dark); }
   .btn__action--inactive {
@@ -297,7 +298,6 @@ input[type='submit']:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 0.5rem;
   height: 1.5rem;
   width: 1.5rem; }
   .btn__dropdown--svg {
@@ -413,7 +413,8 @@ input[type='submit']:hover {
   background-color: var(--color-card-background);
   margin: 2rem auto;
   border-radius: 5px;
-  padding: 2rem; }
+  padding: 2rem;
+  font-size: 1rem; }
 
 .post-item__header {
   display: flex;
@@ -432,15 +433,13 @@ input[type='submit']:hover {
     .post-item__header--info time {
       font-size: 0.9rem; }
   .post-item__header--name {
-    font-size: 1.2rem; }
+    font-size: 1rem; }
 
 .post-item__body {
   margin-top: 2rem; }
   .post-item__body--title {
-    font-size: 1.2rem;
     text-align: center; }
   .post-item__body--desc {
-    font-size: 1.1rem;
     margin: 2rem 1rem; }
 
 .post-item__actions {
@@ -493,7 +492,8 @@ input[type='submit']:hover {
 .comment__container {
   display: flex;
   align-items: center;
-  padding: 1rem 0; }
+  padding: 1rem 0;
+  font-size: 0.95rem; }
   .comment__container--header img {
     height: 3rem;
     width: 3rem;
@@ -506,8 +506,6 @@ input[type='submit']:hover {
     flex: 1 1 auto;
     margin-left: 1rem;
     padding: 0.5rem 1rem; }
-  .comment__container--name {
-    font-weight: 800; }
   .comment__container--actions {
     margin-left: 0.5rem; }
   .comment__container--action {
@@ -733,6 +731,20 @@ input[type='submit']:hover {
       height: 8rem;
       width: 8rem;
       text-align: center; }
+
+.explore__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0; }
+  .explore__container--title {
+    font-size: 2rem; }
+
+.explore__categories {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 2rem 0; }
 
 .posts__container {
   padding: 3rem 0; }
