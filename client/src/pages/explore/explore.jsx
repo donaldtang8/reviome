@@ -3,10 +3,9 @@ import { Switch, Route, withRouter, useRouteMatch } from 'react-router';
 
 import Spinner from './../../components/spinner/spinner';
 
+const ExploreOverview = lazy(() => import('./explore-overview'));
 const ExploreFeed = lazy(() => import('./../../pages/explore/explore-feed'));
-const CategoryOverview = lazy(() =>
-  import('./../../components/category/category-overview')
-);
+const Category = lazy(() => import('./../../components/category/category'));
 
 const Explore = ({ history }) => {
   let { path } = useRouteMatch();
@@ -23,10 +22,10 @@ const Explore = ({ history }) => {
         <Route
           exact
           path={`${path}/:category`}
-          component={CategoryOverview}
+          component={Category}
           history={history}
         />
-        <Route path={path} component={CategoryOverview} />
+        <Route path={path} component={ExploreOverview} history={history} />
       </Switch>
     </Suspense>
   );
