@@ -1,6 +1,11 @@
 .posts__container {
   padding: 3rem 0;
 
+  &--title {
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
   &--form {
     background-color: var(--color-card-background);
     display: flex;
@@ -34,4 +39,9 @@
   .input__btn:hover {
     cursor: pointer;
   }
+}
+
+.explore-feed__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 22rem);
 }

@@ -48,6 +48,49 @@ export const getAllCategories = () => async (dispatch) => {
 };
 
 /**
+ * @action    getCategoryById
+ * @description Retrieve category given category id
+ **/
+export const getCategoryById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.post(`/api/categories/id/${id}`);
+    // Dispatch get action to update categories
+    dispatch({
+      type: GET_CATEGORY,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
+ * @action    getCategoryBySlug
+ * @description Retrieve category given category slug
+ **/
+export const getCategoryBySlug = (category) => async (dispatch) => {
+  try {
+    let formData = {};
+    formData.slug = category;
+    const body = JSON.stringify(formData);
+    const res = await axios.post(`/api/categories/slug`, body, config);
+    // Dispatch get action to update categories
+    dispatch({
+      type: GET_CATEGORY,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
  * @action    getTopCategories
  * @description Retrieves all top level categories
  **/
@@ -106,29 +149,6 @@ export const getSubcategoriesBySlug = (category) => async (dispatch) => {
     // Dispatch get action to update categories
     dispatch({
       type: GET_CATEGORIES,
-      payload: res.data.data.doc,
-    });
-  } catch (err) {
-    dispatch({
-      type: CATEGORY_ERROR,
-      payload: err.message,
-    });
-  }
-};
-
-/**
- * @action    getCategoryBySlug
- * @description Retrieve category given category slug
- **/
-export const getCategoryBySlug = (category) => async (dispatch) => {
-  try {
-    let formData = {};
-    formData.slug = category;
-    const body = JSON.stringify(formData);
-    const res = await axios.post(`/api/categories/slug`, body, config);
-    // Dispatch get action to update categories
-    dispatch({
-      type: GET_CATEGORY,
       payload: res.data.data.doc,
     });
   } catch (err) {
