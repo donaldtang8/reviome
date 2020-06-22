@@ -28,10 +28,10 @@ const PostForm = ({
 
   const [visible, setVisible] = useState(true);
   const [refs, setRefs] = useState({
-    popupRef: React.createRef(),
+    popupPostRef: React.createRef(),
   });
 
-  const { popupRef } = refs;
+  const { popupPostRef } = refs;
 
   useEffect(() => {
     if (visible) {
@@ -54,8 +54,8 @@ const PostForm = ({
   };
 
   const handlePopup = (e) => {
-    const popup = document.querySelector('#popup');
-    const popupContent = document.querySelector('#popupContent');
+    const popup = document.querySelector('#popupPost');
+    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '0';
     popup.style.visibility = 'hidden';
     setVisible(false);
@@ -64,8 +64,8 @@ const PostForm = ({
   };
 
   const handleCheckPopup = (e) => {
-    if (popupRef.current) {
-      if (popupRef.current.contains(e.target)) {
+    if (popupPostRef.current) {
+      if (popupPostRef.current.contains(e.target)) {
         return;
       }
       handlePopup();
@@ -73,8 +73,12 @@ const PostForm = ({
   };
 
   return (
-    <div className="popup" id="popup">
-      <div ref={popupRef} className="popup__content" id="popup__content">
+    <div className="popup popupPost" id="popupPost">
+      <div
+        ref={popupPostRef}
+        className="popup__content popupPost__content"
+        id="popupPost__content"
+      >
         <div className="popup__header">
           <div className="popup__header--title">Create Post</div>
           <div className="popup__close" id="popup__close" onClick={handlePopup}>
@@ -110,7 +114,7 @@ const PostForm = ({
 
             <label htmlFor="categories">Choose a category:</label>
             <select
-              className="post-form__container--select"
+              className="input__select"
               id="categories"
               name="category"
               onChange={handleChange}
