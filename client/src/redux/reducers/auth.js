@@ -8,6 +8,8 @@ import {
   UPDATE_ME,
   FOLLOW_USER,
   UNFOLLOW_USER,
+  BLOCK_USER,
+  UNBLOCK_USER,
   AUTH_ERROR,
 } from './../actions/types';
 
@@ -60,6 +62,17 @@ export default function (state = initialState, action) {
         ...state,
         user: { ...state.user, following: payload },
         loading: false,
+      };
+    case BLOCK_USER:
+    case UNBLOCK_USER:
+      return {
+        ...state,
+        loading: false,
+        user: {
+          ...state.user,
+          following: payload.following,
+          block_to: payload.blocking,
+        },
       };
     case AUTH_ERROR:
       return state;
