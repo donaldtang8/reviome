@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { logout } from './auth';
 import {
+  RESET_POSTS,
+  FETCH_POSTS_START,
   GET_POSTS,
   GET_POST,
   CREATE_POST,
@@ -13,10 +15,8 @@ import {
   UNLIKE_COMMENT,
   SAVE_POST,
   UNSAVE_POST,
-  POST_ERROR,
   INCREMENT_POSTS_PAGE,
-  RESET_POSTS,
-  FETCH_POSTS_START,
+  POST_ERROR,
 } from './types';
 
 const config = {

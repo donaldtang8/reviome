@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {
+  RESET_USERS,
   UPDATE_ME,
   GET_USER,
   FOLLOW_USER,
@@ -10,7 +11,6 @@ import {
   LOGOUT,
   AUTH_ERROR,
   USER_ERROR,
-  RESET_USERS,
 } from './types';
 
 import { uploadImage, getImageURL } from './../../firebase/firebase.utils';
