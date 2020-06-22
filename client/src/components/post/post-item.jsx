@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -36,12 +36,45 @@ const PostItem = ({
           <img className="post-item__header--img" src={post.user.photo} />
         </Link>
         <div className="post-item__header--info">
-          <Link to={`/profile/${post.user.uName}`}>
-            <div className="post-item__header--name">{post.user.fullName}</div>
-            <Moment fromNow>{post.createdAt}</Moment>
-          </Link>
-          <PostDropdown post={post} />
+          {user._id === post.user._id ? (
+            <Link to={`/profile/${post.user.uName}`}>
+              <div className="post-item__header--name">
+                {post.user.fullName}
+              </div>
+              <Moment fromNow>{post.createdAt}</Moment>
+            </Link>
+          ) : user.following.some(
+              (userFollowed) => userFollowed._id === post.user._id
+            ) ? (
+            <div></div>
+          ) : user.categories_following.some(
+              (category) => category == post.category._id
+            ) ? (
+            <Fragment>
+              <div>
+                <Link to={`/profile/${post.user.uName}`}>
+                  <div className="post-item__header--name">
+                    {post.user.fullName}
+                  </div>
+                </Link>
+                <Link to={`/explore/${post.category.slug}`}>
+                  <div className="post-item__header--tag">
+                    Category:{' '}
+                    <div className="uppercase">{post.category.name}</div>
+                  </div>
+                </Link>
+              </div>
+            </Fragment>
+          ) : (
+            <Link to={`/profile/${post.user.uName}`}>
+              <div className="post-item__header--name">
+                {post.user.fullName}
+              </div>
+              <Moment fromNow>{post.createdAt}</Moment>
+            </Link>
+          )}
         </div>
+        <PostDropdown post={post} />
       </div>
       <div className="post-item__body">
         <div className="post-item__body--title">{post.title}</div>
@@ -125,7 +158,7 @@ const PostItem = ({
             <CommentForm postId={post._id} />
           </div>
 
-          {post.comments.length > 0 ? (
+          {post.comments && post.comments.length > 0 ? (
             post.comments.map((com) => (
               <CommentItem key={com._id} comment={com} />
             ))
