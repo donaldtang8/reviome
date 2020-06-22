@@ -1,0 +1,14 @@
+.report {
+  &-form {
+    &__container {
+      &--form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &--item:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
