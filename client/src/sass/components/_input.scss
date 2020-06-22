@@ -16,7 +16,7 @@ input:focus {
 
 input[type='submit'] {
   background-color: var(--color-primary);
-  color: var(--color-light);
+  color: var(--color-white);
   border: none;
   border-radius: 1rem;
   padding: 0.8rem 1rem;
@@ -27,6 +27,21 @@ input[type='submit'] {
 input[type='submit']:hover {
   background-color: var(--color-primary-dark);
   cursor: pointer;
+}
+
+.input__select {
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--color-input-background);
+  color: var(--color-text);
+  border: none;
+  padding: 1rem;
+}
+
+.input__select:focus {
+  outline: none;
 }
 
 // create post button
