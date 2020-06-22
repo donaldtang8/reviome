@@ -8,16 +8,22 @@ const APIFeatures = require('./../utils/APIFeatures');
  **/
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.create(req.body);
+    let doc = await Model.create(req.body);
 
-    req.body.doc = doc;
+    let popDoc = await Model.findById(doc._id).populate({
+      path: 'user',
+      select: '-__v -passwordChangedAt',
+    });
+
+    req.body.doc = popDoc;
 
     res.status(201).json({
       status: 'success',
       data: {
-        doc,
+        doc: popDoc,
       },
     });
+
     if (req.body.notif) {
       next();
     }

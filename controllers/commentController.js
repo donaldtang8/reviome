@@ -5,9 +5,8 @@ const factory = require('./handlerFactory');
 const Comment = require('./../models/commentModel');
 const Post = require('./../models/postModel');
 
-exports.getOne = factory.getOne(Comment);
 exports.getAll = factory.getAll(Comment);
-// exports.createOne = factory.createOne(Comment);
+exports.getOne = factory.getOne(Comment);
 
 // MIDDLEWARE
 /**
