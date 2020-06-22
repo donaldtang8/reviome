@@ -1,16 +1,19 @@
-import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Fragment, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   followUserById,
   unfollowUserById,
   blockUserById,
   unblockUserById,
-} from "./../../redux/actions/users";
+} from './../../redux/actions/users';
 
-import sprite from "../../assets/sprite.svg";
+import ReportForm from './../../components/report/report-form';
+import Confirm from './../../components/confirm/confirm';
+
+import sprite from '../../assets/sprite.svg';
 
 const ProfileHeader = ({
   auth,
@@ -21,6 +24,58 @@ const ProfileHeader = ({
   blockUserById,
   unblockUserById,
 }) => {
+  const [popupReportVisible, setPopupReportVisible] = useState(false);
+  const [popupConfirmVisible, setPopupConfirmVisible] = useState(false);
+  const [confirmBlock, setConfirmBlock] = useState(false);
+
+  // Handle report popup
+  const handleReportPopup = (e) => {
+    if (!popupReportVisible) {
+      setPopupReportVisible(true);
+      const popup = document.querySelector('#popupReport');
+      const popupContent = document.querySelector('#popupReport');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+    }
+    // reset popup visibility state when dropdown is closed
+    setPopupReportVisible(false);
+  };
+
+  // Handle confirm popup
+  const handleConfirmPopup = (e) => {
+    if (!popupConfirmVisible) {
+      setPopupConfirmVisible(true);
+      const popup = document.querySelector('#popupConfirm');
+      const popupContent = document.querySelector('#popupConfirm');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+    }
+    // reset popup visibility state when dropdown is closed
+    setPopupConfirmVisible(false);
+  };
+
+  // Callback to return result from confirm popup
+  const blockCallback = (confirmData) => {
+    setConfirmBlock(confirmData);
+  };
+
+  // When we have received a response from the confirm popup, check response and call block function if confirmed
+  useEffect(() => {
+    if (confirmBlock) {
+      handleBlock();
+    }
+    // reset confirm
+    setConfirmBlock(false);
+  }, [confirmBlock]);
+
+  const handleBlock = (e) => {
+    blockUserById(user._id);
+  };
+
   return (
     <div className="profile__header">
       <div className="profile__header--pic">
@@ -57,7 +112,8 @@ const ProfileHeader = ({
                 </div>
                 <div
                   className="btn__action btn__action--active"
-                  onClick={() => blockUserById(user._id)}
+                  // onClick={() => blockUserById(user._id)}
+                  onClick={handleConfirmPopup}
                 >
                   Block
                 </div>
@@ -72,12 +128,19 @@ const ProfileHeader = ({
                 </div>
                 <div
                   className="btn__action btn__action--active"
-                  onClick={() => blockUserById(user._id)}
+                  // onClick={() => blockUserById(user._id)}
+                  onClick={handleConfirmPopup}
                 >
                   Block
                 </div>
               </Fragment>
             )}
+            <div
+              className="btn__action btn__action--active"
+              onClick={handleReportPopup}
+            >
+              Report
+            </div>
           </div>
         ) : (
           <div className="profile__header--actions">
@@ -89,6 +152,11 @@ const ProfileHeader = ({
           </div>
         )}
       </div>
+      <ReportForm item={user} type="User" />
+      <Confirm
+        parentCallback={blockCallback}
+        message="Are you sure you want to do this?"
+      />
     </div>
   );
 };

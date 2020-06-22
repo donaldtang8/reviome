@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { deletePostById } from './../../redux/actions/posts';
 import { blockUserById } from './../../redux/actions/users';
 
+import ReportForm from './../../components/report/report-form';
+
 import sprite from '../../assets/sprite.svg';
 
 const PostDropdown = ({
@@ -15,6 +17,7 @@ const PostDropdown = ({
   post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
     menuRef: React.createRef(),
@@ -51,9 +54,28 @@ const PostDropdown = ({
     }
   };
 
+  const forceHide = () => {
+    setVisible(false);
+  };
+
   const handleBlock = (e) => {
     e.preventDefault();
     blockUserById(post.user._id);
+  };
+
+  const handleReportPopup = (e) => {
+    if (!popupVisible) {
+      setPopupVisible(true);
+      const popup = document.querySelector('#popupReport');
+      const popupContent = document.querySelector('#popupReport');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+      forceHide();
+    }
+    // reset popup visibility state when dropdown is closed
+    setPopupVisible(false);
   };
 
   return (
@@ -85,7 +107,7 @@ const PostDropdown = ({
         </Link>
         {user._id !== post.user._id ? (
           <Fragment>
-            <div className="dropdown__menu--item">
+            <div className="dropdown__menu--item" onClick={handleReportPopup}>
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
                   <use xlinkHref={`${sprite}#icon-flag`}></use>
@@ -93,7 +115,10 @@ const PostDropdown = ({
               </div>
               Report
             </div>
-            <div className="dropdown__menu--item" onClick={handleBlock}>
+            <div
+              className="dropdown__menu--item"
+              onClick={() => (handleBlock(), forceHide())}
+            >
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
                   <use xlinkHref={`${sprite}#icon-block`}></use>
@@ -116,6 +141,7 @@ const PostDropdown = ({
           </div>
         )}
       </div>
+      <ReportForm item={post} type="Post" />
     </div>
   );
 };
