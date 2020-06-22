@@ -61,6 +61,12 @@ const userSchema = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    categories_following: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Category',
+      },
+    ],
     pass: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -232,6 +238,17 @@ userSchema.methods.isFollowingUser = function (userId) {
  **/
 userSchema.methods.isBlockingUser = function (userId) {
   return this.block_to.some((user) => user.toString() === userId);
+};
+
+/**
+ * @function isFollowingCategory
+ * @description Checks if category is already being followed
+ * @return True if already following, false if not followed yet
+ **/
+userSchema.methods.isFollowingCategory = function (categoryId) {
+  return this.categories_following.some(
+    (cat) => String(cat._id) === categoryId
+  );
 };
 
 const User = mongoose.model('User', userSchema);

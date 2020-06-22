@@ -31,11 +31,14 @@ router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 router.patch('/updatePassword', authController.updatePassword);
 
+/* ADMIN ROUTES */
 router.use(authController.restrictTo('admin'));
 
-router.route('/id/:id').get(userController.getUserById);
-router.route('/user/:username').get(userController.getUserByUsername);
+// Retrieve individual user
+router.get('/id/:id', userController.getUserById);
+router.get('/user/:username', userController.getUserByUsername);
 
+// Individual user actions
 router
   .route('/:id')
   .patch(userController.updateUser)

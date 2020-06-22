@@ -14,6 +14,8 @@ exports.getOne = factory.getOne(Post, { path: 'comments' });
 exports.createOne = factory.createOne(Post);
 exports.deleteOne = factory.deleteOne(Post);
 
+// MIDDLEWARES
+
 // ALIASES
 /**
  * @function getTopPosts
@@ -103,6 +105,7 @@ exports.getFeed = catchAsync(async (req, res) => {
           { user: { $nin: self.block_from } },
         ],
       },
+      { category: { $in: self.categories_following } },
       { user: { $eq: req.user.id } },
     ],
   });
@@ -118,6 +121,7 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $nin: self.block_from } },
           ],
         },
+        { category: { $in: self.categories_following } },
         { user: { $eq: req.user.id } },
       ],
     }).populate('comments'),
@@ -260,6 +264,79 @@ exports.getPostsByUser = catchAsync(async (req, res) => {
 });
 
 /**
+ * @function  getSavedPosts
+ * @description Retrieved all saved posts
+ **/
+exports.getSavedPosts = catchAsync(async (req, res, next) => {
+  // 1. Get user object
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new AppError('User does not exist', 404));
+  }
+  // 2. Execute request without APIFeatures object to find total number of results
+  const posts = await Post.find({
+    saves: { $elemMatch: { $eq: user._id } },
+  });
+
+  // 3. Create new APIFeatures object and pass in query
+  const postsPaginate = new APIFeatures(
+    Post.find({
+      saves: { $elemMatch: { $eq: user._id } },
+    }).populate('comments'),
+    req.query
+  ).paginate();
+
+  // 4. Execute query
+  const doc = await postsPaginate.query;
+
+  res.status(200).json({
+    status: 'success',
+    total: posts.length,
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
+});
+
+/**
+ * @function  getSavedPostsByUser
+ * @description Retrieved all saved posts given userID
+ **/
+exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
+  // 1. Get user object
+  const user = await User.findById(req.params.userId);
+  if (!user) {
+    return next(new AppError('User does not exist', 404));
+  }
+
+  // 2. Execute request without APIFeatures object to find total number of results
+  const posts = await Post.find({
+    saves: { $elemMatch: { $eq: user._id } },
+  });
+
+  // 3. Create new APIFeatures object and pass in query
+  const postsPaginate = new APIFeatures(
+    Post.find({
+      saves: { $elemMatch: { $eq: user._id } },
+    }).populate('comments'),
+    req.query
+  ).paginate();
+
+  // 4. Execute query
+  const doc = await postsPaginate.query;
+
+  res.status(200).json({
+    status: 'success',
+    total: posts.length,
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
+});
+
+/**
  * @function  likePostById
  * @description Like post
  **/
@@ -335,89 +412,6 @@ exports.unlikePostById = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  removePostComments
- * @description Remove all comments associated with post before removing the post
- **/
-exports.removePostComments = catchAsync(async (req, res, next) => {
-  // 1. Find and delete all comments with post id of post to be deleted
-  await Comment.deleteMany({ post: req.params.id });
-  next();
-});
-
-/**
- * @function  getSavedPosts
- * @description Retrieved all saved posts
- **/
-exports.getSavedPosts = catchAsync(async (req, res, next) => {
-  // 1. Get user object
-  const user = await User.findById(req.user.id);
-  if (!user) {
-    return next(new AppError('User does not exist', 404));
-  }
-  // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
-    saves: { $elemMatch: { $eq: user._id } },
-  });
-
-  // 3. Create new APIFeatures object and pass in query
-  const postsPaginate = new APIFeatures(
-    Post.find({
-      saves: { $elemMatch: { $eq: user._id } },
-    }).populate('comments'),
-    req.query
-  ).paginate();
-
-  // 4. Execute query
-  const doc = await postsPaginate.query;
-
-  res.status(200).json({
-    status: 'success',
-    total: posts.length,
-    results: doc.length,
-    data: {
-      doc,
-    },
-  });
-});
-
-/**
- * @function  getSavedPostsByUser
- * @description Retrieved all saved posts given userID
- **/
-exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
-  // 1. Get user object
-  const user = await User.findById(req.params.userId);
-  if (!user) {
-    return next(new AppError('User does not exist', 404));
-  }
-
-  // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
-    saves: { $elemMatch: { $eq: user._id } },
-  });
-
-  // 3. Create new APIFeatures object and pass in query
-  const postsPaginate = new APIFeatures(
-    Post.find({
-      saves: { $elemMatch: { $eq: user._id } },
-    }).populate('comments'),
-    req.query
-  ).paginate();
-
-  // 4. Execute query
-  const doc = await postsPaginate.query;
-
-  res.status(200).json({
-    status: 'success',
-    total: posts.length,
-    results: doc.length,
-    data: {
-      doc,
-    },
-  });
-});
-
-/**
  * @function  savePostById
  * @description Find post by given post ID and add user to its save array
  **/
@@ -485,4 +479,14 @@ exports.unsavePostById = catchAsync(async (req, res, next) => {
       doc: newPost.saves,
     },
   });
+});
+
+/**
+ * @function  removePostComments
+ * @description Remove all comments associated with post before removing the post
+ **/
+exports.removePostComments = catchAsync(async (req, res, next) => {
+  // 1. Find and delete all comments with post id of post to be deleted
+  await Comment.deleteMany({ post: req.params.id });
+  next();
 });

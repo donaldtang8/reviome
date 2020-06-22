@@ -4,12 +4,14 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const categoryController = require('../controllers/categoryController');
 
-router.route('/topcategories').get(categoryController.getTopCategories);
+// Retrieve categories
+router.get('/topcategories', categoryController.getTopCategories);
+router.get('/sub/id/:id', categoryController.getSubcategoriesById);
+router.get('/sub/slug/:slug*', categoryController.getSubcategoriesBySlug);
 
-router.route('/sub/id/:id').get(categoryController.getSubcategoriesById);
-router.route('/sub/slug/:slug*').get(categoryController.getSubcategoriesBySlug);
-
-router.route('/slug').post(categoryController.getOneBySlug);
+// Retrieve individual category
+router.post('/slug', categoryController.getOneBySlug);
+router.get('/id/:id', categoryController.getOneById);
 
 router
   .route('/')
@@ -20,5 +22,11 @@ router
     categoryController.getAncestorsAndParent,
     categoryController.createOne
   );
+
+/* AUTHENTICATED ROUTES */
+router.use(authController.protect);
+
+router.patch('/follow/:id', categoryController.followCategoryById);
+router.patch('/unfollow/:id', categoryController.unfollowCategoryById);
 
 module.exports = router;

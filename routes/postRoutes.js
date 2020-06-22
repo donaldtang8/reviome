@@ -1,8 +1,9 @@
 const express = require('express');
 const authController = require('./../controllers/authController');
+const categoryController = require('./../controllers/categoryController');
+const notificationController = require('./../controllers/notificationController');
 const postController = require('./../controllers/postController');
 const userController = require('./../controllers/userController');
-const notificationController = require('./../controllers/notificationController');
 const Post = require('./../models/postModel');
 
 const router = express.Router();
@@ -20,37 +21,40 @@ router
     userController.setMe,
     notificationController.setNotif,
     postController.createOne,
+    categoryController.incrementPostCount,
     notificationController.addPostNotification
   );
 
-router.route('/user/:userId/saves').get(postController.getSavedPostsByUser);
-router.route('/user/:userId').get(postController.getPostsByUser);
+// Retrieve post data based on user
+router.get('/user/:userId/saves', postController.getSavedPostsByUser);
+router.get('/user/:userId', postController.getSavedPostsByUser);
 
+// Retrieve post data based on category
+router.get('/category/:id/:time', postController.getTopPosts);
+router.get('/category/id/:id', postController.getPostsByCategoryId);
+router.get('/category/slug/:slug*', postController.getPostsByCategorySlug);
+
+// Retrieve feed
 router.route('/feed').get(postController.getFeed);
 
-router.route('/category/:id/:time').get(postController.getTopPosts);
-router.route('/category/id/:id').get(postController.getPostsByCategoryId);
-router
-  .route('/category/slug/:slug*')
-  .get(postController.getPostsByCategorySlug);
+// Post like actions
+router.patch(
+  '/:id/like',
+  postController.likePostById,
+  notificationController.addLikeNotification
+);
+router.patch(
+  '/:id/unlike',
+  postController.unlikePostById,
+  notificationController.removeLikeNotification
+);
 
-router
-  .route('/:id/like')
-  .patch(
-    postController.likePostById,
-    notificationController.addLikeNotification
-  );
-router
-  .route('/:id/unlike')
-  .patch(
-    postController.unlikePostById,
-    notificationController.removeLikeNotification
-  );
+// Post save actions
+router.get('/saves', postController.getSavedPosts);
+router.patch('/:id/save', postController.savePostById);
+router.patch('/:id/unsave', postController.unsavePostById);
 
-router.route('/saves').get(postController.getSavedPosts);
-router.route('/:id/save').patch(postController.savePostById);
-router.route('/:id/unsave').patch(postController.unsavePostById);
-
+// Individual post actions
 router
   .route('/:id')
   .get(postController.getOne)
@@ -59,6 +63,7 @@ router
     notificationController.setNotif,
     postController.removePostComments,
     postController.deleteOne,
+    categoryController.decrementPostCount,
     notificationController.removePostNotification
   );
 

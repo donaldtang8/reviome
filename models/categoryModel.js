@@ -29,6 +29,14 @@ const categorySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  followers: {
+    type: Number,
+    default: 0,
+  },
+  num_posts: {
+    type: Number,
+    default: 0,
+  },
 });
 
 /* INDEX */
@@ -71,6 +79,8 @@ categorySchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+/* INSTANCE/STATIC METHODS */
 
 const Category = mongoose.model('Category', categorySchema);
 module.exports = Category;

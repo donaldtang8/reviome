@@ -53,56 +53,6 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 /**
- * @function  signup
- * @description Signup user
- **/
-exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
-    fName: req.body.firstName,
-    lName: req.body.lastName,
-    uName: req.body.username,
-    email: req.body.email,
-    pass: req.body.password,
-    passConfirm: req.body.passwordConfirm,
-  });
-  createSendToken(newUser, 201, res);
-});
-
-/**
- * @function  login
- * @description Login user
- **/
-exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
-  // 1. check if email and passsword exist in request body
-  if (!email || !password) {
-    return next(new AppError('Please provide an email and password', 400));
-  }
-  // 2. Find user associated with email
-  const user = await User.findOne({ email: email }).select('+pass');
-  if (!user) return next(new AppError('Incorrect email or password', 401));
-  // 3. Check if password is correct
-  // call the instance method "correctPassword" to check if password is correct
-  const correct = await user.correctPassword(password, user.pass);
-  if (!correct) return next(new AppError('Incorrect email or password', 401));
-
-  // 4. If correct, send token to client
-  createSendToken(user, 200, res);
-});
-
-/**
- * @function  logout
- * @description Logout user
- **/
-exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
-  res.status(200).json({ status: 'success' });
-};
-
-/**
  * @middleware  protect
  * @description Checks that request is being made from user with a token
  **/
@@ -174,6 +124,56 @@ exports.restrictToMe = (Model) =>
       next();
     }
   });
+
+/**
+ * @function  signup
+ * @description Signup user
+ **/
+exports.signup = catchAsync(async (req, res, next) => {
+  const newUser = await User.create({
+    fName: req.body.firstName,
+    lName: req.body.lastName,
+    uName: req.body.username,
+    email: req.body.email,
+    pass: req.body.password,
+    passConfirm: req.body.passwordConfirm,
+  });
+  createSendToken(newUser, 201, res);
+});
+
+/**
+ * @function  login
+ * @description Login user
+ **/
+exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+  // 1. check if email and passsword exist in request body
+  if (!email || !password) {
+    return next(new AppError('Please provide an email and password', 400));
+  }
+  // 2. Find user associated with email
+  const user = await User.findOne({ email: email }).select('+pass');
+  if (!user) return next(new AppError('Incorrect email or password', 401));
+  // 3. Check if password is correct
+  // call the instance method "correctPassword" to check if password is correct
+  const correct = await user.correctPassword(password, user.pass);
+  if (!correct) return next(new AppError('Incorrect email or password', 401));
+
+  // 4. If correct, send token to client
+  createSendToken(user, 200, res);
+});
+
+/**
+ * @function  logout
+ * @description Logout user
+ **/
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
 
 /**
  * @function  forgotPassword

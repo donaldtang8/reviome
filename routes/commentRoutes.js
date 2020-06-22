@@ -5,6 +5,8 @@ const notificationController = require('./../controllers/notificationController'
 
 const router = express.Router({ mergeParams: true });
 
+/* AUTHENTICATED ROUTES */
+
 router.use(authController.protect);
 
 router
@@ -17,19 +19,19 @@ router
     notificationController.addCommentNotification
   );
 
-router
-  .route('/:id/like')
-  .patch(
-    commentController.likeCommentById,
-    notificationController.addCommentLikeNotification
-  );
-router
-  .route('/:id/unlike')
-  .patch(
-    commentController.unlikeCommentById,
-    notificationController.removeCommentLikeNotification
-  );
+// Comment like actions
+router.patch(
+  '/:id/like',
+  commentController.likeCommentById,
+  notificationController.addCommentLikeNotification
+);
+router.patch(
+  '/:id/unlike',
+  commentController.unlikeCommentById,
+  notificationController.removeCommentLikeNotification
+);
 
+// Individual comment actions
 router
   .route('/:id')
   .get(commentController.getOne)
@@ -38,7 +40,5 @@ router
     commentController.deleteOne,
     notificationController.removeCommentNotification
   );
-
-router.use(authController.restrictTo('admin'));
 
 module.exports = router;

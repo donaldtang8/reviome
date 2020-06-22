@@ -3,6 +3,7 @@ const catchAsync = require('./../utils/catchAsync');
 
 const factory = require('./handlerFactory');
 const Category = require('./../models/categoryModel');
+const User = require('./../models/userModel');
 
 // exports.getAll = factory.getAll(Category);
 exports.getOne = factory.getOne(Category);
@@ -30,6 +31,32 @@ exports.getAncestorsAndParent = catchAsync(async (req, res, next) => {
     // 4. Set parent to parent id
     req.body.parent = category._id;
   }
+  next();
+});
+
+/**
+ * @function  incrementPostCount
+ * @description Increment the post count for category
+ **/
+exports.incrementPostCount = catchAsync(async (req, res, next) => {
+  // 1. Find category with given ID and update
+  await Category.findByIdAndUpdate(req.body.category, {
+    $inc: { num_posts: 1 },
+  });
+
+  next();
+});
+
+/**
+ * @function  decrementPostCount
+ * @description Decrement the post count for category
+ **/
+exports.decrementPostCount = catchAsync(async (req, res, next) => {
+  // 1. Find category with given ID and update
+  await Category.findByIdAndUpdate(req.body.category, {
+    $inc: { num_posts: -1 },
+  });
+
   next();
 });
 
@@ -151,6 +178,90 @@ exports.getSubcategoriesBySlug = catchAsync(async (req, res, next) => {
     results: subcategories.length,
     data: {
       doc: subcategories,
+    },
+  });
+});
+
+/**
+ * @function  followCategoryById
+ * @description Add category to user's categories list and increment category follower account
+ **/
+exports.followCategoryById = catchAsync(async (req, res, next) => {
+  // 1. Find category with given ID
+  let category = await Category.findById(req.params.id);
+
+  if (!category) {
+    return next(new AppError('There is no category with that ID', 400));
+  }
+
+  // 2. Make sure category is a genre
+  if (!category.genre) {
+    return next(new AppError('Can only follow genres', 400));
+  }
+
+  // 2. Retrieve self user object
+  const self = await User.findById(req.user.id);
+
+  // 3. Check if user is already following category
+  if (self.isFollowingCategory(req.params.id)) {
+    return next(new AppError('Already following category', 400));
+  }
+
+  // 4. Update category follower count
+  category = await Category.findByIdAndUpdate(req.params.id, {
+    $inc: { followers: 1 },
+  });
+
+  // 5. Add category to user's category list
+  self.categories_following.push(req.params.id);
+  await self.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: self.categories_following,
+    },
+  });
+});
+
+/**
+ * @function  unfollowCategoryById
+ * @description Remove category from user's categories list and decrement category follower account
+ **/
+exports.unfollowCategoryById = catchAsync(async (req, res, next) => {
+  // 1. Find category with given ID
+  let category = await Category.findById(req.params.id);
+
+  if (!category) {
+    return next(new AppError('There is no category with that ID', 400));
+  }
+
+  // 2. Retrieve self user object
+  let self = await User.findById(req.user.id);
+
+  // 3. Check if user is following category
+  if (!self.isFollowingCategory(req.params.id)) {
+    return next(new AppError('Not following category', 400));
+  }
+
+  // 4. Update category follower count
+  category = await Category.findByIdAndUpdate(req.params.id, {
+    $inc: { followers: -1 },
+  });
+
+  // 5. Remove category from user's category list
+  self = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $pull: { categories_following: req.params.id },
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: self.categories_following,
     },
   });
 });
