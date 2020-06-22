@@ -6,6 +6,7 @@ import auth from './auth';
 import categories from './categories';
 import notifications from './notifications';
 import posts from './posts';
+import reports from './reports';
 import users from './users';
 
 const persistConfig = {
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   categories: categories,
   notifications: notifications,
   posts: posts,
+  reports: reports,
   users: users,
 });
 
