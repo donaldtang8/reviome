@@ -6,7 +6,13 @@ import PropTypes from 'prop-types';
 
 import { createReport } from './../../redux/actions/reports';
 
-const ReportForm = ({ createReport, item, type, history }) => {
+const ReportForm = ({
+  createReport,
+  item,
+  type,
+  history,
+  reportOpenCallback,
+}) => {
   let userToId = type === 'User' ? item._id : item.user._id;
   const [formData, setFormData] = useState({
     user_to: userToId,
@@ -51,13 +57,8 @@ const ReportForm = ({ createReport, item, type, history }) => {
   };
 
   const handlePopup = (e) => {
-    const popup = document.querySelector('#popupReport');
-    const popupContent = document.querySelector('#popupReportContent');
-    popup.style.opacity = '0';
-    popup.style.visibility = 'hidden';
+    reportOpenCallback(false);
     setVisible(false);
-    // popupContent.opacity = "0";
-    // popupContent.transform = "translate(0, 0) scale(0)";
   };
 
   const handleCheckPopup = (e) => {
@@ -144,6 +145,7 @@ ReportForm.propTypes = {
   report: PropTypes.object,
   item: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  reportOpenCallback: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
