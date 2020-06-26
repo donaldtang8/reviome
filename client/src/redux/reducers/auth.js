@@ -10,6 +10,8 @@ import {
   UNFOLLOW_USER,
   BLOCK_USER,
   UNBLOCK_USER,
+  FOLLOW_CATEGORY,
+  UNFOLLOW_CATEGORY,
   AUTH_ERROR,
 } from './../actions/types';
 
@@ -72,6 +74,15 @@ export default function (state = initialState, action) {
           ...state.user,
           following: payload.following,
           block_to: payload.blocking,
+        },
+      };
+    case FOLLOW_CATEGORY:
+    case UNFOLLOW_CATEGORY:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          categories_following: payload,
         },
       };
     case AUTH_ERROR:
