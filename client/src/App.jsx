@@ -8,6 +8,7 @@ import './App.css';
 // Utility components
 import Spinner from './components/spinner/spinner';
 import AuthRoute from './utils/routes/AuthRoute';
+import AdminRoute from './utils/routes/AdminRoute';
 
 // Layout components
 import Header from './components/header/header';
@@ -21,6 +22,7 @@ const ResetPassword = lazy(() => import('./pages/auth/reset-password'));
 
 const Explore = lazy(() => import('./pages/explore/explore'));
 const Feed = lazy(() => import('./pages/feed/feed'));
+const Post = lazy(() => import('./pages/post/post'));
 const Account = lazy(() => import('./pages/account/account'));
 const Profile = lazy(() => import('./pages/profile/profile'));
 
@@ -40,6 +42,7 @@ const App = ({ auth: { isAuthenticated } }) => {
                     path="/"
                     component={() => <Feed pageType="feed" />}
                   />
+                  <AuthRoute exact path="/post/:id" component={Post} />
                   <AuthRoute path="/explore" component={Explore} />
                   <AuthRoute
                     exact
