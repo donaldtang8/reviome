@@ -139,13 +139,15 @@ export const getPostById = (id) => async (dispatch) => {
  * @action    getPostsByCategoryId
  * @description Retrieve posts based on category id
  **/
-export const getPostsByCategoryId = (category) => async (dispatch) => {
+export const getPostsByCategoryId = (page, category) => async (dispatch) => {
   try {
     // Dispatch fetch action to set loading
     dispatch({
       type: FETCH_POSTS_START,
     });
-    const res = await axios.get(`/api/posts/category/id/${category}`);
+    const res = await axios.get(
+      `/api/posts/category/id/${category}?page=${page}`
+    );
     // Dispatch get action to update posts
     dispatch({
       type: GET_POSTS,
@@ -180,7 +182,11 @@ export const getPostsByCategorySlug = (page, category) => async (dispatch) => {
     // Dispatch get action to update posts
     dispatch({
       type: GET_POSTS,
-      payload: { posts: res.data.data.doc, total: res.data.data.total },
+      payload: {
+        posts: res.data.data.doc,
+        results: res.data.results,
+        total: res.data.total,
+      },
     });
     if (res.data.results > 0 && res.data.results < res.data.total) {
       dispatch({
@@ -223,12 +229,12 @@ export const createPost = (formData) => async (dispatch) => {
  * @action    deletePostById
  * @description Delete post given postID
  **/
-export const deletePostById = (postId) => async (dispatch) => {
+export const deletePostById = (postId, categoryId) => async (dispatch) => {
   try {
     await axios.delete(`/api/posts/${postId}`);
     dispatch({
       type: DELETE_POST,
-      payload: postId,
+      payload: { postId, categoryId },
     });
   } catch (err) {
     dispatch({
