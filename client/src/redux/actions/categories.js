@@ -1,10 +1,12 @@
 import axios from 'axios';
 import {
+  FETCH_CATEGORIES_START,
   GET_CATEGORIES,
   GET_CATEGORY,
-  CATEGORY_ERROR,
-  FETCH_CATEGORIES_START,
+  FOLLOW_CATEGORY,
+  UNFOLLOW_CATEGORY,
   SET_GENRE,
+  CATEGORY_ERROR,
 } from './types';
 
 const config = {
@@ -149,6 +151,44 @@ export const getSubcategoriesBySlug = (category) => async (dispatch) => {
     // Dispatch get action to update categories
     dispatch({
       type: GET_CATEGORIES,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
+ * @action    followCategoryById
+ * @description Follow category given ID
+ **/
+export const followCategoryById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.patch(`/api/categories/follow/${id}`);
+    dispatch({
+      type: FOLLOW_CATEGORY,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    dispatch({
+      type: CATEGORY_ERROR,
+      payload: err.message,
+    });
+  }
+};
+
+/**
+ * @action    unfollowCategoryById
+ * @description Unfollow category given ID
+ **/
+export const unfollowCategoryById = (id) => async (dispatch) => {
+  try {
+    const res = await axios.patch(`/api/categories/unfollow/${id}`);
+    dispatch({
+      type: UNFOLLOW_CATEGORY,
       payload: res.data.data.doc,
     });
   } catch (err) {
