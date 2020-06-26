@@ -2,42 +2,71 @@ import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
-const Confirm = ({ parentCallback, message }) => {
-  const [visible, setVisible] = useState(true);
+const Confirm = ({
+  confirmOpenCallback,
+  confirmDataCallback,
+  openData,
+  message,
+}) => {
+  // confirmOpen will toggle confirm popup
+  const [confirmOpen, setConfirmOpen] = useState(openData);
+  // refs
   const [refs, setRefs] = useState({
     popupConfirmRef: React.createRef(),
   });
-
   const { popupConfirmRef } = refs;
 
+  // when the openData property changes, we should update the local open toggle
   useEffect(() => {
-    if (visible) {
+    setConfirmOpen(openData);
+  }, [openData]);
+
+  // when the confirmOpen toggle changes, we want to open/close the confirm popup based on the toggle setting
+  // when the confirmOpen toggle changes, we also want to add or remove a listener to see if a click was pressed outside the confirm window. If yes, then we close
+  useEffect(() => {
+    handleConfirmPopup();
+    if (confirmOpen) {
       document.addEventListener('mousedown', handleCheckPopup);
     } else {
       document.removeEventListener('mousedown', handleCheckPopup);
     }
-  }, [visible]);
+  }, [confirmOpen]);
 
-  const handleClick = (e) => {
-    console.log(e.target.value);
-    console.log(typeof e.target.value);
-    e.preventDefault();
-    if (e.target.value === 'Confirm') {
-      parentCallback(true);
-    } else {
-      parentCallback(false);
-    }
-    handlePopup();
+  // when the close button is clicked, we want to update the confirmOpen toggle in the parent component and the local confirmOpen toggle in the current component
+  const handleClose = () => {
+    confirmOpenCallback(false);
+    setConfirmOpen(false);
   };
 
-  const handlePopup = (e) => {
-    const popup = document.querySelector('#popupConfirm');
-    const popupContent = document.querySelector('#popupConfirmContent');
-    popup.style.opacity = '0';
-    popup.style.visibility = 'hidden';
-    setVisible(false);
-    // popupContent.opacity = "0";
-    // popupContent.transform = "translate(0, 0) scale(0)";
+  // Handle confirm popup
+  const handleConfirmPopup = (e) => {
+    if (confirmOpen) {
+      const popup = document.querySelector('#popupConfirm');
+      const popupContent = document.querySelector('#popupConfirm');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+    } else {
+      const popup = document.querySelector('#popupConfirm');
+      const popupContent = document.querySelector('#popupConfirm');
+      popup.style.opacity = '0';
+      popup.style.visibility = 'hidden';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+      handleClose();
+    }
+  };
+
+  // when user has made a selection, we want to call the callback to set the selection and close the confirm popup
+  const handleSubmitClick = (e) => {
+    e.preventDefault();
+    if (e.target.value === 'Confirm') {
+      confirmDataCallback(true);
+    } else {
+      confirmDataCallback(false);
+    }
+    handleClose();
   };
 
   const handleCheckPopup = (e) => {
@@ -45,7 +74,7 @@ const Confirm = ({ parentCallback, message }) => {
       if (popupConfirmRef.current.contains(e.target)) {
         return;
       }
-      handlePopup();
+      handleClose();
     }
   };
 
@@ -58,7 +87,7 @@ const Confirm = ({ parentCallback, message }) => {
       >
         <div className="popup__header">
           <div className="popup__header--title">Confirm</div>
-          <div className="popup__close" id="popup__close" onClick={handlePopup}>
+          <div className="popup__close" id="popup__close" onClick={handleClose}>
             &times;
           </div>
         </div>
@@ -69,13 +98,13 @@ const Confirm = ({ parentCallback, message }) => {
               className="input__submit"
               type="submit"
               value="Cancel"
-              onClick={handleClick}
+              onClick={handleSubmitClick}
             />
             <input
               className="input__submit"
               type="submit"
               value="Confirm"
-              onClick={handleClick}
+              onClick={handleSubmitClick}
             />
           </form>
         </div>
@@ -85,7 +114,9 @@ const Confirm = ({ parentCallback, message }) => {
 };
 
 Confirm.propTypes = {
-  parentCallback: PropTypes.func.isRequired,
+  confirmOpenCallback: PropTypes.func,
+  confirmDataCallback: PropTypes.func,
+  openData: PropTypes.bool,
   message: PropTypes.string,
 };
 
