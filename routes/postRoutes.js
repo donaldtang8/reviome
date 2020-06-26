@@ -62,6 +62,7 @@ router
     authController.restrictToMe(Post),
     notificationController.setNotif,
     postController.removePostComments,
+    postController.setCategoryToDelete,
     postController.deleteOne,
     categoryController.decrementPostCount,
     notificationController.removePostNotification
