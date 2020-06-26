@@ -26,6 +26,8 @@ const PostItem = ({
   unsavePostById,
   post,
   auth: { user },
+  reportOpenCallback,
+  reportItemCallback,
 }) => {
   const [showComments, toggleShowComments] = useState(false);
 
@@ -74,7 +76,11 @@ const PostItem = ({
             </Link>
           )}
         </div>
-        <PostDropdown post={post} />
+        <PostDropdown
+          post={post}
+          reportOpenCallback={reportOpenCallback}
+          reportItemCallback={reportItemCallback}
+        />
       </div>
       <div className="post-item__body">
         <div className="post-item__body--title">{post.title}</div>
@@ -158,10 +164,21 @@ const PostItem = ({
             <CommentForm postId={post._id} />
           </div>
 
+          {/* IF WE ARE BLOCKING COMMENT USER, DONT SHOW COMMENT */}
           {post.comments && post.comments.length > 0 ? (
-            post.comments.map((com) => (
-              <CommentItem key={com._id} comment={com} />
-            ))
+            post.comments.map((com) =>
+              user.block_to.some(
+                (userBlocked) => userBlocked === com.user._id
+              ) ? (
+                <Fragment></Fragment>
+              ) : user.block_to.some(
+                  (userBlocked) => userBlocked === com.user._id
+                ) ? (
+                <div key={com._id}></div>
+              ) : (
+                <CommentItem key={com._id} comment={com} />
+              )
+            )
           ) : (
             <div className="post-item__comments--error">No comments</div>
           )}
@@ -177,6 +194,8 @@ PostItem.propTypes = {
   savePostById: PropTypes.func.isRequired,
   unsavePostById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
+  reportOpenCallback: PropTypes.func,
+  reportItemCallback: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

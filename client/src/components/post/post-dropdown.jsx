@@ -15,8 +15,12 @@ const PostDropdown = ({
   blockUserById,
   auth: { user },
   post,
+  reportOpenCallback,
+  reportItemCallback,
 }) => {
+  // visible refers to the toggle of the dropdown menu
   const [visible, setVisible] = useState(false);
+  // popupVisible refers to the toggle of the report popup
   const [popupVisible, setPopupVisible] = useState(false);
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
@@ -61,17 +65,14 @@ const PostDropdown = ({
   const handleBlock = (e) => {
     e.preventDefault();
     blockUserById(post.user._id);
+    forceHide();
   };
 
   const handleReportPopup = (e) => {
+    reportItemCallback(post);
     if (!popupVisible) {
+      reportOpenCallback(true);
       setPopupVisible(true);
-      const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReport');
-      popup.style.opacity = '1';
-      popup.style.visibility = 'visible';
-      // popupContent.opacity = "1";
-      // popupContent.transform = "translate(-50%, -50%) scale(1)";
       forceHide();
     }
     // reset popup visibility state when dropdown is closed
@@ -115,10 +116,7 @@ const PostDropdown = ({
               </div>
               Report
             </div>
-            <div
-              className="dropdown__menu--item"
-              onClick={() => (handleBlock(), forceHide())}
-            >
+            <div className="dropdown__menu--item" onClick={handleBlock}>
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
                   <use xlinkHref={`${sprite}#icon-block`}></use>
@@ -130,7 +128,7 @@ const PostDropdown = ({
         ) : (
           <div
             className="dropdown__menu--item"
-            onClick={() => deletePostById(post._id)}
+            onClick={() => deletePostById(post._id, post.category._id)}
           >
             <div className="btn__dropdown">
               <svg className="btn__dropdown--svg">
@@ -141,7 +139,6 @@ const PostDropdown = ({
           </div>
         )}
       </div>
-      <ReportForm item={post} type="Post" />
     </div>
   );
 };
@@ -150,6 +147,8 @@ PostDropdown.propTypes = {
   deletePostById: PropTypes.func.isRequired,
   blockUserById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
+  reportOpenCallback: PropTypes.func,
+  reportItemCallback: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

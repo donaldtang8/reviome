@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { withRouter, useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -15,6 +15,7 @@ import {
 import PostForm from './../../components/post/post-form';
 import PostItem from '../../components/post/post-item';
 import Spinner from '../../components/spinner/spinner';
+import ReportForm from './../../components/report/report-form';
 
 import debounce from 'lodash.debounce';
 
@@ -30,19 +31,36 @@ const Feed = ({
   posts: { posts, loading, page, nextPage, errors },
   match,
 }) => {
-  // we only want useEffect to fire when nav link for feed has been clicked
+  //  if posts state has been reset, we can then retrieve posts for feed
+  const [stateReset, setStateReset] = useState(false);
+  // reportOpen will toggle report form
+  const [reportOpen, setReportOpen] = useState(false);
+  // item refers to the item object in ReportForm
+  const [item, setItem] = useState(null);
+
   useEffect(() => {
     resetPosts();
-    if (pageType === 'feed') {
-      getFeed(page);
-    } else if (pageType === 'favorites') {
-      getSavedPosts(page);
-    } else if (pageType === 'profilePosts') {
-      getPostsByUser(page, userId);
-    } else if (pageType === 'profileFavorites') {
-      getSavedPostsByUser(page, userId);
-    }
+    setStateReset(true);
   }, []);
+
+  // we only want useEffect to fire when nav link for feed has been clicked
+  useEffect(() => {
+    if (stateReset) {
+      if (pageType === 'feed') {
+        getFeed(page);
+      } else if (pageType === 'favorites') {
+        getSavedPosts(page);
+      } else if (pageType === 'profilePosts') {
+        getPostsByUser(page, userId);
+      } else if (pageType === 'profileFavorites') {
+        getSavedPostsByUser(page, userId);
+      }
+    }
+  }, [stateReset]);
+
+  useEffect(() => {
+    handleReportPopup();
+  }, [reportOpen]);
 
   window.onscroll = debounce(() => {
     // when users scroll, if the inner height is smaller than the window height we still call get feed
@@ -63,9 +81,39 @@ const Feed = ({
     }
   }, 100);
 
+  const handleReportPopup = () => {
+    if (reportOpen) {
+      const popup = document.querySelector('#popupReport');
+      const popupContent = document.querySelector('#popupReport');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+      // popupContent.opacity = "1";
+      // popupContent.transform = "translate(-50%, -50%) scale(1)";
+    } else if (!reportOpen && item) {
+      const popup = document.querySelector('#popupReport');
+      const popupContent = document.querySelector('#popupReportContent');
+      popup.style.opacity = '0';
+      popup.style.visibility = 'hidden';
+      // popupContent.opacity = "0";
+      // popupContent.transform = "translate(0, 0) scale(0)";
+    }
+  };
+
+  // Callback to toggle report open property
+  const reportOpenCallback = (openData) => {
+    setReportOpen(openData);
+    console.log(openData);
+  };
+
+  // Callback to return post object from post dropdown component
+  const reportItemCallback = (itemData) => {
+    setItem(itemData);
+    console.log(itemData);
+  };
+
   const handlePopup = (e) => {
-    const popup = document.querySelector('#popup');
-    const popupContent = document.querySelector('#popupContent');
+    const popup = document.querySelector('#popupPost');
+    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '1';
     popup.style.visibility = 'visible';
     // popupContent.opacity = "1";
@@ -90,10 +138,24 @@ const Feed = ({
       ) : posts.length === 0 ? (
         <div>No posts here. Please check out the explore page!</div>
       ) : (
-        posts.map((post) => <PostItem key={post._id} post={post} />)
+        posts.map((post) => (
+          <PostItem
+            key={post._id}
+            post={post}
+            reportOpenCallback={reportOpenCallback}
+            reportItemCallback={reportItemCallback}
+          />
+        ))
       )}
       {posts.length > 0 && !nextPage && (
         <div className="posts__container--end"> No more posts</div>
+      )}
+      {item && (
+        <ReportForm
+          item={item}
+          type="Post"
+          reportOpenCallback={reportOpenCallback}
+        />
       )}
     </div>
   );

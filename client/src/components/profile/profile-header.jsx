@@ -24,53 +24,82 @@ const ProfileHeader = ({
   blockUserById,
   unblockUserById,
 }) => {
-  const [popupReportVisible, setPopupReportVisible] = useState(false);
-  const [popupConfirmVisible, setPopupConfirmVisible] = useState(false);
-  const [confirmBlock, setConfirmBlock] = useState(false);
+  // reportOpen will toggle report form
+  const [reportOpen, setReportOpen] = useState(false);
+  // confirm state properties
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmData, setConfirmData] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(confirmData);
+  // }, []);
+
+  useEffect(() => {
+    handleReportPopup();
+  }, [reportOpen]);
+
+  useEffect(() => {
+    if (confirmData) {
+      handleBlock();
+    }
+  }, [confirmData]);
+
+  // toggles reportOpen variable
+  const reportOpenCallback = (openData) => {
+    setReportOpen(openData);
+  };
+
+  // toggles confirmOpen variable
+  const confirmOpenCallback = (openData) => {
+    setConfirmOpen(openData);
+  };
+
+  // toggles confirmData variable - if selection in window has been made
+  const confirmDataCallback = (confirmData) => {
+    setConfirmData(confirmData);
+  };
+
+  const handleConfirmOpen = () => {
+    setConfirmOpen(true);
+  };
 
   // Handle report popup
-  const handleReportPopup = (e) => {
-    if (!popupReportVisible) {
-      setPopupReportVisible(true);
+  const handleReportPopup = () => {
+    if (reportOpen) {
       const popup = document.querySelector('#popupReport');
       const popupContent = document.querySelector('#popupReport');
       popup.style.opacity = '1';
       popup.style.visibility = 'visible';
       // popupContent.opacity = "1";
       // popupContent.transform = "translate(-50%, -50%) scale(1)";
+    } else if (!reportOpen) {
+      const popup = document.querySelector('#popupReport');
+      const popupContent = document.querySelector('#popupReportContent');
+      popup.style.opacity = '0';
+      popup.style.visibility = 'hidden';
+      // popupContent.opacity = "0";
+      // popupContent.transform = "translate(0, 0) scale(0)";
     }
-    // reset popup visibility state when dropdown is closed
-    setPopupReportVisible(false);
   };
 
   // Handle confirm popup
-  const handleConfirmPopup = (e) => {
-    if (!popupConfirmVisible) {
-      setPopupConfirmVisible(true);
-      const popup = document.querySelector('#popupConfirm');
-      const popupContent = document.querySelector('#popupConfirm');
-      popup.style.opacity = '1';
-      popup.style.visibility = 'visible';
-      // popupContent.opacity = "1";
-      // popupContent.transform = "translate(-50%, -50%) scale(1)";
-    }
-    // reset popup visibility state when dropdown is closed
-    setPopupConfirmVisible(false);
-  };
-
-  // Callback to return result from confirm popup
-  const blockCallback = (confirmData) => {
-    setConfirmBlock(confirmData);
-  };
-
-  // When we have received a response from the confirm popup, check response and call block function if confirmed
-  useEffect(() => {
-    if (confirmBlock) {
-      handleBlock();
-    }
-    // reset confirm
-    setConfirmBlock(false);
-  }, [confirmBlock]);
+  // const handleConfirmPopup = (e) => {
+  //   if (confirmOpen) {
+  //     const popup = document.querySelector('#popupConfirm');
+  //     const popupContent = document.querySelector('#popupConfirm');
+  //     popup.style.opacity = '1';
+  //     popup.style.visibility = 'visible';
+  //     // popupContent.opacity = "1";
+  //     // popupContent.transform = "translate(-50%, -50%) scale(1)";
+  //   } else {
+  //     const popup = document.querySelector('#popupConfirm');
+  //     const popupContent = document.querySelector('#popupConfirm');
+  //     popup.style.opacity = '0';
+  //     popup.style.visibility = 'hidden';
+  //     // popupContent.opacity = "1";
+  //     // popupContent.transform = "translate(-50%, -50%) scale(1)";
+  //   }
+  // };
 
   const handleBlock = (e) => {
     blockUserById(user._id);
@@ -113,7 +142,7 @@ const ProfileHeader = ({
                 <div
                   className="btn__action btn__action--active"
                   // onClick={() => blockUserById(user._id)}
-                  onClick={handleConfirmPopup}
+                  onClick={() => console.log('Hello')}
                 >
                   Block
                 </div>
@@ -129,7 +158,7 @@ const ProfileHeader = ({
                 <div
                   className="btn__action btn__action--active"
                   // onClick={() => blockUserById(user._id)}
-                  onClick={handleConfirmPopup}
+                  onClick={handleConfirmOpen}
                 >
                   Block
                 </div>
@@ -137,7 +166,7 @@ const ProfileHeader = ({
             )}
             <div
               className="btn__action btn__action--active"
-              onClick={handleReportPopup}
+              onClick={() => setReportOpen(true)}
             >
               Report
             </div>
@@ -152,9 +181,15 @@ const ProfileHeader = ({
           </div>
         )}
       </div>
-      <ReportForm item={user} type="User" />
+      <ReportForm
+        item={user}
+        type="User"
+        reportOpenCallback={reportOpenCallback}
+      />
       <Confirm
-        parentCallback={blockCallback}
+        openData={confirmOpen}
+        confirmOpenCallback={confirmOpenCallback}
+        confirmDataCallback={confirmDataCallback}
         message="Are you sure you want to do this?"
       />
     </div>
