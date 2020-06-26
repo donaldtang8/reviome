@@ -15,6 +15,17 @@ exports.createOne = factory.createOne(Post);
 exports.deleteOne = factory.deleteOne(Post);
 
 // MIDDLEWARES
+exports.setCategoryToDelete = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+  const category = await Category.findById(post.category);
+
+  if (!category) {
+    return next(new AppError('No category found', 400));
+  }
+
+  req.body.category = category._id;
+  next();
+});
 
 // ALIASES
 /**
@@ -121,7 +132,13 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $nin: self.block_from } },
           ],
         },
-        { category: { $in: self.categories_following } },
+        {
+          $and: [
+            { category: { $in: self.categories_following } },
+            { user: { $nin: self.block_to } },
+            { user: { $nin: self.block_from } },
+          ],
+        },
         { user: { $eq: req.user.id } },
       ],
     }).populate('comments'),
