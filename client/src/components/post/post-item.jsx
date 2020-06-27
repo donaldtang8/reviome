@@ -26,6 +26,7 @@ const PostItem = ({
   unsavePostById,
   post,
   auth: { user },
+  reportOpen,
   reportOpenCallback,
   reportItemCallback,
 }) => {
@@ -78,6 +79,7 @@ const PostItem = ({
         </div>
         <PostDropdown
           post={post}
+          reportOpen={reportOpen}
           reportOpenCallback={reportOpenCallback}
           reportItemCallback={reportItemCallback}
         />
@@ -194,6 +196,7 @@ PostItem.propTypes = {
   savePostById: PropTypes.func.isRequired,
   unsavePostById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
+  reportOpen: PropTypes.bool,
   reportOpenCallback: PropTypes.func,
   reportItemCallback: PropTypes.func,
 };

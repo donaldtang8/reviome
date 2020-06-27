@@ -24,7 +24,7 @@ const Confirm = ({
   // when the confirmOpen toggle changes, we want to open/close the confirm popup based on the toggle setting
   // when the confirmOpen toggle changes, we also want to add or remove a listener to see if a click was pressed outside the confirm window. If yes, then we close
   useEffect(() => {
-    handleConfirmPopup();
+    handlePopup();
     if (confirmOpen) {
       document.addEventListener('mousedown', handleCheckPopup);
     } else {
@@ -39,7 +39,7 @@ const Confirm = ({
   };
 
   // Handle confirm popup
-  const handleConfirmPopup = (e) => {
+  const handlePopup = (e) => {
     if (confirmOpen) {
       const popup = document.querySelector('#popupConfirm');
       const popupContent = document.querySelector('#popupConfirm');
@@ -58,6 +58,15 @@ const Confirm = ({
     }
   };
 
+  const handleCheckPopup = (e) => {
+    if (popupConfirmRef.current) {
+      if (popupConfirmRef.current.contains(e.target)) {
+        return;
+      }
+      handleClose();
+    }
+  };
+
   // when user has made a selection, we want to call the callback to set the selection and close the confirm popup
   const handleSubmitClick = (e) => {
     e.preventDefault();
@@ -67,15 +76,6 @@ const Confirm = ({
       confirmDataCallback(false);
     }
     handleClose();
-  };
-
-  const handleCheckPopup = (e) => {
-    if (popupConfirmRef.current) {
-      if (popupConfirmRef.current.contains(e.target)) {
-        return;
-      }
-      handleClose();
-    }
   };
 
   return (

@@ -21,32 +21,24 @@ const PostDropdown = ({
   // visible refers to the toggle of the dropdown menu
   const [visible, setVisible] = useState(false);
   // popupVisible refers to the toggle of the report popup
-  const [popupVisible, setPopupVisible] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  // refs
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
     menuRef: React.createRef(),
   });
-
   const { btnRef, menuRef } = refs;
 
+  // whenever dropdown visible state is toggled, add or remove listener to hide dropdown
   useEffect(() => {
     if (visible) {
-      document.addEventListener('mousedown', hideDropdown);
+      document.addEventListener('mousedown', hideDropdownHandler);
     } else {
-      document.removeEventListener('mousedown', hideDropdown);
+      document.removeEventListener('mousedown', hideDropdownHandler);
     }
   }, [visible]);
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (!visible) {
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
-  };
-
-  const hideDropdown = (e) => {
+  const hideDropdownHandler = (e) => {
     if (btnRef.current || menuRef.current) {
       if (
         btnRef.current.contains(e.target) ||
@@ -58,25 +50,31 @@ const PostDropdown = ({
     }
   };
 
-  const forceHide = () => {
-    setVisible(false);
+  // handleClick will handle the toggling of the visible state of the dropdown menu when the dropdown menu dots are pressed
+  const handleDropdownClick = (e) => {
+    e.preventDefault();
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
   };
 
   const handleBlock = (e) => {
     e.preventDefault();
     blockUserById(post.user._id);
-    forceHide();
+    setVisible(false);
   };
 
-  const handleReportPopup = (e) => {
+  // When report option is clicked:
+  // 1. Call report callback function to set item property of report
+  // 2. Check if report toggle is false - If so, set report toggle to open and dropdown toggle to close
+  // 3.
+  const handleReportClick = (e) => {
+    console.log('Clicked report option in dropdown');
+    reportOpenCallback(true);
     reportItemCallback(post);
-    if (!popupVisible) {
-      reportOpenCallback(true);
-      setPopupVisible(true);
-      forceHide();
-    }
-    // reset popup visibility state when dropdown is closed
-    setPopupVisible(false);
+    setVisible(false);
   };
 
   return (
@@ -85,7 +83,7 @@ const PostDropdown = ({
         ref={btnRef}
         id="dropdown-btn"
         className="dropdown__btn"
-        onClick={handleClick}
+        onClick={handleDropdownClick}
       >
         <span className="dropdown__dot dropdown-dot"></span>
         <span className="dropdown__dot dropdown-dot"></span>
@@ -108,7 +106,7 @@ const PostDropdown = ({
         </Link>
         {user._id !== post.user._id ? (
           <Fragment>
-            <div className="dropdown__menu--item" onClick={handleReportPopup}>
+            <div className="dropdown__menu--item" onClick={handleReportClick}>
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
                   <use xlinkHref={`${sprite}#icon-flag`}></use>
