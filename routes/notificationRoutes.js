@@ -11,7 +11,11 @@ router
   .get(notificationController.getAll)
   .post(notificationController.setUserId, notificationController.createOne);
 
-router.route('/me').get(notificationController.getUserNotifications);
+router.get(
+  '/me',
+  notificationController.setMe,
+  notificationController.getNotificationsByUserId
+);
 
 router.route('/:id/open').patch(notificationController.setOpen);
 router.route('/:id/read').patch(notificationController.setRead);

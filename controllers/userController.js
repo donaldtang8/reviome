@@ -10,7 +10,7 @@ exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
 /**
- * @function  filterObj
+ * @helper  filterObj
  * @param obj The object that we will filter
  * @param allowedFields A list of fields that will be allowed in object
  * @description Utility function used to filter out req.body object and only keep fields we allow
@@ -65,6 +65,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.username) convertBody.uName = req.body.username;
   // FRONT END IMAGE UPLOAD
   if (req.body.photo) convertBody.photo = req.body.photo;
+
   // 3. Filter out req.body to make sure user does not update properties that are not allowed
   const filteredBody = filterObj(
     convertBody,
@@ -74,6 +75,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'email',
     'photo'
   );
+
   // FRONT END IMAGE UPLOAD
   // if (req.file) filteredBody.photo = req.file.filename;
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
@@ -110,7 +112,7 @@ exports.getUserByUsername = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ uName: req.params.username });
 
   if (!user) {
-    return next(new AppError('No document found with that username'));
+    return next(new AppError('No document found with that username', 404));
   }
 
   res.status(200).json({
@@ -138,15 +140,15 @@ exports.followUserById = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.params.id);
 
   if (!user) {
-    return next(new AppError('No user found with that id', 400));
+    return next(new AppError('No user found with that id', 404));
   }
 
-  // 4. Check if self is blocking user
+  // 4. Check if user who made request is blocking user to be followed
   if (self.isBlockingUser(req.params.id)) {
     return next(new AppError('Please unblock user to follow', 400));
   }
 
-  // 5. Check if user is blocking self
+  // 5. Check if user to follow is blocking user who made request
   if (user.isBlockingUser(req.user.id)) {
     return next(new AppError('Cannot follow user', 400));
   }
@@ -211,7 +213,7 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.params.id);
 
   if (!user) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Retrieve self user object
@@ -222,7 +224,7 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
     return next(new AppError('Already blocking user', 400));
   }
 
-  // 4. If self is following user, remove user from following list and decrement follower count from user
+  // 4. If user who made request is following user to be blocked, remove user who made request from following list and decrement follower count from user to be blocked
   if (self.isFollowingUser(req.params.id)) {
     self = await User.findByIdAndUpdate(
       req.user.id,
@@ -241,7 +243,7 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 5. If user to be blocked is following self, remove self from user following list and decrement follower count from self
+  // 5. If user to be blocked is following user who made request, remove user to be blocked from following list and decrement follower count from user who made request
   if (user.isFollowingUser(req.user.id)) {
     user = await User.findByIdAndUpdate(
       req.params.id,
@@ -280,14 +282,14 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
 
 /**
  * @function  unblockUserById
- * @description Unblock user given id and add to block list
+ * @description Unblock user given id and remove from block list
  **/
 exports.unblockUserById = catchAsync(async (req, res, next) => {
   // 1. Retrieve user by ID
   const user = await User.findById(req.user.id);
 
   if (!user) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Check to see if we are already blocking user

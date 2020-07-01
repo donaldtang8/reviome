@@ -5,8 +5,6 @@ const factory = require('./handlerFactory');
 const Category = require('./../models/categoryModel');
 const User = require('./../models/userModel');
 
-// exports.getAll = factory.getAll(Category);
-exports.getOne = factory.getOne(Category);
 exports.createOne = factory.createOne(Category);
 
 // MIDDLEWARE
@@ -21,10 +19,11 @@ exports.getAncestorsAndParent = catchAsync(async (req, res, next) => {
       name: req.body.parentString,
       genre: false,
     });
+
     // 2. Add all ancestors of parent to current ancestor list
     let ancestors = category.ancestors;
-    // 2. Add parent to ancestors
     ancestors.push(category._id);
+
     // 3. Set ancestor array in request body
     req.body.ancestors = ancestors;
 
@@ -35,7 +34,7 @@ exports.getAncestorsAndParent = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  incrementPostCount
+ * @middleware  incrementPostCount
  * @description Increment the post count for category
  **/
 exports.incrementPostCount = catchAsync(async (req, res, next) => {
@@ -48,7 +47,7 @@ exports.incrementPostCount = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  decrementPostCount
+ * @middleware  decrementPostCount
  * @description Decrement the post count for category
  **/
 exports.decrementPostCount = catchAsync(async (req, res, next) => {
@@ -61,8 +60,8 @@ exports.decrementPostCount = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  getOne
- * @description Queries and finds category with given ID
+ * @function  getAll
+ * @description Finds all categories
  **/
 exports.getAll = catchAsync(async (req, res, next) => {
   const categories = await Category.find();
@@ -139,7 +138,7 @@ exports.getSubcategoriesById = catchAsync(async (req, res, next) => {
   const category = await Category.findById(req.params.id);
 
   if (!category) {
-    return next(new AppError('There is no category with that ID', 400));
+    return next(new AppError('There is no category with that ID', 404));
   }
 
   // 2. Find all categories with parent as 'category'
@@ -167,7 +166,7 @@ exports.getSubcategoriesBySlug = catchAsync(async (req, res, next) => {
   const category = await Category.findOne({ slug: slugString });
 
   if (!category) {
-    return next(new AppError('There is no category with that slug', 400));
+    return next(new AppError('There is no category with that slug', 404));
   }
 
   // 2. Find all categories with parent as 'category'
@@ -191,7 +190,7 @@ exports.followCategoryById = catchAsync(async (req, res, next) => {
   let category = await Category.findById(req.params.id);
 
   if (!category) {
-    return next(new AppError('There is no category with that ID', 400));
+    return next(new AppError('There is no category with that ID', 404));
   }
 
   // 2. Make sure category is a genre
@@ -199,20 +198,20 @@ exports.followCategoryById = catchAsync(async (req, res, next) => {
     return next(new AppError('Can only follow genres', 400));
   }
 
-  // 2. Retrieve self user object
+  // 3. Retrieve self user object
   const self = await User.findById(req.user.id);
 
-  // 3. Check if user is already following category
+  // 4. Check if user is already following category
   if (self.isFollowingCategory(req.params.id)) {
     return next(new AppError('Already following category', 400));
   }
 
-  // 4. Update category follower count
+  // 5. Update category follower count
   category = await Category.findByIdAndUpdate(req.params.id, {
     $inc: { followers: 1 },
   });
 
-  // 5. Add category to user's category list
+  // 6. Add category to user's category list
   self.categories_following.push(req.params.id);
   await self.save({ validateBeforeSave: false });
 
@@ -233,7 +232,7 @@ exports.unfollowCategoryById = catchAsync(async (req, res, next) => {
   let category = await Category.findById(req.params.id);
 
   if (!category) {
-    return next(new AppError('There is no category with that ID', 400));
+    return next(new AppError('There is no category with that ID', 404));
   }
 
   // 2. Retrieve self user object

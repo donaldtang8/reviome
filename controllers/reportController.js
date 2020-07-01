@@ -69,7 +69,7 @@ exports.validateReport = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  filterObj
+ * @helper  filterObj
  * @param obj The object that we will filter
  * @param allowedFields A list of fields that will be allowed in object
  * @description Utility function used to filter out req.body object and only keep fields we allow
@@ -117,7 +117,7 @@ exports.resolveReport = catchAsync(async (req, res, next) => {
   });
 
   if (!report) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Return updated document

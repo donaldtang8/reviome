@@ -70,7 +70,7 @@ exports.likeCommentById = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(req.params.id);
 
   if (!comment) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // NOTIFICATION - set doc in req.body so notification can access
@@ -110,7 +110,7 @@ exports.unlikeCommentById = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(req.params.id);
 
   if (!comment) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Check if post is liked

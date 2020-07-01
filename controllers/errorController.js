@@ -16,7 +16,7 @@ const handleCastErrorDB = (err) => {
  * @return  AppError object with new error message
  **/
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
   const message = `Duplicate field value ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
@@ -81,7 +81,7 @@ const sendErrorDev = (err, req, res) => {
  * @function  sendErrorProd
  * @description Send error in production environment
  **/
-const sendErrorProd = (err, res) => {
+const sendErrorProd = (err, req, res) => {
   // if call came from API
   if (req.originalUrl.startsWith('/api')) {
     // A. API - Operational error - trusted error, show error details
@@ -125,23 +125,25 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   // if there is no status associated with the error, by default it will be set to 'error'
   err.status = err.status || 'error';
+
+  let error = { ...err };
+  error.message = err.message;
+
+  if (err.name === 'CastError') error = handleCastErrorDB(error);
+  if (err.code === 11000) error = handleDuplicateFieldsDB(error);
+  if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
+  if (err.name === 'JsonWebTokenError') error = handleJWTError();
+  if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
+
   // if we are in the production environment, we let our helper functions create a user friendly error message before showing it to the user
   if (process.env.NODE_ENV === 'production') {
-    let error = { ...err };
-    error.message = err.message;
-
-    if (error.name === 'CastError') error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === 'ValidationError')
-      error = handleValidationErrorDB(error);
-    if (error.name === 'JsonWebTokenError') error = handleJWTError();
-    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     // use sendErrorProd function for remaining functions that are not explicitly caught
     sendErrorProd(error, res);
   }
   // otherwise, if we are in the developmental environment, we can just show the error details as is
   else {
-    sendErrorDev(err, req, res);
+    sendErrorDev(error, req, res);
   }
+
   next();
 };

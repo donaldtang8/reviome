@@ -8,53 +8,8 @@ const Email = require('./../utils/email');
 const User = require('../models/userModel');
 
 /**
- * @function  signToken
- * @description Signs JWT token with expires options
- * @param id  Accepts userId as parameter
- * @return  Returns signed JWT token
- **/
-const signToken = (id) => {
-  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
-
-/**
- * @function  createSendToken
- * @description Creates and sends JWT token
- * @param user  User object of the owner of token
- * @param statusCode Response status code
- * @param res Response object
- **/
-const createSendToken = (user, statusCode, res) => {
-  // sign token with user id
-  const token = signToken(user._id);
-  // define cookie options with expires time and httpOnly option
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-  // in development mode, http is used, so we do not use the secure option in development mode, only in production mode
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  // return jwt in cookie
-  res.cookie('jwt', token, cookieOptions);
-  // remove password from output
-  user.pass = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token: token,
-    data: {
-      user: user,
-    },
-  });
-};
-
-/**
  * @middleware  protect
- * @description Checks that request is being made from user with a token
+ * @description Checks that request is being made from authenticated user
  **/
 exports.protect = catchAsync(async (req, res, next) => {
   // 1. Get token and check if its there
@@ -78,7 +33,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const user = await User.findById(decoded.id);
   if (!user)
     return next(
-      new AppError('The user belong to this token does not exist', 401)
+      new AppError('The user belonging to this token does not exist', 401)
     );
   // 3. Check if user changed password after token was issued
   if (user.changedPasswordAfter(decoded.iat)) {
@@ -111,19 +66,64 @@ exports.restrictTo = (...roles) => {
 
 /**
  * @middleware  restrictToMe
- * @description Restricts route to self owner of document
+ * @description Restricts route to owner of document
  **/
 exports.restrictToMe = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findById(req.params.id);
     if (req.user.id !== doc.user._id.toString()) {
       return next(
-        new AppError('You do not have permission to perform this action', 400)
+        new AppError('You do not have permission to perform this action', 403)
       );
     } else {
       next();
     }
   });
+
+/**
+ * @helper  signToken
+ * @description Signs JWT token with expires options
+ * @param id  Accepts userId as parameter
+ * @return  Returns signed JWT token
+ **/
+const signToken = (id) => {
+  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+/**
+ * @helper  createSendToken
+ * @description Creates and sends JWT token
+ * @param user  User object of the owner of token
+ * @param statusCode Response status code
+ * @param res Response object
+ **/
+const createSendToken = (user, statusCode, res) => {
+  // sign token with user id
+  const token = signToken(user._id);
+  // define cookie options with expires time and httpOnly option
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+  // in development mode, http is used, so we do not use the secure option in development mode, only in production mode
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // return jwt in cookie
+  res.cookie('jwt', token, cookieOptions);
+  // remove password from output
+  user.pass = undefined;
+
+  res.status(statusCode).json({
+    status: 'success',
+    token: token,
+    data: {
+      user: user,
+    },
+  });
+};
 
 /**
  * @function  signup
@@ -183,9 +183,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1. Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(
-      new AppError('There is no user associated with this email', 404)
-    );
+    return res.status(200).json({
+      status: 'success',
+      message:
+        'If there was an email associated with the account, a reset password email has been sent',
+    });
   }
   // 2. Generate random reset password Token
   const resetToken = user.createPasswordResetToken();
@@ -198,7 +200,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      message: 'Reset password request successfully sent',
+      message:
+        'If there was an email associated with the account, a reset password email has been sent',
     });
   } catch (err) {
     user.passResetToken = undefined;
@@ -232,7 +235,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new AppError('There is no user associated with this token', 404)
+      new AppError('There is no user associated with this token', 400)
     );
   }
 
@@ -265,7 +268,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 2. Check if current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.pass))) {
-    return next(new AppError('Your current password is incorrect', 401));
+    return next(new AppError('Your current password is incorrect', 400));
   }
 
   // 3. If password is correct, check that passwords

@@ -12,6 +12,10 @@ exports.getOne = factory.getOne(Notification);
 exports.createOne = factory.createOne(Notification);
 exports.deleteOne = factory.deleteOne(Notification);
 
+/**
+ * @helper countUnreadNotifications
+ * @description Set notif property in req.body to true for factory createOne to call next()
+ **/
 const countUnreadNotifications = (notificationArray) => {
   let count = 0;
   for (let i = 0; i < notificationArray.length; i++) {
@@ -32,8 +36,17 @@ exports.setNotif = (req, res, next) => {
 };
 
 /**
+ * @middleware setMe
+ * @description Populate id property in req.params to the user that made the request
+ **/
+exports.setMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
+/**
  * @middleware setUserId
- * @description Get top posts within a certain time period
+ * @description Populate user_from property in body to the user that made the request
  **/
 exports.setUserId = (req, res, next) => {
   if (!req.body.user_from) req.body.user_from = req.user.id;
@@ -41,15 +54,32 @@ exports.setUserId = (req, res, next) => {
 };
 
 /**
- * @function getUserNotifications
+ * @function getNotificationsByUser
  * @description Retrieve all notifications to specified user
  **/
-exports.getUserNotifications = catchAsync(async (req, res, next) => {
-  // 1. Execute request without APIFeatures object to find total number of results
-  const notifications = await Notification.find({ user_to: req.user.id });
+exports.getNotificationsByUserId = catchAsync(async (req, res) => {
+  // 1. Get self document for access to block list
+  const self = await User.findById(req.params.id);
 
-  // 2. Get self document for access to block list
-  const self = await User.findById(req.user.id);
+  // 2. Execute request without APIFeatures object to find total number of results
+  const notifications = await Notification.find({
+    $or: [
+      {
+        $and: [
+          { user_to: { $eq: req.params.id } },
+          { user_from: { $nin: self.block_to } },
+          { user_from: { $nin: self.block_from } },
+        ],
+        $and: [
+          { user_to: { $eq: req.params.id } },
+          { user_from: { $nin: self.block_to } },
+          { user_from: { $nin: self.block_from } },
+          { user_from: { $in: self.following } },
+          { type: { $eq: 'Post' } },
+        ],
+      },
+    ],
+  });
 
   // 3. Create new APIFeatures object and pass in query
   // we want to display all notifications where user_to is the user and where user_from is not blocked or is blocking user_from
@@ -59,12 +89,12 @@ exports.getUserNotifications = catchAsync(async (req, res, next) => {
       $or: [
         {
           $and: [
-            { user_to: { $eq: req.user.id } },
+            { user_to: { $eq: req.params.id } },
             { user_from: { $nin: self.block_to } },
             { user_from: { $nin: self.block_from } },
           ],
           $and: [
-            { user_to: { $eq: req.user.id } },
+            { user_to: { $eq: req.params.id } },
             { user_from: { $nin: self.block_to } },
             { user_from: { $nin: self.block_from } },
             { user_from: { $in: self.following } },
@@ -83,7 +113,6 @@ exports.getUserNotifications = catchAsync(async (req, res, next) => {
   let count = countUnreadNotifications(doc);
 
   // we need to retrieve the number of unread notifications in doc array
-
   res.status(200).json({
     status: 'success',
     total: notifications.length,
@@ -102,6 +131,7 @@ exports.getUserNotifications = catchAsync(async (req, res, next) => {
 exports.addPostNotification = catchAsync(async (req, res) => {
   // 1. Retrieve self user object
   const self = await User.findById(req.user.id);
+
   // 2. Retrieve all users that are following post creator
   const followingUsers = await User.find({
     following: { $all: [req.body.doc.user] },
@@ -136,11 +166,11 @@ exports.removePostNotification = catchAsync(async (req, res) => {
  * @description Create a notification for liking a post
  **/
 exports.addLikeNotification = catchAsync(async (req, res) => {
-  // 1. If post creator liked own post, we do not create a notification
+  // 1. Only create notification for non-self-liked actions
   if (req.user.id !== req.body.doc.user.id) {
-    // 1. Retrieve self user object
+    // 2. Retrieve self user object
     const self = await User.findById(req.user.id);
-    // 2. Create notification object for post creator
+    // 3. Create notification object for post creator
     await Notification.create({
       user_from: req.user.id,
       user_to: req.body.doc.user._id,
@@ -174,9 +204,9 @@ exports.addCommentNotification = catchAsync(async (req, res) => {
   const post = await Post.findById(req.params.postId);
   // 2. If post creator commented on own post, we do not create a notification
   if (req.user.id !== post.user._id) {
-    // 1. Retrieve self user object
+    // 3. Retrieve self user object
     const self = await User.findById(req.user.id);
-    // 2. Create notification object for post creator
+    // 4. Create notification object for post creator
     await Notification.create({
       user_from: req.user.id,
       user_to: post.user,
@@ -208,9 +238,9 @@ exports.removeCommentNotification = catchAsync(async (req, res) => {
 exports.addCommentLikeNotification = catchAsync(async (req, res) => {
   // 1. If comment creator liked own comment, do not create a notification for that
   if (req.user.id !== req.body.doc.user.id) {
-    // 1. 1. Retrieve self user object
+    // 2. Retrieve self user object
     const self = await User.findById(req.user.id);
-    // 2. Create notification object for comment creator
+    // 3. Create notification object for comment creator
     await Notification.create({
       user_from: req.user.id,
       user_to: req.body.doc.user._id,

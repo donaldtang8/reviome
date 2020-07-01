@@ -15,6 +15,11 @@ exports.createOne = factory.createOne(Post);
 exports.deleteOne = factory.deleteOne(Post);
 
 // MIDDLEWARES
+
+/**
+ * @middleware setCategoryToDelete
+ * @description Get top posts within a certain time period
+ **/
 exports.setCategoryToDelete = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
   const category = await Category.findById(post.category);
@@ -29,8 +34,8 @@ exports.setCategoryToDelete = catchAsync(async (req, res, next) => {
 
 // ALIASES
 /**
- * @function getTopPosts
- * @description Get top posts within a certain time period
+ * @alias getTopPosts
+ * @description STILL IN PROGRESS
  **/
 exports.getTopPosts = catchAsync(async (req, res, next) => {
   let days;
@@ -170,7 +175,7 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
 
   if (!cat) {
     return next(
-      new AppError('There is no category associated with that ID', 400)
+      new AppError('There is no category associated with that ID', 404)
     );
   }
 
@@ -212,7 +217,7 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
 
   if (!cat) {
     return next(
-      new AppError('There is no category associated with that ID', 400)
+      new AppError('There is no category associated with that slug', 404)
     );
   }
 
@@ -362,7 +367,7 @@ exports.likePostById = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // NOTIFICATION - set doc in req.body so notification can access
@@ -437,7 +442,7 @@ exports.savePostById = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Check if user already liked post
@@ -464,15 +469,15 @@ exports.savePostById = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  savePostById
- * @description Find post by given post ID and add user to its save array
+ * @function  unsavePostById
+ * @description Find post by given post ID and remove user from its save array
  **/
 exports.unsavePostById = catchAsync(async (req, res, next) => {
   // 1. Retrieve post from id
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new AppError('No document found with that ID', 400));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   // 2. Check if user already liked post
@@ -480,7 +485,7 @@ exports.unsavePostById = catchAsync(async (req, res, next) => {
     return next(new AppError('Post has not been saved yet', 400));
   }
 
-  // 1. Find post by id and update save list
+  // 3. Find post by id and update save list
   const newPost = await Post.findByIdAndUpdate(
     req.params.id,
     {
