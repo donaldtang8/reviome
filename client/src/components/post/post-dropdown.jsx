@@ -69,9 +69,8 @@ const PostDropdown = ({
   // When report option is clicked:
   // 1. Call report callback function to set item property of report
   // 2. Check if report toggle is false - If so, set report toggle to open and dropdown toggle to close
-  // 3.
+  // 3. Set dropdown visible toggle to false to close dropdown
   const handleReportClick = (e) => {
-    console.log('Clicked report option in dropdown');
     reportOpenCallback(true);
     reportItemCallback(post);
     setVisible(false);

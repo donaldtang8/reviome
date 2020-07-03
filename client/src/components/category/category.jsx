@@ -23,12 +23,6 @@ const Category = ({
     getSubcategoriesBySlug(match.params.category);
   }, []);
 
-  useEffect(() => {
-    if (category) {
-      console.log(category);
-    }
-  }, [category]);
-
   return (
     <div className="category__container">
       <div className="category__container--title">

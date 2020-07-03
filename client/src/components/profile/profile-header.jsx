@@ -30,14 +30,12 @@ const ProfileHeader = ({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmData, setConfirmData] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(confirmData);
-  // }, []);
-
+  // if reportOpen toggle changes, we will call the handler function to check whether to open/close the report popup
   useEffect(() => {
     handleReportPopup();
   }, [reportOpen]);
 
+  // if confirmData toggle changes, check if confirmData has a value
   useEffect(() => {
     if (confirmData) {
       handleBlock();
@@ -45,18 +43,18 @@ const ProfileHeader = ({
   }, [confirmData]);
 
   // toggles reportOpen variable
-  const reportOpenCallback = (openData) => {
-    setReportOpen(openData);
+  const reportOpenCallback = (open) => {
+    setReportOpen(open);
   };
 
   // toggles confirmOpen variable
-  const confirmOpenCallback = (openData) => {
-    setConfirmOpen(openData);
+  const confirmOpenCallback = (open) => {
+    setConfirmOpen(open);
   };
 
   // toggles confirmData variable - if selection in window has been made
-  const confirmDataCallback = (confirmData) => {
-    setConfirmData(confirmData);
+  const confirmDataCallback = (data) => {
+    setConfirmData(data);
   };
 
   const handleConfirmOpen = () => {
@@ -83,25 +81,10 @@ const ProfileHeader = ({
   };
 
   // Handle confirm popup
-  // const handleConfirmPopup = (e) => {
-  //   if (confirmOpen) {
-  //     const popup = document.querySelector('#popupConfirm');
-  //     const popupContent = document.querySelector('#popupConfirm');
-  //     popup.style.opacity = '1';
-  //     popup.style.visibility = 'visible';
-  //     // popupContent.opacity = "1";
-  //     // popupContent.transform = "translate(-50%, -50%) scale(1)";
-  //   } else {
-  //     const popup = document.querySelector('#popupConfirm');
-  //     const popupContent = document.querySelector('#popupConfirm');
-  //     popup.style.opacity = '0';
-  //     popup.style.visibility = 'hidden';
-  //     // popupContent.opacity = "1";
-  //     // popupContent.transform = "translate(-50%, -50%) scale(1)";
-  //   }
-  // };
 
+  // block user
   const handleBlock = (e) => {
+    e.preventDefault();
     blockUserById(user._id);
   };
 
@@ -141,8 +124,7 @@ const ProfileHeader = ({
                 </div>
                 <div
                   className="btn__action btn__action--active"
-                  // onClick={() => blockUserById(user._id)}
-                  onClick={() => console.log('Hello')}
+                  onClick={handleConfirmOpen}
                 >
                   Block
                 </div>
@@ -187,7 +169,7 @@ const ProfileHeader = ({
         reportOpenCallback={reportOpenCallback}
       />
       <Confirm
-        openData={confirmOpen}
+        confirmOpen={confirmOpen}
         confirmOpenCallback={confirmOpenCallback}
         confirmDataCallback={confirmDataCallback}
         message="Are you sure you want to do this?"
