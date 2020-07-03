@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -8,7 +8,7 @@ import { logout } from './../../redux/actions/auth';
 
 import sprite from './../../assets/sprite.svg';
 
-const HeaderDropdown = ({ logout, user, match }) => {
+const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
   const [visible, setVisible] = useState(false);
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
@@ -96,44 +96,68 @@ const HeaderDropdown = ({ logout, user, match }) => {
         aria-labelledby="dropdown-btn"
         aria-hidden="true"
       >
-        <Link to={`/profile/${user.uName}`} className="dropdown__menu--item">
-          <div className="btn__dropdown">
-            <svg className="btn__dropdown--svg">
-              <use xlinkHref={`${sprite}#icon-user`}></use>
-            </svg>
-          </div>
-          Profile
-        </Link>
-        <Link to="/account" className="dropdown__menu--item">
-          <div className="btn__dropdown">
-            <svg className="btn__dropdown--svg">
-              <use xlinkHref={`${sprite}#icon-cog`}></use>
-            </svg>
-          </div>
-          Account
-        </Link>
-        <div className="dropdown__menu--item">
-          <div className="btn__dropdown">
-            <svg className="btn__dropdown--svg">
-              <use xlinkHref={`${sprite}#icon-moon`}></use>
-            </svg>
-          </div>
-          <div>Dark Mode</div>
-          <div className="toggle-switch__container">
-            <label className="toggle-switch--item" htmlFor="checkbox">
-              <input type="checkbox" id="checkbox" onChange={handleTheme} />
-              <div className="slider round"></div>
-            </label>
-          </div>
-        </div>
-        <div className="dropdown__menu--item" onClick={handleLogout}>
-          <div className="btn__dropdown">
-            <svg className="btn__dropdown--svg">
-              <use xlinkHref={`${sprite}#icon-exit`}></use>
-            </svg>
-          </div>
-          Logout
-        </div>
+        {isAuthenticated ? (
+          <Fragment>
+            <Link
+              to={`/profile/${user.uName}`}
+              className="dropdown__menu--item"
+            >
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-user`}></use>
+                </svg>
+              </div>
+              Profile
+            </Link>
+            <Link to="/account" className="dropdown__menu--item">
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-cog`}></use>
+                </svg>
+              </div>
+              Account
+            </Link>
+            <div className="dropdown__menu--item">
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-moon`}></use>
+                </svg>
+              </div>
+              <div>Dark Mode</div>
+              <div className="toggle-switch__container">
+                <label className="toggle-switch--item" htmlFor="checkbox">
+                  <input type="checkbox" id="checkbox" onChange={handleTheme} />
+                  <div className="slider round"></div>
+                </label>
+              </div>
+            </div>
+            <div className="dropdown__menu--item" onClick={handleLogout}>
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-exit`}></use>
+                </svg>
+              </div>
+              Logout
+            </div>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <div className="dropdown__menu--item">
+              <div className="btn__dropdown">
+                <svg className="btn__dropdown--svg">
+                  <use xlinkHref={`${sprite}#icon-moon`}></use>
+                </svg>
+              </div>
+              <div>Dark Mode</div>
+              <div className="toggle-switch__container">
+                <label className="toggle-switch--item" htmlFor="checkbox">
+                  <input type="checkbox" id="checkbox" onChange={handleTheme} />
+                  <div className="slider round"></div>
+                </label>
+              </div>
+            </div>
+          </Fragment>
+        )}
       </div>
     </div>
   );
@@ -144,4 +168,8 @@ HeaderDropdown.propTypes = {
   user: PropTypes.object,
 };
 
-export default connect(null, { logout })(withRouter(HeaderDropdown));
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { logout })(withRouter(HeaderDropdown));

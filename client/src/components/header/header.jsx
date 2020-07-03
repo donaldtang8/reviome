@@ -36,6 +36,9 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
               <Link to="/login" className="nav__item">
                 Login
               </Link>
+              <div className="nav__item">
+                <HeaderDropdown user={user} />
+              </div>
             </Fragment>
           )}
         </nav>
