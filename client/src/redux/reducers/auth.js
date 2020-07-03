@@ -1,4 +1,7 @@
 import {
+  AUTH_LOADING,
+  AUTH_SUCCESS,
+  AUTH_ERROR,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
@@ -12,7 +15,6 @@ import {
   UNBLOCK_USER,
   FOLLOW_CATEGORY,
   UNFOLLOW_CATEGORY,
-  AUTH_ERROR,
 } from './../actions/types';
 
 const initialState = {
@@ -27,6 +29,16 @@ export default function (state = initialState, action) {
 
   switch (type) {
     // Authentication related actions
+    case AUTH_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case AUTH_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
     case GET_ME:
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -36,20 +48,18 @@ export default function (state = initialState, action) {
         loading: false,
         user: payload,
       };
-    case REGISTER_FAIL:
-    case LOGIN_FAIL:
-      return {
-        ...state,
-        isAuthenticated: false,
-        loading: false,
-        errors: [...state.errors, payload],
-      };
     case LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
         loading: false,
         user: null,
+        errors: [],
+      };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        loading: false,
       };
     // User related actions
     case UPDATE_ME:
@@ -85,8 +95,6 @@ export default function (state = initialState, action) {
           categories_following: payload,
         },
       };
-    case AUTH_ERROR:
-      return state;
     default:
       return state;
   }
