@@ -52,12 +52,10 @@ const ExploreFeed = ({
 
   window.onscroll = debounce(() => {
     // when users scroll, if the inner height is smaller than the window height we still call get feed
-    console.log('On scroll function');
     if (
       window.innerHeight + window.scrollY >= document.body.scrollHeight &&
       nextPage
     ) {
-      console.log('Retrieving next page');
       if (loading || errors.length > 0) return;
       getPostsByCategorySlug(page, genre);
     }

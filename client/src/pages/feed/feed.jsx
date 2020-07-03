@@ -36,7 +36,7 @@ const Feed = ({
   // reportOpen will toggle report form
   const [reportOpen, setReportOpen] = useState(false);
   // item refers to the item object in ReportForm
-  const [item, setItem] = useState(null);
+  const [reportItem, setReportItem] = useState(null);
 
   useEffect(() => {
     resetPosts();
@@ -58,10 +58,6 @@ const Feed = ({
     }
   }, [stateReset]);
 
-  useEffect(() => {
-    handleReportPopup();
-  }, [reportOpen]);
-
   window.onscroll = debounce(() => {
     // when users scroll, if the inner height is smaller than the window height we still call get feed
     if (
@@ -81,34 +77,14 @@ const Feed = ({
     }
   }, 100);
 
-  const handleReportPopup = () => {
-    if (reportOpen) {
-      const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReport');
-      popup.style.opacity = '1';
-      popup.style.visibility = 'visible';
-      // popupContent.opacity = "1";
-      // popupContent.transform = "translate(-50%, -50%) scale(1)";
-    } else if (!reportOpen && item) {
-      const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReportContent');
-      popup.style.opacity = '0';
-      popup.style.visibility = 'hidden';
-      // popupContent.opacity = "0";
-      // popupContent.transform = "translate(0, 0) scale(0)";
-    }
-  };
-
   // Callback to toggle report open property
-  const reportOpenCallback = (openData) => {
-    setReportOpen(openData);
-    console.log(openData);
+  const reportOpenCallback = (open) => {
+    setReportOpen(open);
   };
 
   // Callback to return post object from post dropdown component
   const reportItemCallback = (itemData) => {
-    setItem(itemData);
-    console.log(itemData);
+    setReportItem(itemData);
   };
 
   const handlePopup = (e) => {
@@ -150,10 +126,12 @@ const Feed = ({
       {posts.length > 0 && !nextPage && (
         <div className="posts__container--end"> No more posts</div>
       )}
-      {item && (
+      {reportItem && (
         <ReportForm
-          item={item}
+          item={reportItem}
           type="Post"
+          reportOpen={reportOpen}
+          reportItemCallback={reportItemCallback}
           reportOpenCallback={reportOpenCallback}
         />
       )}
