@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Username is required'],
       unique: true,
       lowercase: true,
-      minlength: 3,
+      minlength: [3, 'Username must be at least 3 characters long'],
     },
     email: {
       type: String,
@@ -70,7 +70,7 @@ const userSchema = new mongoose.Schema(
     pass: {
       type: String,
       required: [true, 'Please provide a password'],
-      minlength: 8,
+      minlength: [8, 'Password must be at least 8 characters long'],
       select: false,
     },
     passConfirm: {
@@ -78,8 +78,8 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Please provide a password'],
       validate: {
         // 'this' only works on create and save because password object will not refer to updated password if not saved
-        validator: function (pass) {
-          return pass === this.passConfirm;
+        validator: function (el) {
+          return el === this.pass;
         },
         message: 'Passwords do not match',
       },
@@ -131,6 +131,7 @@ userSchema.pre('save', async function (next) {
   // only run this function if password was modified
   if (!this.isModified('pass')) return next();
   // encrypt this password with a "cost" - salt of 12
+  console.log(this);
   this.pass = await bcrypt.hash(this.pass, 12);
   // no need to persist passwordConfirm to database
   this.passConfirm = undefined;
