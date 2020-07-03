@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 const Confirm = ({
   confirmOpenCallback,
   confirmDataCallback,
-  openData,
+  confirmOpen,
   message,
 }) => {
   // confirmOpen will toggle confirm popup
-  const [confirmOpen, setConfirmOpen] = useState(openData);
+  const [open, setOpen] = useState(confirmOpen);
   // refs
   const [refs, setRefs] = useState({
     popupConfirmRef: React.createRef(),
@@ -18,51 +18,45 @@ const Confirm = ({
 
   // when the openData property changes, we should update the local open toggle
   useEffect(() => {
-    setConfirmOpen(openData);
-  }, [openData]);
+    setOpen(confirmOpen);
+  }, [confirmOpen]);
 
-  // when the confirmOpen toggle changes, we want to open/close the confirm popup based on the toggle setting
-  // when the confirmOpen toggle changes, we also want to add or remove a listener to see if a click was pressed outside the confirm window. If yes, then we close
+  // when the local open toggle is changed, we add or remove the mousedown listener depending on whether open toggle is open or closed
   useEffect(() => {
     handlePopup();
-    if (confirmOpen) {
+    if (open) {
       document.addEventListener('mousedown', handleCheckPopup);
     } else {
       document.removeEventListener('mousedown', handleCheckPopup);
     }
-  }, [confirmOpen]);
+  }, [open]);
 
   // when the close button is clicked, we want to update the confirmOpen toggle in the parent component and the local confirmOpen toggle in the current component
   const handleClose = () => {
     confirmOpenCallback(false);
-    setConfirmOpen(false);
+    setOpen(false);
   };
 
-  // Handle confirm popup
-  const handlePopup = (e) => {
-    if (confirmOpen) {
-      const popup = document.querySelector('#popupConfirm');
-      const popupContent = document.querySelector('#popupConfirm');
-      popup.style.opacity = '1';
-      popup.style.visibility = 'visible';
-      // popupContent.opacity = "1";
-      // popupContent.transform = "translate(-50%, -50%) scale(1)";
-    } else {
-      const popup = document.querySelector('#popupConfirm');
-      const popupContent = document.querySelector('#popupConfirm');
-      popup.style.opacity = '0';
-      popup.style.visibility = 'hidden';
-      // popupContent.opacity = "1";
-      // popupContent.transform = "translate(-50%, -50%) scale(1)";
-      handleClose();
-    }
-  };
-
+  // mousedown listener event that will check if popup is to be closed
   const handleCheckPopup = (e) => {
     if (popupConfirmRef.current) {
       if (popupConfirmRef.current.contains(e.target)) {
         return;
       }
+      handleClose();
+    }
+  };
+
+  // popup handler that is called when open toggle is changed to either open or close the popup
+  const handlePopup = (e) => {
+    if (open) {
+      const popup = document.querySelector('#popupConfirm');
+      popup.style.opacity = '1';
+      popup.style.visibility = 'visible';
+    } else {
+      const popup = document.querySelector('#popupConfirm');
+      popup.style.opacity = '0';
+      popup.style.visibility = 'hidden';
       handleClose();
     }
   };
@@ -116,7 +110,7 @@ const Confirm = ({
 Confirm.propTypes = {
   confirmOpenCallback: PropTypes.func,
   confirmDataCallback: PropTypes.func,
-  openData: PropTypes.bool,
+  confirmOpen: PropTypes.bool,
   message: PropTypes.string,
 };
 
