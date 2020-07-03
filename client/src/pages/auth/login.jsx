@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { login } from './../../redux/actions/auth';
 
-const Login = ({ auth: { isAuthenticated }, login, history }) => {
+import Spinner from './../../components/spinner/spinner';
+
+const Login = ({ auth: { isAuthenticated, loading }, login, history }) => {
   useEffect(() => {
     if (isAuthenticated) {
       history.push('/');
@@ -31,28 +33,35 @@ const Login = ({ auth: { isAuthenticated }, login, history }) => {
   return (
     <div className="section__container auth__container">
       <div className="auth__container--form">
-        <form className="form__container" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => handleChange(e)}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => handleChange(e)}
-            required
-          />
+        <div className="auth__container--logo">revio</div>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Fragment>
+            <form className="form__container" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => handleChange(e)}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => handleChange(e)}
+                required
+              />
 
-          <input className="input__submit" type="submit" value="Login" />
-        </form>
-        <Link to="/forgot-password">Forgot Password?</Link>
-        <Link to="/register">No Account?</Link>
+              <input className="input__submit" type="submit" value="Login" />
+            </form>
+            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="/register">No Account?</Link>
+          </Fragment>
+        )}
       </div>
     </div>
   );

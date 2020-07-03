@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -6,8 +6,10 @@ import PropTypes from 'prop-types';
 
 import { forgotPassword } from './../../redux/actions/auth';
 
+import Spinner from './../../components/spinner/spinner';
+
 const ForgotPassword = ({
-  auth: { isAuthenticated },
+  auth: { isAuthenticated, loading },
   forgotPassword,
   history,
 }) => {
@@ -33,18 +35,26 @@ const ForgotPassword = ({
 
   return (
     <div className="section__container auth__container">
-      <form className="auth__container--form" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={handleChange}
-          required
-        />
-        <input type="submit" value="Submit" />
-      </form>
-      <Link to="/login">Back to login</Link>
+      <div className="auth__container--form">
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Fragment>
+            <form className="form__container" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleChange}
+                required
+              />
+              <input className="input__submit" type="submit" value="Submit" />
+            </form>
+            <Link to="/login">Back to login</Link>
+          </Fragment>
+        )}
+      </div>
     </div>
   );
 };
