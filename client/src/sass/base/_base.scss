@@ -12,66 +12,142 @@
 :root {
   // universal colors
   --color-white: #fff;
-  // main colors
+  --color-success: #29ce73;
+  --color-fail: #ff0033;
+
+  /* -----main colors----- */
   --color-text: #000;
   --color-light: #fff;
   --color-dark: #000;
-  --color-success: #2ada64;
-  --color-danger: #ff2119;
-  // theme colors
+
+  /* -----theme colors----- */
   --color-primary: #eb2f64;
   --color-primary-light: #ff3366;
   --color-primary-dark: #e32259;
-  // layout colors
+
+  /* -----layout colors----- */
+  // header
+  --color-header: #fff;
+  --color-header-hover: #d8d8d8;
   --color-header-shadow: #d8d8d8;
+  // body
   --color-body: #f0f2f5;
+
+  /* -----component colors----- */
+  // card
   --color-card-background: #fff;
-  --color-input-background: #f0f2f5;
   --color-card-item: #7e848a;
   --color-card-item-hover: #f2f2f2;
+  // category
+  --color-category-background: #fff;
+  --color-category-hover: #f2f2f2;
+  // dropdown
+  --color-dropdown-dot: #7e848a;
+  --color-dropdown-background: #fff;
+  --color-dropdown-border: #f0f2f5;
+  --color-dropdown-item-hover: #f2f2f2;
+  // post
+  --color-post-background: #fff;
+  --color-post-border: #d8d8d8;
+  // comment
+  --color-comment-background: #f0f2f5;
+  --color-comment-action-hover: #f2f2f2;
+  // notification
+  --color-notification-background: #fff;
+  --color-notification-hover: #f2f2f2;
+  --color-notification-action-hover: #242526;
+  // popup
+  --color-popup-background: #fff;
+  --color-popup-border: #f0f2f5;
+
+  /* -----HTML ELEMENTS----- */
+  // form
+  --color-form-background: #fff;
+  // input
+  --color-input-background: #f0f2f5;
   --color-input-text: #a7a9ad;
   --color-input-caret: #000;
-  // component colors
+  // button
   --color-button: #e4e6eb;
   --color-button-hover: #d8dadf;
-  // utility colors
+
+  /* -----utility colors----- */
   --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
     inset 0 0 0 1px var(--shadow-inset);
   --color-hover-light: #f2f2f2;
   --color-hover-dark: #d0d0d0;
-  // shadows
+
+  /* -----shadows------ */
   --shadow-1: rgba(0, 0, 0, 0.1);
   --shadow-2: rgba(0, 0, 0, 0.2);
   --shadow-inset: rgba(255, 255, 255, 0.5);
 }
 
 [data-theme='dark'] {
-  // main colors
+  /* -----main colors----- */
   --color-text: #fff;
   --color-light: #242526;
-  // theme colors
+
+  /* -----theme colors----- */
   --color-primary: #eb2f64;
   --color-primary-light: #ff3366;
   --color-primary-dark: #ee205b;
-  // layout colors
+
+  /* -----layout colors----- */
+  // header
+  --color-header: #242526;
+  --color-header-hover: #3a3b3c;
   --color-header-shadow: #3a3b3c;
+  // body
   --color-body: #18191a;
+
+  /* -----component colors----- */
+  // card
   --color-card-background: #242526;
   --color-card-item: #94989a;
   --color-card-item-hover: #3a3b3c;
-  --color-input-background: #3a3b3c;
-  --color-input-caret: #fff;
-  // component colors
-  --color-button: #3a3b3c;
-  --color-button-hover: #4e4f50;
+  // category
+  --color-category-background: #242526;
+  --color-category-hover: #3a3b3c;
+  // dropdown
+  --color-dropdown-dot: #94989a;
+  --color-dropdown-background: #242526;
+  --color-dropdown-border: #18191a;
+  --color-dropdown-item-hover: #3a3b3c;
   --color-dropdown-button: #3e4042;
   --color-dropdown-button-hover: #525355;
-  // utility colors
+  // post
+  --color-post-background: #242526;
+  --color-post-border: #3a3b3c;
+  // comment
+  --color-comment-background: #3a3b3c;
+  --color-comment-action-hover: #3a3b3c;
+  // notification
+  --color-notification-background: #242526;
+  --color-notification-count: red;
+  --color-notification-hover: #3a3b3c;
+  --color-notification-action-hover: #242526;
+  // popup
+  --color-popup-background: #242526;
+  --color-popup-border: #3a3b3c;
+
+  /* -----HTML ELEMENTS----- */
+  // form
+  --color-form-background: #242526;
+  // input
+  --color-input-background: #3a3b3c;
+  --color-input-caret: #fff;
+  // button
+  --color-button: #3a3b3c;
+  --color-button-hover: #4e4f50;
+
+  /* -----utility colors----- */
   --color-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1),
     inset 0 0 0 1px var(--shadow-inset);
   --color-hover-light: #3a3b3c;
   --color-hover-dark: #303031;
-  // shadows
+
+  /* -----shadows------ */
   --shadow-1: rgba(0, 0, 0, 0.1);
   --shadow-2: rgba(0, 0, 0, 0.2);
   --shadow-inset: rgba(255, 255, 255, 0.05);
@@ -103,5 +179,13 @@ body {
   // background styles
   box-sizing: border-box;
   min-height: 100vh;
+  // text
   color: var(--color-text);
+}
+
+::selection {
+  background: var(--color-primary-light);
+}
+::-moz-selection {
+  background: var(--color-primary-light);
 }

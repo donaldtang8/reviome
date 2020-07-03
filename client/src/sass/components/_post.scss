@@ -1,7 +1,7 @@
 .post {
   &-item {
     &__container {
-      background-color: var(--color-card-background);
+      background-color: var(--color-post-background);
       margin: 2rem auto;
       border-radius: 5px;
       padding: 2rem;
@@ -64,8 +64,8 @@
 
     &__actions {
       display: flex;
-      border-top: 1px solid var(--color-header-shadow);
-      border-bottom: 1px solid var(--color-header-shadow);
+      border-top: 1px solid var(--color-post-border);
+      border-bottom: 1px solid var(--color-post-border);
       padding: 0.3rem 0;
 
       &--button {
@@ -78,7 +78,7 @@
 
       &--button:hover {
         cursor: pointer;
-        background-color: var(--color-card-item-hover);
+        background-color: var(--color-hover-light);
       }
     }
 

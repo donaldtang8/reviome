@@ -1,6 +1,10 @@
 .notification {
   &__dropdown {
     width: 15rem;
+
+    hr {
+      margin: 0.5rem 0;
+    }
   }
 
   &__item {
@@ -18,21 +22,27 @@
     &--main {
       height: 100%;
       width: 100%;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.5rem 0.5rem 1rem;
       display: flex;
+      flex-direction: column;
       border-radius: 0.8rem;
     }
 
     &--main:hover {
       cursor: pointer;
-      background-color: var(--color-hover-light);
+      background-color: var(--color-notification-hover);
     }
 
     &--main:hover &--action {
       visibility: visible;
     }
 
+    &--top {
+      display: flex;
+    }
+
     &--action {
+      border-radius: 50%;
       position: absolute;
       top: 0.5rem;
       right: 0;
@@ -40,14 +50,13 @@
 
     &--action:hover {
       cursor: pointer;
-      background-color: #242526;
     }
 
     &--bubble {
       @include flexCenter();
       font-size: 0.85rem;
       position: absolute;
-      background-color: red;
+      background-color: var(--color-notification-count);
       height: 1.2rem;
       width: 1.2rem;
       border-radius: 0.8rem;
@@ -73,7 +82,7 @@
 
   &__action:hover {
     cursor: pointer;
-    background-color: var(--color-hover-light);
+    background-color: var(--color-notification-hover);
   }
 
   &__error {
@@ -83,7 +92,7 @@
 
   /* Notification Item */
   &__container {
-    background-color: var(--color-light);
+    background-color: var(--color-notification-background);
     border-radius: 3px;
     display: flex;
   }

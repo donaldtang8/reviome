@@ -1,0 +1,22 @@
+.alert {
+  &__container {
+    margin-top: 1px;
+    position: absolute;
+    padding: 1rem;
+    width: 100%;
+
+    &--fail {
+      background-color: var(--color-fail);
+    }
+
+    &--success {
+      background-color: var(--color-success);
+    }
+
+    &--message {
+      @include flexCenter();
+      height: 100%;
+      color: var(--color-white);
+    }
+  }
+}

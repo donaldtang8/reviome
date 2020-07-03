@@ -19,6 +19,7 @@
 @import 'components/comment';
 @import 'components/notification';
 @import 'components/report';
+@import 'components/alert';
 @import 'components/popup';
 @import 'components/confirm';
 @import 'components/toggle-switch';
@@ -28,5 +29,6 @@
 @import 'pages/explore';
 @import 'pages/feed';
 @import 'pages/profile';
+@import 'pages/error';
 
 @import 'layout/containers';

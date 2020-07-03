@@ -16,7 +16,7 @@
     &--main {
       display: flex;
       flex-direction: column;
-      background-color: var(--color-input-background);
+      background-color: var(--color-comment-background);
       border-radius: 0.8rem;
       flex: 1 1 auto;
       margin-left: 1rem;
@@ -37,7 +37,7 @@
 
     &--action:hover {
       cursor: pointer;
-      background-color: var(--color-hover-light);
+      background-color: var(--color-comment-action-hover);
     }
   }
 

@@ -66,7 +66,7 @@
     }
   }
 
-  &__dropdownAction {
+  &__dropdownItemAction {
     @include flexCenter();
     height: 2rem;
     width: 2rem;
@@ -78,5 +78,9 @@
       width: 1rem;
       fill: var(--color-text);
     }
+  }
+
+  &__dropdownItemAction:hover {
+    background-color: var(--color-button-hover);
   }
 }
