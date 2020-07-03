@@ -278,7 +278,7 @@ exports.setOpen = catchAsync(async (req, res, next) => {
   });
 
   // 2. Return updated document
-  res.status.json({
+  res.status(200).json({
     status: 'success',
     data: {
       doc: notification,
@@ -297,7 +297,7 @@ exports.setRead = catchAsync(async (req, res, next) => {
   });
 
   // 2. Return updated document
-  res.status.json({
+  res.status(200).json({
     status: 'success',
     data: {
       doc: notification,
