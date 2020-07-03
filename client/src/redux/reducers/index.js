@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import persistReducer from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 
+import alert from './alert';
 import auth from './auth';
 import categories from './categories';
 import notifications from './notifications';
@@ -9,14 +10,30 @@ import posts from './posts';
 import reports from './reports';
 import users from './users';
 
-const persistConfig = {
+const rootPersistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  blacklist: [
+    'alerts',
+    'auth',
+    'categories',
+    'notifications',
+    'posts',
+    'reports',
+    'users',
+  ],
+};
+
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['isAuthenticated', 'user'],
 };
 
 const rootReducer = combineReducers({
-  auth: auth,
+  alerts: alert,
+  auth: persistReducer(authPersistConfig, auth),
+  // auth: auth,
   categories: categories,
   notifications: notifications,
   posts: posts,
@@ -24,4 +41,4 @@ const rootReducer = combineReducers({
   users: users,
 });
 
-export default persistReducer(persistConfig, rootReducer);
+export default persistReducer(rootPersistConfig, rootReducer);
