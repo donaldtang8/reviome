@@ -31,6 +31,13 @@ const NotificationDropdown = ({
 
   useEffect(() => {
     if (visible) {
+      resetNotifications();
+      getNotifications();
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    if (visible) {
       document.addEventListener('mousedown', hideDropdown);
     } else {
       document.removeEventListener('mousedown', hideDropdown);
@@ -101,9 +108,9 @@ const NotificationDropdown = ({
         {notifications.length > 0 && (
           <Fragment>
             <hr />
-            <div className="notification__action">
-              <Link to="/notifications">See All</Link>
-            </div>
+            <Link to="/notifications">
+              <div className="notification__action">See All</div>
+            </Link>
           </Fragment>
         )}
       </div>
