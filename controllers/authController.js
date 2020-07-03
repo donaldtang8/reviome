@@ -241,7 +241,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 3. Check that passwords are equal
   if (req.body.password !== req.body.passwordConfirm) {
-    return next(new AppError('Passwords do not match', 400));
+    return next(new AppError('Both password fields must match!', 400));
   }
 
   // 4. Set new password and reset password token and token expires at
@@ -273,7 +273,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 3. If password is correct, check that passwords
   if (req.body.password !== req.body.passwordConfirm) {
-    return next(new AppError('Passwords must match', 400));
+    return next(new AppError('Both password fields must match!', 400));
   }
 
   // 4. Check that password is not equal to old password

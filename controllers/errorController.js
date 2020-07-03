@@ -29,7 +29,7 @@ const handleDuplicateFieldsDB = (err) => {
 const handleValidationErrorDB = (err) => {
   // loop over error object to look at other errors
   const errors = Object.values(err.errors).map((elem) => elem.message);
-  const message = `Invalid input data. ${errors.join('. ')}`;
+  const message = `${errors.join(', ')}`;
   return new AppError(message, 400);
 };
 
