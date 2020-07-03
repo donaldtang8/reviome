@@ -49,7 +49,12 @@ const PostItem = ({
           ) : user.following.some(
               (userFollowed) => userFollowed._id === post.user._id
             ) ? (
-            <div></div>
+            <Link to={`/profile/${post.user.uName}`}>
+              <div className="post-item__header--name">
+                {post.user.fullName}
+              </div>
+              <Moment fromNow>{post.createdAt}</Moment>
+            </Link>
           ) : user.categories_following.some(
               (category) => category == post.category._id
             ) ? (
