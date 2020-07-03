@@ -49,8 +49,8 @@ const NotificationDropdownItem = ({
         className="notification__item--action"
         onClick={() => deleteNotificationById(notification._id)}
       >
-        <div className="btn__dropdownAction">
-          <svg className="btn__dropdownAction--svg">
+        <div className="btn__dropdownItemAction">
+          <svg className="btn__dropdownItemAction--svg">
             <use xlinkHref={`${sprite}#icon-cross`}></use>
           </svg>
         </div>
