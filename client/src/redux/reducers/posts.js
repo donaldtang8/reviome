@@ -1,5 +1,6 @@
 import {
   FETCH_POSTS_START,
+  FETCH_POSTS_END,
   GET_POSTS,
   GET_POST,
   CREATE_POST,
@@ -47,6 +48,11 @@ export default function (state = initialState, action) {
         ...state,
         loading: true,
       };
+    case FETCH_POSTS_END:
+      return {
+        ...state,
+        loading: false,
+      };
     case GET_POSTS:
       return {
         ...state,
@@ -73,6 +79,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: state.posts.filter((post) => post._id !== payload.postId),
+        post:
+          state.post !== null && state.post._id === payload.postId
+            ? null
+            : state.post,
         loading: false,
       };
     case LIKE_POST:
@@ -170,7 +180,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        errors: [payload, ...state.errors],
       };
 
     default:

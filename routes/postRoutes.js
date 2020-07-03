@@ -27,7 +27,7 @@ router
 
 // Retrieve post data based on user
 router.get('/user/:userId/saves', postController.getSavedPostsByUser);
-router.get('/user/:userId', postController.getSavedPostsByUser);
+router.get('/user/:userId', postController.getPostsByUser);
 
 // Retrieve post data based on category
 router.get('/category/:id/:time', postController.getTopPosts);
