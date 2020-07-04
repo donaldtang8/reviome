@@ -686,6 +686,8 @@ input:focus {
       visibility: visible; }
     .notification__item--top {
       display: flex; }
+    .notification__item--time {
+      font-size: 0.85rem; }
     .notification__item--action {
       border-radius: 50%;
       position: absolute;
