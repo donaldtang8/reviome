@@ -210,7 +210,7 @@ export const getPostsByCategoryId = (page, category) => async (dispatch) => {
     });
     // make api call
     const res = await axios.get(
-      `/api/posts/category/id/${category}?page=${page}`
+      `/api/posts/category/id/${category}?page=${page}&limit=6`
     );
     // dispatch action to update posts if results are returned
     if (res.data.results > 0) {
@@ -266,7 +266,7 @@ export const getPostsByCategorySlug = (page, category) => async (dispatch) => {
     });
     // make api call
     const res = await axios.get(
-      `/api/posts/category/slug/${category}?page=${page}`
+      `/api/posts/category/slug/${category}?page=${page}&limit=6`
     );
     // dispatch action to update posts if results are returned
     if (res.data.results > 0) {

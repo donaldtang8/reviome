@@ -1,5 +1,6 @@
 import axios from 'axios';
-
+import { setAlert } from './alert';
+import { logout } from './auth';
 import {
   RESET_USERS,
   UPDATE_ME,
@@ -38,15 +39,36 @@ export const resetUsers = () => async (dispatch) => {
  **/
 export const getMe = () => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.get('/api/users/me');
     dispatch({
       type: GET_USER,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
-      type: AUTH_ERROR,
-      payload: err.message,
+      type: USER_ERROR,
     });
   }
 };
@@ -57,6 +79,7 @@ export const getMe = () => async (dispatch) => {
  **/
 export const updateMe = (formData) => async (dispatch) => {
   try {
+    // update photo to firebase and retrieve image URL to update user document
     if (formData.photo) {
       // upload to firebase
       let ref = await uploadImage(formData.photo.name, formData.photo);
@@ -65,15 +88,36 @@ export const updateMe = (formData) => async (dispatch) => {
       // add photo property in formData and attach url to it
       formData.photo = url;
     }
+    // make api call
     const res = await axios.patch('/api/users/updateMe', formData, config);
     dispatch({
       type: UPDATE_ME,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
-      type: AUTH_ERROR,
-      payload: err.message,
+      type: USER_ERROR,
     });
   }
 };
@@ -84,14 +128,35 @@ export const updateMe = (formData) => async (dispatch) => {
  **/
 export const deleteMe = () => async (dispatch) => {
   try {
+    // make api call
     await axios.delete('/api/users');
     dispatch({
       type: LOGOUT,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
-      type: AUTH_ERROR,
-      payload: err.message,
+      type: USER_ERROR,
     });
   }
 };
@@ -103,15 +168,36 @@ export const deleteMe = () => async (dispatch) => {
  **/
 export const getUserById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.get(`/api/users/id/${id}`);
     dispatch({
       type: GET_USER,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };
@@ -122,15 +208,36 @@ export const getUserById = (id) => async (dispatch) => {
  **/
 export const getUserByUsername = (user) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.get(`/api/users/user/${user}`);
     dispatch({
       type: GET_USER,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };
@@ -141,15 +248,36 @@ export const getUserByUsername = (user) => async (dispatch) => {
  **/
 export const followUserById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/users/follow/${id}`);
     dispatch({
       type: FOLLOW_USER,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };
@@ -160,15 +288,36 @@ export const followUserById = (id) => async (dispatch) => {
  **/
 export const unfollowUserById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/users/unfollow/${id}`);
     dispatch({
       type: UNFOLLOW_USER,
       payload: res.data.data.doc,
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };
@@ -179,6 +328,7 @@ export const unfollowUserById = (id) => async (dispatch) => {
  **/
 export const blockUserById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/users/block/${id}`);
     dispatch({
       type: BLOCK_USER,
@@ -189,9 +339,29 @@ export const blockUserById = (id) => async (dispatch) => {
       },
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };
@@ -202,6 +372,7 @@ export const blockUserById = (id) => async (dispatch) => {
  **/
 export const unblockUserById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/users/unblock/${id}`);
     dispatch({
       type: UNBLOCK_USER,
@@ -212,9 +383,29 @@ export const unblockUserById = (id) => async (dispatch) => {
       },
     });
   } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
     dispatch({
       type: USER_ERROR,
-      payload: err.message,
     });
   }
 };

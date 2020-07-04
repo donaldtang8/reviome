@@ -96,18 +96,12 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case SAVE_POST:
+    case UNSAVE_POST:
       return {
         ...state,
         posts: state.posts.map((post) =>
           post._id === payload.postId ? { ...post, saves: payload.saves } : post
         ),
-        post: { ...state.post, saves: payload.saves },
-        loading: false,
-      };
-    case UNSAVE_POST:
-      return {
-        ...state,
-        posts: state.posts.filter((post) => post._id !== payload.postId),
         post: { ...state.post, saves: payload.saves },
         loading: false,
       };

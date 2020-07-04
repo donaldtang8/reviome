@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   RESET_NOTIFICATIONS,
   FETCH_NOTIFICATIONS_START,
+  FETCH_NOTIFICATIONS_END,
   GET_NOTIFICATIONS,
   GET_NOTIFICATION,
   UPDATE_NOTIFICATION,
@@ -21,24 +22,45 @@ export const resetNotifications = () => async (dispatch) => {
 };
 
 /**
+ * @action    incrementNotificationsPage
+ * @description Increment page
+ **/
+export const incrementNotificationsPage = () => async (dispatch) => {
+  dispatch({
+    type: INCREMENT_NOTIFICATIONS_PAGE,
+  });
+};
+
+/**
  * @action    getNotifications
  * @description Retrieve all notifications for user
  **/
 export const getNotifications = (page) => async (dispatch) => {
   try {
+    // set notification state loading property to true
     dispatch({
       type: FETCH_NOTIFICATIONS_START,
     });
+    // make api call
     const res = await axios.get(`/api/notifications/me`);
+    // only dispatch action if there are results returned
     if (res.data.results > 0) {
       dispatch({
         type: GET_NOTIFICATIONS,
         payload: {
           notifications: res.data.data.doc,
+          results: res.data.results,
           total: res.data.total,
         },
       });
+      dispatch({
+        type: INCREMENT_NOTIFICATIONS_PAGE,
+      });
     }
+    // set notification state loading property to false
+    dispatch({
+      type: FETCH_NOTIFICATIONS_END,
+    });
   } catch (err) {
     dispatch({
       type: NOTIFICATION_ERROR,
@@ -53,10 +75,13 @@ export const getNotifications = (page) => async (dispatch) => {
  **/
 export const getNotification = (id) => async (dispatch) => {
   try {
+    // set notification state loading property to true
     dispatch({
       type: FETCH_NOTIFICATIONS_START,
     });
+    // make api call
     const res = await axios.get(`/api/notifications/${id}`);
+    // dispatch action when server returns result
     dispatch({
       type: GET_NOTIFICATION,
       payload: res.data.data.doc,

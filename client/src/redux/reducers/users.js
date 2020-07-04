@@ -51,7 +51,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        errors: [payload, ...state.errors],
       };
     default:
       return state;

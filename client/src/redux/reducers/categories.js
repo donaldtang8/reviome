@@ -68,7 +68,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         category:
-          state.category._id === payload.categoryId
+          state.category !== null && state.category._id === payload.categoryId
             ? { ...state.category, num_posts: state.category.num_posts - 1 }
             : state.category,
       };

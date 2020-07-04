@@ -32,9 +32,11 @@ export const setGenre = (category) => (dispatch) => {
  **/
 export const getAllCategories = () => async (dispatch) => {
   try {
+    // set state loading property to true
     dispatch({
       type: FETCH_CATEGORIES_START,
     });
+    // make api call
     const res = await axios.get('/api/categories');
     // Dispatch get action to update categories
     dispatch({
@@ -55,6 +57,11 @@ export const getAllCategories = () => async (dispatch) => {
  **/
 export const getCategoryById = (id) => async (dispatch) => {
   try {
+    // set state loading property to true
+    dispatch({
+      type: FETCH_CATEGORIES_START,
+    });
+    // make api call
     const res = await axios.post(`/api/categories/id/${id}`);
     // Dispatch get action to update categories
     dispatch({
@@ -78,6 +85,11 @@ export const getCategoryBySlug = (category) => async (dispatch) => {
     let formData = {};
     formData.slug = category;
     const body = JSON.stringify(formData);
+    // set state loading property to true
+    dispatch({
+      type: FETCH_CATEGORIES_START,
+    });
+    // make api call
     const res = await axios.post(`/api/categories/slug`, body, config);
     // Dispatch get action to update categories
     dispatch({
@@ -98,9 +110,11 @@ export const getCategoryBySlug = (category) => async (dispatch) => {
  **/
 export const getTopCategories = () => async (dispatch) => {
   try {
+    // set state loading property to true
     dispatch({
       type: FETCH_CATEGORIES_START,
     });
+    // make api call
     const res = await axios.get('/api/categories/topCategories');
     // Dispatch get action to update categories
     dispatch({
@@ -121,9 +135,11 @@ export const getTopCategories = () => async (dispatch) => {
  **/
 export const getSubcategoriesById = (category) => async (dispatch) => {
   try {
+    // set state loading property to true
     dispatch({
       type: FETCH_CATEGORIES_START,
     });
+    // make api call
     const res = await axios.get(`/api/categories/sub/id/${category}`);
     // Dispatch get action to update categories
     dispatch({
@@ -144,9 +160,11 @@ export const getSubcategoriesById = (category) => async (dispatch) => {
  **/
 export const getSubcategoriesBySlug = (category) => async (dispatch) => {
   try {
+    // set state loading property to true
     dispatch({
       type: FETCH_CATEGORIES_START,
     });
+    // make api call
     const res = await axios.get(`/api/categories/sub/slug/${category}`);
     // Dispatch get action to update categories
     dispatch({
@@ -167,6 +185,7 @@ export const getSubcategoriesBySlug = (category) => async (dispatch) => {
  **/
 export const followCategoryById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/categories/follow/${id}`);
     dispatch({
       type: FOLLOW_CATEGORY,
@@ -186,6 +205,7 @@ export const followCategoryById = (id) => async (dispatch) => {
  **/
 export const unfollowCategoryById = (id) => async (dispatch) => {
   try {
+    // make api call
     const res = await axios.patch(`/api/categories/unfollow/${id}`);
     dispatch({
       type: UNFOLLOW_CATEGORY,

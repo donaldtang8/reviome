@@ -1,6 +1,7 @@
 import {
   RESET_NOTIFICATIONS,
   FETCH_NOTIFICATIONS_START,
+  FETCH_NOTIFICATIONS_END,
   GET_NOTIFICATIONS,
   GET_NOTIFICATION,
   UPDATE_NOTIFICATION,
@@ -39,6 +40,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+    case FETCH_NOTIFICATIONS_END:
+      return {
+        ...state,
+        loading: false,
       };
     case GET_NOTIFICATIONS:
       return {
