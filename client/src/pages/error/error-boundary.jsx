@@ -7,6 +7,8 @@ class ErrorBoundary extends Component {
     super();
     this.state = {
       hasErrored: false,
+      error: null,
+      info: null,
     };
   }
 
@@ -17,7 +19,11 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.log(error);
+    this.setState({
+      hasError: true,
+      error: error,
+      info: info,
+    });
   }
 
   render() {
