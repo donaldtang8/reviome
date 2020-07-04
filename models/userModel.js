@@ -131,7 +131,6 @@ userSchema.pre('save', async function (next) {
   // only run this function if password was modified
   if (!this.isModified('pass')) return next();
   // encrypt this password with a "cost" - salt of 12
-  console.log(this);
   this.pass = await bcrypt.hash(this.pass, 12);
   // no need to persist passwordConfirm to database
   this.passConfirm = undefined;
