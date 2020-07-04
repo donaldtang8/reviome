@@ -80,7 +80,7 @@ exports.getTopPosts = catchAsync(async (req, res, next) => {
           { category: mongoose.Types.ObjectId(req.params.id) },
           {
             createdAt: {
-              $gte: new Date(new Date() - days * 60 * 60 * 24 * 1000),
+              $gt: new Date(new Date() - days * 60 * 60 * 24 * 1000),
             },
           },
         ],
@@ -112,19 +112,30 @@ exports.getFeed = catchAsync(async (req, res) => {
   const self = await User.findById(req.user.id);
 
   // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
-    $or: [
-      {
-        $and: [
-          { user: { $in: self.following } },
-          { user: { $nin: self.block_to } },
-          { user: { $nin: self.block_from } },
-        ],
-      },
-      { category: { $in: self.categories_following } },
-      { user: { $eq: req.user.id } },
-    ],
-  });
+  const postsTotal = new APIFeatures(
+    Post.find({
+      $or: [
+        {
+          $and: [
+            { user: { $in: self.following } },
+            { user: { $nin: self.block_to } },
+            { user: { $nin: self.block_from } },
+          ],
+        },
+        {
+          $and: [
+            { category: { $in: self.categories_following } },
+            { user: { $nin: self.block_to } },
+            { user: { $nin: self.block_from } },
+          ],
+        },
+        { user: { $eq: req.user.id } },
+      ],
+    }).populate('comments'),
+    req.query
+  ).sort();
+
+  const posts = await postsTotal.query;
 
   // 3. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
@@ -180,7 +191,16 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
   }
 
   // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({ category: cat }).populate('comments');
+  const postsTotal = new APIFeatures(
+    Post.find({
+      category: cat,
+    }).populate('comments'),
+    req.query
+  )
+    .filter()
+    .sort();
+
+  const posts = await postsTotal.query;
 
   // 3. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
@@ -188,7 +208,10 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
       category: cat,
     }).populate('comments'),
     req.query
-  ).paginate();
+  )
+    .filter()
+    .sort()
+    .paginate();
 
   // 4. Execute query
   const doc = await postsPaginate.query;
@@ -222,9 +245,16 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
   }
 
   // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
-    category: cat,
-  }).populate('comments');
+  const postsTotal = new APIFeatures(
+    Post.find({
+      category: cat,
+    }).populate('comments'),
+    req.query
+  )
+    .filter()
+    .sort();
+
+  const posts = await postsTotal.query;
 
   // 3. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
@@ -232,7 +262,10 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
       category: cat,
     }).populate('comments'),
     req.query
-  ).paginate();
+  )
+    .filter()
+    .sort()
+    .paginate();
 
   // 4. Execute query
   const doc = await postsPaginate.query;
