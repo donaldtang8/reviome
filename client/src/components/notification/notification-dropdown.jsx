@@ -19,7 +19,7 @@ const NotificationDropdown = ({
   resetNotifications,
   getNotifications,
   setRead,
-  notifications: { notifications, loading, page, nextPage, count, errors },
+  notifications: { notifications, loading, count },
 }) => {
   const [visible, setVisible] = useState(false);
   const [refs, setRefs] = useState({

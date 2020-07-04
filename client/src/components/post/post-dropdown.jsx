@@ -6,8 +6,6 @@ import PropTypes from 'prop-types';
 import { deletePostById } from './../../redux/actions/posts';
 import { blockUserById } from './../../redux/actions/users';
 
-import ReportForm from './../../components/report/report-form';
-
 import sprite from '../../assets/sprite.svg';
 
 const PostDropdown = ({
@@ -20,8 +18,6 @@ const PostDropdown = ({
 }) => {
   // visible refers to the toggle of the dropdown menu
   const [visible, setVisible] = useState(false);
-  // popupVisible refers to the toggle of the report popup
-  const [reportOpen, setReportOpen] = useState(false);
   // refs
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),

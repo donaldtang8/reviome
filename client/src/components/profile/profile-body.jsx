@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import Feed from "./../../pages/feed/feed";
+import Feed from './../../pages/feed/feed';
 
 const ProfileBody = ({ auth, user }) => {
-  const [tab, setTab] = useState("posts");
+  const [tab, setTab] = useState('posts');
 
   return auth.user._id !== user._id &&
     auth.user.block_to.some((userBlocked) => userBlocked === user._id) ? (
@@ -17,40 +17,40 @@ const ProfileBody = ({ auth, user }) => {
       <div className="profile__body--tabs">
         <div
           className={
-            tab === "posts" ? "tabs tabs--active" : "tabs tabs--inactive"
+            tab === 'posts' ? 'tabs tabs--active' : 'tabs tabs--inactive'
           }
-          onClick={() => setTab("posts")}
+          onClick={() => setTab('posts')}
         >
           Posts
         </div>
         <div
           className={
-            tab === "favorites" ? "tabs tabs--active" : "tabs tabs--inactive"
+            tab === 'favorites' ? 'tabs tabs--active' : 'tabs tabs--inactive'
           }
-          onClick={() => setTab("favorites")}
+          onClick={() => setTab('favorites')}
         >
           Favorites
         </div>
         <div
           className={
-            tab === "following" ? "tabs tabs--active" : "tabs tabs--inactive"
+            tab === 'following' ? 'tabs tabs--active' : 'tabs tabs--inactive'
           }
-          onClick={() => setTab("following")}
+          onClick={() => setTab('following')}
         >
           Following
         </div>
       </div>
-      {tab === "posts" && (
+      {tab === 'posts' && (
         <div className="tabs__view">
           <Feed pageType="profilePosts" userId={user._id} />
         </div>
       )}
-      {tab === "favorites" && (
+      {tab === 'favorites' && (
         <div className="tabs__view">
           <Feed pageType="profileFavorites" userId={user._id} />
         </div>
       )}
-      {tab === "following" && (
+      {tab === 'following' && (
         <div className="tabs__view">
           <div className="heading-tertiary">Following</div>
           <Feed pageType="profileFavorites" userId={user._id} />

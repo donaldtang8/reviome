@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 const Alert = ({ alerts }) => {
   return (
@@ -16,8 +15,6 @@ const Alert = ({ alerts }) => {
     ))
   );
 };
-
-Alert.propTypes = {};
 
 const mapStateToProps = (state) => ({
   alerts: state.alerts,

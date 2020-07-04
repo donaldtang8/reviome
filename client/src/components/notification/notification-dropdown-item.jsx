@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
+
+import Moment from 'react-moment';
 
 import {
   setOpen,
@@ -13,11 +15,9 @@ import {
 import sprite from '../../assets/sprite.svg';
 
 const NotificationDropdownItem = ({
-  setOpen,
   setRead,
   deleteNotificationById,
   notification,
-  history,
 }) => {
   return (
     <div
@@ -27,11 +27,7 @@ const NotificationDropdownItem = ({
           : 'notification__item notification__item--opened'
       }
     >
-      <Link
-        to={notification.link}
-        className="notification__item--main"
-        onClick={() => setOpen(notification._id)}
-      >
+      <Link to={notification.link} className="notification__item--main">
         <div className="notification__item--top">
           <div className="notification__item--img">
             <img
@@ -39,11 +35,16 @@ const NotificationDropdownItem = ({
               alt={notification.user_from.fullName}
             />
           </div>
-          <div className="notification__item--message">
-            {notification.message}
+          <div className="notification__item--body">
+            <div className="notification__item--message">
+              {notification.message}
+            </div>
+            <div className="notification__item--time">
+              <Moment fromNow>{notification.createdAt}</Moment>
+            </div>
           </div>
         </div>
-        <div className="notification__item--bottom">Time</div>
+        <div className="notification__item--bottom"></div>
       </Link>
       <div
         className="notification__item--action"

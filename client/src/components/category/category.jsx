@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { withRouter, useRouteMatch } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
