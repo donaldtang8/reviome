@@ -13,14 +13,40 @@ class APIFeatures {
 
   /**
    * @function  filter
-   * @description Check query string for any filter objects and apply filter objects to query
+   * @description Check query string for any filter objects (likeCount = 0, etc...) and removes any filters that we already have functions to take care of (sort, fields, limit)
    * @this  Binded APIFeature that we can chain other methods to
    **/
   filter() {
+    // create a deep copy of the query string
     const queryObj = { ...this.queryString };
     // we exclude these fields because sort(), limitField(), and paginate() will take care of these fields
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
+
+    // handle filter by time range
+    if (queryObj.range) {
+      let days = 0;
+      if (queryObj.range === 'daily') {
+        days = 1;
+      } else if (queryObj.range === 'weekly') {
+        days = 7;
+      } else if (queryObj.range === 'monthly') {
+        days = 30;
+      } else if (queryObj.range === 'yearly') {
+        days = 360;
+      }
+      // if days is not 0, that maens a valid range was picked
+      if (days !== 0) {
+        let time = new Date(new Date() - days * 60 * 60 * 24 * 1000);
+        let newTimeObj = {
+          gt: time,
+        };
+        queryObj.createdAt = newTimeObj;
+      }
+
+      delete queryObj['range'];
+    }
+
     // we stringify the query string to manipulate it
     let queryStr = JSON.stringify(queryObj);
     // \b makes sure we match the exact string for all query objects (gte, gt, lte, lt)
