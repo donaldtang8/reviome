@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -37,6 +37,8 @@ const Feed = ({
   const [reportOpen, setReportOpen] = useState(false);
   // item refers to the item object in ReportForm
   const [reportItem, setReportItem] = useState(null);
+  // itemType refers to the type of item being reported
+  const [reportItemType, setReportItemType] = useState(null);
 
   useEffect(() => {
     resetPosts();
@@ -58,25 +60,6 @@ const Feed = ({
     }
   }, [stateReset]);
 
-  window.onscroll = debounce(() => {
-    // when users scroll, if the inner height is smaller than the window height we still call get feed
-    if (
-      window.innerHeight + window.scrollY >= document.body.scrollHeight &&
-      nextPage
-    ) {
-      if (loading || errors.length > 0) return;
-      if (pageType === 'feed') {
-        getFeed(page);
-      } else if (pageType === 'favorites') {
-        getSavedPosts(page);
-      } else if (pageType === 'profilePosts') {
-        getPostsByUser(page, userId);
-      } else if (pageType === 'profileFavorites') {
-        getSavedPostsByUser(page, userId);
-      }
-    }
-  }, 100);
-
   // Callback to toggle report open property
   const reportOpenCallback = (open) => {
     setReportOpen(open);
@@ -85,6 +68,11 @@ const Feed = ({
   // Callback to return post object from post dropdown component
   const reportItemCallback = (itemData) => {
     setReportItem(itemData);
+  };
+
+  // Callback to return post object from post dropdown component
+  const reportItemTypeCallback = (itemType) => {
+    setReportItemType(itemType);
   };
 
   const handlePopup = (e) => {
@@ -96,7 +84,20 @@ const Feed = ({
     // popupContent.transform = "translate(-50%, -50%) scale(1)";
   };
 
-  return loading ? (
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (pageType === 'feed') {
+      getFeed(page);
+    } else if (pageType === 'favorites') {
+      getSavedPosts(page);
+    } else if (pageType === 'profilePosts') {
+      getPostsByUser(page, userId);
+    } else if (pageType === 'profileFavorites') {
+      getSavedPostsByUser(page, userId);
+    }
+  };
+
+  return page === 1 && loading ? (
     <Spinner />
   ) : (
     <div className="section__container posts__container">
@@ -109,27 +110,38 @@ const Feed = ({
           <PostForm />
         </div>
       )}
-      {loading ? (
+      {page === 1 && loading ? (
         <Spinner />
       ) : posts.length === 0 ? (
         <div>No posts here. Please check out the explore page!</div>
       ) : (
-        posts.map((post) => (
-          <PostItem
-            key={post._id}
-            post={post}
-            reportOpenCallback={reportOpenCallback}
-            reportItemCallback={reportItemCallback}
-          />
-        ))
+        <Fragment>
+          {posts.map((post) => (
+            <PostItem
+              key={post._id}
+              post={post}
+              reportOpenCallback={reportOpenCallback}
+              reportItemCallback={reportItemCallback}
+              reportItemTypeCallback={reportItemTypeCallback}
+            />
+          ))}
+          {nextPage &&
+            (page > 1 && loading ? (
+              <div className="btn__load-more">Loading...</div>
+            ) : (
+              <div className="btn__load-more" onClick={handleClick}>
+                Load More
+              </div>
+            ))}
+        </Fragment>
       )}
       {posts.length > 0 && !nextPage && (
-        <div className="posts__container--end"> No more posts</div>
+        <div className="posts__container--end">No more posts</div>
       )}
       {reportItem && (
         <ReportForm
           item={reportItem}
-          type="Post"
+          type={reportItemType}
           reportOpen={reportOpen}
           reportItemCallback={reportItemCallback}
           reportOpenCallback={reportOpenCallback}

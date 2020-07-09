@@ -26,6 +26,7 @@
     cursor: pointer;
   }
 
+  // for buttons that are solely icon based with no label
   &__icon {
     @include flexCenter();
     height: 3rem;
@@ -40,9 +41,18 @@
     }
   }
 
-  &__icon:hover {
+  &__icon:hover,
+  &__icon-label:hover {
     cursor: pointer;
     background-color: var(--color-button-hover);
+  }
+
+  // for bar buttons with an icon and a label
+  &__icon-label {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
   }
 
   &__dropdown {
@@ -82,5 +92,19 @@
 
   &__dropdownItemAction:hover {
     background-color: var(--color-button-hover);
+  }
+
+  &__load-more {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 3px;
+    background-color: var(--color-button);
+    padding: 0.5rem 1rem;
+  }
+
+  &__load-more:hover {
+    background-color: var(--color-button-hover);
+    cursor: pointer;
   }
 }
