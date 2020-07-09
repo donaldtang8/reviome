@@ -37,7 +37,6 @@ export const resetReports = () => async (dispatch) => {
 export const getReports = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/reports');
-    console.log(res.data);
     dispatch({
       type: GET_REPORTS,
       payload: res.data.data.doc,
