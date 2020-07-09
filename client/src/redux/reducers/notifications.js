@@ -63,9 +63,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         notifications: state.notifications.map((notification) =>
-          notification._id === payload.notificationId
-            ? payload.notification
-            : notification
+          notification._id === payload.id ? payload.notification : notification
         ),
         loading: false,
       };

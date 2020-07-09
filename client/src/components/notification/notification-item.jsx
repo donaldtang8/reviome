@@ -1,8 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-const NotificationItem = ({ notification }) => {
+import { deleteNotificationById } from './../../redux/actions/notifications';
+
+import sprite from '../../assets/sprite.svg';
+
+const NotificationItem = ({ deleteNotificationById, notification }) => {
   return (
     <div className="notification__container">
       <div className="notification__header">
@@ -14,13 +18,28 @@ const NotificationItem = ({ notification }) => {
           {notification.user_from.fullName}
         </div>
       </div>
-      <div className="notification__body">{notification.message}</div>
+      <div className="notification__body">
+        <div
+          className="notification__item--action"
+          onClick={() => deleteNotificationById(notification._id)}
+        >
+          <div className="btn__dropdownItemAction">
+            <svg className="btn__dropdownItemAction--svg">
+              <use xlinkHref={`${sprite}#icon-cross`}></use>
+            </svg>
+          </div>
+        </div>
+        <div className="notification__body--message">
+          {notification.message}
+        </div>
+      </div>
     </div>
   );
 };
 
 NotificationItem.propTypes = {
+  deleteNotificationById: PropTypes.func.isRequired,
   notification: PropTypes.object.isRequired,
 };
 
-export default connect(null, {})(NotificationItem);
+export default connect(null, { deleteNotificationById })(NotificationItem);

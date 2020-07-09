@@ -117,9 +117,9 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
     status: 'success',
     total: notifications.length,
     results: doc.length,
+    count: count,
     data: {
       doc,
-      count: count,
     },
   });
 });

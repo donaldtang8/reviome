@@ -24,10 +24,17 @@ const Notifications = ({
     <Spinner />
   ) : (
     <div className="notifications__container">
-      <div className="notifications__container--title">Notifications</div>
-      {notifications.map((notif) => (
-        <NotificationItem key={notif._id} notification={notif} />
-      ))}
+      <div className="heading-1 center">Notifications</div>
+      {notifications.length > 0 ? (
+        notifications.map((notif) => (
+          <NotificationItem key={notif._id} notification={notif} />
+        ))
+      ) : (
+        <div className="center italic font-medium">
+          You're all caught up! No more notifications!
+        </div>
+      )}
+      {}
     </div>
   );
 };
