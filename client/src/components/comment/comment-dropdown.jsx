@@ -3,16 +3,17 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { deletePostById } from './../../redux/actions/posts';
+import { deleteCommentById } from './../../redux/actions/posts';
 import { blockUserById } from './../../redux/actions/users';
 
 import sprite from '../../assets/sprite.svg';
 
-const PostDropdown = ({
-  deletePostById,
+const CommentDropdown = ({
+  deleteCommentById,
   blockUserById,
   auth: { user },
   post,
+  comment,
   reportOpenCallback,
   reportItemCallback,
   reportItemTypeCallback,
@@ -59,7 +60,7 @@ const PostDropdown = ({
 
   const handleBlock = (e) => {
     e.preventDefault();
-    blockUserById(post.user._id);
+    blockUserById(comment.user._id);
     setVisible(false);
   };
 
@@ -69,8 +70,8 @@ const PostDropdown = ({
   // 3. Set dropdown visible toggle to false to close dropdown
   const handleReportClick = (e) => {
     reportOpenCallback(true);
-    reportItemCallback(post);
-    reportItemTypeCallback('Post');
+    reportItemCallback(comment);
+    reportItemTypeCallback('Comment');
     setVisible(false);
   };
 
@@ -93,15 +94,56 @@ const PostDropdown = ({
         aria-labelledby="dropdown-btn"
         aria-hidden="true"
       >
-        <Link to={`/post/${post._id}`} className="dropdown__menu--item">
-          <div className="btn__dropdown">
-            <svg className="btn__dropdown--svg">
-              <use xlinkHref={`${sprite}#icon-share-alternitive`}></use>
-            </svg>
-          </div>
-          Open
-        </Link>
-        {user._id !== post.user._id ? (
+        {user._id === comment.user._id || user._id === post.user._id ? (
+          <Fragment>
+            {user._id !== comment.user._id ? (
+              <Fragment>
+                <div
+                  className="dropdown__menu--item"
+                  onClick={handleReportClick}
+                >
+                  <div className="btn__dropdown">
+                    <svg className="btn__dropdown--svg">
+                      <use xlinkHref={`${sprite}#icon-flag`}></use>
+                    </svg>
+                  </div>
+                  Report
+                </div>
+                <div className="dropdown__menu--item" onClick={handleBlock}>
+                  <div className="btn__dropdown">
+                    <svg className="btn__dropdown--svg">
+                      <use xlinkHref={`${sprite}#icon-block`}></use>
+                    </svg>
+                  </div>
+                  Block
+                </div>
+                <div
+                  className="dropdown__menu--item"
+                  onClick={() => deleteCommentById(post._id, comment._id)}
+                >
+                  <div className="btn__dropdown">
+                    <svg className="btn__dropdown--svg">
+                      <use xlinkHref={`${sprite}#icon-trash`}></use>
+                    </svg>
+                  </div>
+                  Delete
+                </div>
+              </Fragment>
+            ) : (
+              <div
+                className="dropdown__menu--item"
+                onClick={() => deleteCommentById(post._id, comment._id)}
+              >
+                <div className="btn__dropdown">
+                  <svg className="btn__dropdown--svg">
+                    <use xlinkHref={`${sprite}#icon-trash`}></use>
+                  </svg>
+                </div>
+                Delete
+              </div>
+            )}
+          </Fragment>
+        ) : (
           <Fragment>
             <div className="dropdown__menu--item" onClick={handleReportClick}>
               <div className="btn__dropdown">
@@ -120,28 +162,17 @@ const PostDropdown = ({
               Block
             </div>
           </Fragment>
-        ) : (
-          <div
-            className="dropdown__menu--item"
-            onClick={() => deletePostById(post._id, post.category._id)}
-          >
-            <div className="btn__dropdown">
-              <svg className="btn__dropdown--svg">
-                <use xlinkHref={`${sprite}#icon-trash`}></use>
-              </svg>
-            </div>
-            Delete
-          </div>
         )}
       </div>
     </div>
   );
 };
 
-PostDropdown.propTypes = {
-  deletePostById: PropTypes.func.isRequired,
+CommentDropdown.propTypes = {
+  deleteCommentById: PropTypes.func.isRequired,
   blockUserById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
+  comment: PropTypes.object.isRequired,
   reportOpenCallback: PropTypes.func,
   reportItemCallback: PropTypes.func,
   reportItemTypeCallback: PropTypes.func,
@@ -151,6 +182,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { deletePostById, blockUserById })(
-  PostDropdown
+export default connect(mapStateToProps, { deleteCommentById, blockUserById })(
+  CommentDropdown
 );

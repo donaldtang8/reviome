@@ -26,9 +26,9 @@ const PostItem = ({
   unsavePostById,
   post,
   auth: { user },
-  reportOpen,
   reportOpenCallback,
   reportItemCallback,
+  reportItemTypeCallback,
 }) => {
   const [showComments, toggleShowComments] = useState(false);
 
@@ -84,9 +84,9 @@ const PostItem = ({
         </div>
         <PostDropdown
           post={post}
-          reportOpen={reportOpen}
           reportOpenCallback={reportOpenCallback}
           reportItemCallback={reportItemCallback}
+          reportItemTypeCallback={reportItemTypeCallback}
         />
       </div>
       <div className="post-item__body">
@@ -110,7 +110,7 @@ const PostItem = ({
                 <use xlinkHref={`${sprite}#icon-heart`}></use>
               </svg>
             </div>
-            Unlike
+            {post.likes.length}
           </div>
         ) : (
           <div
@@ -122,7 +122,7 @@ const PostItem = ({
                 <use xlinkHref={`${sprite}#icon-heart-outlined`}></use>
               </svg>
             </div>
-            Like
+            {post.likes.length}
           </div>
         )}
         <div
@@ -136,7 +136,7 @@ const PostItem = ({
               <use xlinkHref={`${sprite}#icon-message`}></use>
             </svg>
           </div>
-          Comments
+          {post.comments.length}
         </div>
         {post.saves.some((postSaved) => postSaved._id === user._id) ? (
           <div
@@ -177,13 +177,16 @@ const PostItem = ({
               user.block_to.some(
                 (userBlocked) => userBlocked === com.user._id
               ) ? (
-                <Fragment></Fragment>
-              ) : user.block_to.some(
-                  (userBlocked) => userBlocked === com.user._id
-                ) ? (
-                <div key={com._id}></div>
+                <Fragment key={com._id}></Fragment>
               ) : (
-                <CommentItem key={com._id} comment={com} />
+                <CommentItem
+                  key={com._id}
+                  post={post}
+                  comment={com}
+                  reportOpenCallback={reportOpenCallback}
+                  reportItemCallback={reportItemCallback}
+                  reportItemTypeCallback={reportItemTypeCallback}
+                />
               )
             )
           ) : (
@@ -201,9 +204,9 @@ PostItem.propTypes = {
   savePostById: PropTypes.func.isRequired,
   unsavePostById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  reportOpen: PropTypes.bool,
   reportOpenCallback: PropTypes.func,
   reportItemCallback: PropTypes.func,
+  reportItemTypeCallback: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

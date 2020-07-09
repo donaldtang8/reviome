@@ -4,20 +4,21 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import {
-  deleteCommentById,
-  likeCommentById,
-  unlikeCommentById,
-} from '../../redux/actions/posts';
+import CommentDropdown from './comment-dropdown';
+
+import { likeCommentById, unlikeCommentById } from '../../redux/actions/posts';
 
 import sprite from '../../assets/sprite.svg';
 
 const CommentItem = ({
   auth: { user },
-  deleteCommentById,
   likeCommentById,
   unlikeCommentById,
+  post,
   comment,
+  reportOpenCallback,
+  reportItemCallback,
+  reportItemTypeCallback,
 }) => {
   return (
     <div className="comment__container">
@@ -27,44 +28,46 @@ const CommentItem = ({
         </Link>
       </div>
       <div className="comment__container--main">
-        <div className="comment__container--name">
-          <Link to={`/profile/${comment.user.uName}`}>
-            {comment.user.fullName}
-          </Link>
+        <div className="comment__container--top">
+          <div className="comment__container--name">
+            <Link to={`/profile/${comment.user.uName}`}>
+              {comment.user.fullName}
+            </Link>
+          </div>
+          <CommentDropdown
+            post={post}
+            comment={comment}
+            reportOpenCallback={reportOpenCallback}
+            reportItemCallback={reportItemCallback}
+            reportItemTypeCallback={reportItemTypeCallback}
+          />
         </div>
         <div className="comment__container--text">{comment.text}</div>
       </div>
       <div className="comment__container--actions">
-        {user._id === comment.user._id ? (
+        {comment.likes.some((userLiked) => userLiked._id === user._id) ? (
           <div
             className="comment__container--action"
-            onClick={() => deleteCommentById(comment.post, comment._id)}
+            onClick={() => unlikeCommentById(post._id, comment._id)}
           >
             <div className="btn__dropdown">
               <svg className="btn__dropdown--svg">
-                <use xlinkHref={`${sprite}#icon-trash`}></use>
+                <use xlinkHref={`${sprite}#icon-heart`}></use>
               </svg>
             </div>
-          </div>
-        ) : comment.likes.some((userLiked) => userLiked._id === user._id) ? (
-          <div className="comment__container--action">
-            <div onClick={() => unlikeCommentById(comment.post, comment._id)}>
-              <div className="btn__dropdown">
-                <svg className="btn__dropdown--svg">
-                  <use xlinkHref={`${sprite}#icon-heart`}></use>
-                </svg>
-              </div>
-            </div>
+            {comment.likes.length}
           </div>
         ) : (
-          <div className="comment__container--action">
-            <div onClick={() => likeCommentById(comment.post, comment._id)}>
-              <div className="btn__dropdown">
-                <svg className="btn__dropdown--svg">
-                  <use xlinkHref={`${sprite}#icon-heart-outlined`}></use>
-                </svg>
-              </div>
+          <div
+            className="comment__container--action"
+            onClick={() => likeCommentById(post._id, comment._id)}
+          >
+            <div className="btn__dropdown">
+              <svg className="btn__dropdown--svg">
+                <use xlinkHref={`${sprite}#icon-heart-outlined`}></use>
+              </svg>
             </div>
+            {comment.likes.length}
           </div>
         )}
       </div>
@@ -73,10 +76,13 @@ const CommentItem = ({
 };
 
 CommentItem.propTypes = {
-  deleteCommentById: PropTypes.func.isRequired,
   likeCommentById: PropTypes.func.isRequired,
   unlikeCommentById: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
   comment: PropTypes.object.isRequired,
+  reportOpenCallback: PropTypes.func,
+  reportItemCallback: PropTypes.func,
+  reportItemTypeCallback: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
@@ -84,7 +90,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  deleteCommentById,
   likeCommentById,
   unlikeCommentById,
 })(CommentItem);
