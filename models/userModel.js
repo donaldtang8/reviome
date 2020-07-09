@@ -7,10 +7,12 @@ const userSchema = new mongoose.Schema(
   {
     fName: {
       type: String,
+      maxlength: [15, 'Please enter your first name under 15 characters long.'],
       required: [true, 'First name is required'],
     },
     lName: {
       type: String,
+      maxlength: [15, 'Please enter your last name under 15 characters long.'],
       required: [true, 'Last name is required'],
     },
     uName: {
@@ -18,14 +20,14 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Username is required'],
       unique: true,
       lowercase: true,
-      minlength: [3, 'Username must be at least 3 characters long'],
+      minlength: [3, 'Username must be at least 3 characters long.'],
     },
     email: {
       type: String,
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: [validator.isEmail, 'Please provide a valid email.'],
     },
     photo: {
       type: String,

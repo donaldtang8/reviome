@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('./../controllers/authController');
+const postController = require('./../controllers/postController');
 const userController = require('./../controllers/userController');
 
 const User = require('./../models/userModel');
@@ -20,6 +21,7 @@ router.use(authController.protect);
 router.get('/id/:id', userController.getUserById);
 router.get('/user/:username', userController.getUserByUsername);
 
+router.get('/following/:id', userController.getUserFollowingList);
 router.patch('/follow/:id', userController.followUserById);
 router.patch('/unfollow/:id', userController.unfollowUserById);
 

@@ -124,6 +124,25 @@ exports.getUserByUsername = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @function  getUserFollowingList
+ * @description Given the id of a user, retrieve the list of users that the user follows
+ **/
+exports.getUserFollowingList = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id).populate('following');
+
+  if (!user) {
+    return next(new AppError('No document found with that username', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: user.following,
+    },
+  });
+});
+
+/**
  * @function  followUserById
  * @description Follow user by id
  **/
