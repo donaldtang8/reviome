@@ -11,7 +11,10 @@
       }
 
       &--body {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 10rem);
+        grid-column-gap: 1rem;
+        grid-row-gap: 2rem;
       }
     }
 
@@ -23,13 +26,6 @@
   &__container {
     padding: 2rem 0;
     grid-column: medium-start / medium-end;
-
-    &--title {
-      padding: 2rem 1rem;
-      font-size: 1.35rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
 
     &--body {
       grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));

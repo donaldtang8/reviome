@@ -12,3 +12,44 @@ a {
 .uppercase {
   text-transform: uppercase;
 }
+
+.italic {
+  font-style: italic;
+}
+
+.center {
+  text-align: center;
+}
+
+.font-small {
+  font-size: 1.1rem;
+}
+
+.font-medium {
+  font-size: 1.25rem;
+}
+
+.font-big {
+  font-size: 1.35rem;
+}
+
+.font-large {
+  font-size: 1.5rem;
+}
+
+.padding-small {
+  padding: 1rem;
+}
+
+.heading-1 {
+  padding: 2rem 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.heading-2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}

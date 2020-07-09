@@ -33,6 +33,10 @@
     // padding: 0.75rem;
     border-radius: 0.8rem;
 
+    > a {
+      display: flex;
+    }
+
     &--img {
       border-radius: 50%;
       height: 2.5rem;

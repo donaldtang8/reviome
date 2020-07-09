@@ -75,4 +75,12 @@
   &__menu:focus {
     outline: none;
   }
+
+  &__filter {
+    width: 20%;
+  }
+
+  &__filter:not(:last-child) {
+    margin-right: 1rem;
+  }
 }

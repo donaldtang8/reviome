@@ -1,31 +1,6 @@
 .explore {
-  &-feed {
-    &__container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, 22rem);
-      grid-column-gap: 2rem;
-    }
-  }
-
-  &-posts {
-    &__container {
-      padding: 1rem;
-      text-align: center;
-
-      &--header {
-        width: 50%;
-        margin: 0 auto;
-      }
-
-      &--actions {
-        display: flex;
-        justify-content: center;
-      }
-    }
-  }
-
   &__container {
-    grid-column: medium-start / medium-end;
+    grid-column: large-start / large-end;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,6 +15,51 @@
 
     &--title {
       font-size: 2rem;
+    }
+  }
+
+  &-feed {
+    &__container {
+      padding: 1rem;
+
+      &--top {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &--header {
+        display: flex;
+      }
+
+      &--pic {
+        height: 5rem;
+        width: 5rem;
+        border-radius: 50%;
+      }
+
+      &--actions {
+        display: flex;
+        justify-content: center;
+      }
+
+      &--bar {
+        display: flex;
+        background-color: var(--color-card-background);
+        border-radius: 3px;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        margin: 0 auto;
+      }
+    }
+
+    &__posts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 22rem);
+      grid-column-gap: 4rem;
+      justify-content: center;
     }
   }
 

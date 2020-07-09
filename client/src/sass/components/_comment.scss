@@ -23,6 +23,12 @@
       padding: 0.5rem 1rem;
     }
 
+    &--top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     &--name {
     }
 
@@ -31,6 +37,7 @@
     }
 
     &--action {
+      display: flex;
       padding: 1rem;
       border-radius: 0.8rem;
     }
