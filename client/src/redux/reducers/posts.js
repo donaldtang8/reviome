@@ -58,7 +58,9 @@ export default function (state = initialState, action) {
         ...state,
         posts: state.posts.concat(payload.posts),
         nextPage:
-          payload.total === 0 || payload.results === payload.total
+          payload.total === 0 ||
+          state.posts.length + payload.results === payload.total ||
+          state.posts.length === payload.total
             ? false
             : true,
         loading: false,
@@ -152,6 +154,17 @@ export default function (state = initialState, action) {
               }
             : post
         ),
+        post:
+          state.post !== null && state.post._id === payload.postId
+            ? {
+                ...state.post,
+                comments: state.post.comments.map((com) =>
+                  com._id === payload.commentId
+                    ? { ...com, likes: payload.likes }
+                    : com
+                ),
+              }
+            : state.post,
       };
     // when a user blocks someone, we want to remove all posts belonging to 'someone'
     case BLOCK_USER:

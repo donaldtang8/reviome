@@ -202,7 +202,9 @@ export const getPostById = (id) => async (dispatch) => {
  * @action    getPostsByCategoryId
  * @description Retrieve posts based on category id
  **/
-export const getPostsByCategoryId = (page, category) => async (dispatch) => {
+export const getPostsByCategoryId = (page, category, history) => async (
+  dispatch
+) => {
   try {
     // set state loading property to true
     dispatch({
@@ -226,6 +228,10 @@ export const getPostsByCategoryId = (page, category) => async (dispatch) => {
         type: INCREMENT_POSTS_PAGE,
       });
     }
+    // set state loading property to false
+    dispatch({
+      type: FETCH_POSTS_END,
+    });
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {
@@ -258,15 +264,40 @@ export const getPostsByCategoryId = (page, category) => async (dispatch) => {
  * @action    getPostsByCategorySlug
  * @description Retrieve posts based on category slug
  **/
-export const getPostsByCategorySlug = (page, category) => async (dispatch) => {
+export const getPostsByCategorySlug = (page, category, history) => async (
+  dispatch
+) => {
   try {
+    // create new object 'params'
+    let paramObj = {};
+    console.log(history);
+    // check if there are any URL params
+    if (history.location && history.location.search) {
+      // remove initial ? character from query string
+      let paramsArray = history.location.search.replace('?', '').split('&');
+      paramsArray.forEach((param) => {
+        let newObjPair = param.split('=');
+        paramObj[newObjPair[0]] = newObjPair[1];
+      });
+    }
+    // create query string
+    let queryString = `?page=${page}&limit=6`;
+    // we want to look for the 'sort' param
+    if (paramObj.sort) {
+      if (paramObj.sort === 'time') {
+        paramObj.sort = '-createdAt';
+      } else if (paramObj.sort === 'likes') {
+        paramObj.sort = 'likeCount';
+      }
+      queryString += `&sort=${paramObj.sort}`;
+    }
     // set state loading property to true
     dispatch({
       type: FETCH_POSTS_START,
     });
     // make api call
     const res = await axios.get(
-      `/api/posts/category/slug/${category}?page=${page}&limit=6`
+      `/api/posts/category/slug/${category}` + queryString
     );
     // dispatch action to update posts if results are returned
     if (res.data.results > 0) {
@@ -282,9 +313,15 @@ export const getPostsByCategorySlug = (page, category) => async (dispatch) => {
         type: INCREMENT_POSTS_PAGE,
       });
     }
+    // set state loading property to false
+    dispatch({
+      type: FETCH_POSTS_END,
+    });
   } catch (err) {
+    console.log(err);
     /* back end server-returned errors */
     if (err.response) {
+      console.log(err.response);
       // if user is making unauthorized request or token expired, log out
       if (err.response.status === 401) {
         dispatch(logout());
@@ -686,7 +723,7 @@ export const likeCommentById = (postId, commentId) => async (dispatch) => {
     );
     dispatch({
       type: LIKE_COMMENT,
-      payload: { postId, commentId, likes: res.data.data.likes },
+      payload: { postId, commentId, likes: res.data.data.doc.likes },
     });
   } catch (err) {
     /* back end server-returned errors */
