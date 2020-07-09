@@ -51,6 +51,7 @@ export const getNotifications = (page) => async (dispatch) => {
           notifications: res.data.data.doc,
           results: res.data.results,
           total: res.data.total,
+          count: res.data.count,
         },
       });
       dispatch({
@@ -115,15 +116,29 @@ export const setOpen = (id) => async (dispatch) => {
 
 /**
  * @action    setRead
- * @description Toggle notification read status
+ * @description Accepts array of notifications and sets read property to true
  **/
-export const setRead = (id) => async (dispatch) => {
+export const setRead = ([...notifications]) => async (dispatch) => {
   try {
-    const res = await axios.patch(`/api/notifications/${id}/read`);
-    dispatch({
-      type: UPDATE_NOTIFICATION,
-      payload: { notificationId: id, notification: res.data.data.doc },
-    });
+    // loop through array of notifications and for each notification, make an api call to update the read property of that notification to true
+    if (notifications.length > 0) {
+      notifications.map(async (notification) => {
+        if (notification.read) return;
+        // make api call
+        const res = await axios.patch(
+          `/api/notifications/${notification._id}/read`
+        );
+        console.log(res.data);
+        // update notification
+        dispatch({
+          type: UPDATE_NOTIFICATION,
+          payload: {
+            id: notification._id,
+            notification: res.data.data.doc,
+          },
+        });
+      });
+    }
   } catch (err) {
     dispatch({
       type: NOTIFICATION_ERROR,

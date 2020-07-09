@@ -30,7 +30,9 @@ const NotificationDropdown = ({
   const { btnRef, menuRef } = refs;
 
   useEffect(() => {
+    // when we open up the notification dropdown, we want to set the 'read' property of all of the notifications in the dropdown to 'true' and update the count
     if (visible) {
+      setRead([...notifications]);
       resetNotifications();
       getNotifications();
     }
@@ -87,7 +89,9 @@ const NotificationDropdown = ({
             <use xlinkHref={`${sprite}#icon-bell1`}></use>
           </svg>
         </div>
-        {count > 0 && <div className="notification__item--bubble">{count}</div>}
+        {!loading && count > 0 && (
+          <div className="notification__item--bubble">{count}</div>
+        )}
       </div>
       <div
         ref={menuRef}
