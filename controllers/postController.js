@@ -166,6 +166,21 @@ exports.getFeed = catchAsync(async (req, res) => {
   // 4. Execute query
   const doc = await postsPaginate.query;
 
+  // 5. Filter out any blocked comments
+  doc.map((post) => {
+    post.comments.filter((comment) => {
+      const containsBlockTo = self.block_to.some(
+        (userBlocked) => userBlocked._id === comment.user._id
+      );
+
+      const containsBlockFrom = self.block_from.some(
+        (userBlocked) => userBlocked._id === comment.user._id
+      );
+
+      return containsBlockTo || containsBlockFrom;
+    });
+  });
+
   res.status(200).json({
     status: 'success',
     total: posts.length,
