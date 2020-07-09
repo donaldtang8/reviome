@@ -2,8 +2,10 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import { logout } from './auth';
 import {
+  RESET_USERS_STATE,
   RESET_USERS,
   UPDATE_ME,
+  GET_USERS,
   GET_USER,
   FOLLOW_USER,
   UNFOLLOW_USER,
@@ -20,6 +22,16 @@ const config = {
   headers: {
     'Content-Type': 'application/json',
   },
+};
+
+/**
+ * @action    resetUsersState
+ * @description Reset users state
+ **/
+export const resetUsersState = () => async (dispatch) => {
+  dispatch({
+    type: RESET_USERS_STATE,
+  });
 };
 
 /**
@@ -212,6 +224,46 @@ export const getUserByUsername = (user) => async (dispatch) => {
     const res = await axios.get(`/api/users/user/${user}`);
     dispatch({
       type: GET_USER,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
+    dispatch({
+      type: USER_ERROR,
+    });
+  }
+};
+
+/**
+ * @action    getUserFollowingList
+ * @description Given the id of a user, retrieve the list of users that the user follows
+ **/
+export const getUserFollowingList = (id) => async (dispatch) => {
+  try {
+    // make api call
+    const res = await axios.get(`/api/users/following/${id}`);
+    dispatch({
+      type: GET_USERS,
       payload: res.data.data.doc,
     });
   } catch (err) {

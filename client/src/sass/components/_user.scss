@@ -1,0 +1,29 @@
+.user {
+  &-item {
+    &__container {
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-radius: 3px;
+      background-color: var(--color-card-background);
+      width: 50%;
+      margin: 0 auto;
+
+      &--pic {
+        border-radius: 50%;
+        height: 3rem;
+        width: 3rem;
+        margin-right: 1rem;
+      }
+
+      &--name {
+        white-space: nowrap;
+      }
+    }
+
+    &__container:hover {
+      cursor: pointer;
+      background-color: var(--color-hover-light);
+    }
+  }
+}

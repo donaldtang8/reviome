@@ -1,5 +1,7 @@
 import {
+  RESET_USERS_STATE,
   RESET_USERS,
+  RESET_USER,
   GET_USERS,
   GET_USER,
   FOLLOW_USER,
@@ -20,13 +22,25 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case RESET_USERS:
+    case RESET_USERS_STATE:
       return {
         ...state,
         users: [],
         user: null,
         loading: false,
         errors: [],
+      };
+    case RESET_USERS:
+      return {
+        ...state,
+        users: [],
+        loading: false,
+      };
+    case RESET_USER:
+      return {
+        ...state,
+        user: null,
+        loading: false,
       };
     case GET_USERS:
       return {

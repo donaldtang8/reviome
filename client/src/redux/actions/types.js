@@ -14,7 +14,9 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
 
 // USERS
+export const RESET_USERS_STATE = 'RESET_USERS_STATE';
 export const RESET_USERS = 'RESET_USERS';
+export const RESET_USER = 'RESET_USER';
 export const FETCH_USER_START = 'FETCH_USER_START';
 export const GET_ME = 'GET_ME';
 export const GET_USERS = 'GET_USERS';

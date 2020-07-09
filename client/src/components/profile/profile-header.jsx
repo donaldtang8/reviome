@@ -83,8 +83,7 @@ const ProfileHeader = ({
   // Handle confirm popup
 
   // block user
-  const handleBlock = (e) => {
-    e.preventDefault();
+  const handleBlock = () => {
     blockUserById(user._id);
   };
 

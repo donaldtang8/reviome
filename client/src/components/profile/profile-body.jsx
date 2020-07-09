@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Feed from './../../pages/feed/feed';
+import { resetUsers, getUserFollowingList } from './../../redux/actions/users';
 
-const ProfileBody = ({ auth, user }) => {
+import Feed from './../../pages/feed/feed';
+import UserItem from './../../components/user/user-item';
+
+const ProfileBody = ({
+  getUserFollowingList,
+  auth,
+  users: { users },
+  user,
+}) => {
   const [tab, setTab] = useState('posts');
+
+  useEffect(() => {
+    if (tab === 'following') {
+      resetUsers();
+      getUserFollowingList(user._id);
+    }
+  }, [tab]);
 
   return auth.user._id !== user._id &&
     auth.user.block_to.some((userBlocked) => userBlocked === user._id) ? (
@@ -52,8 +67,9 @@ const ProfileBody = ({ auth, user }) => {
       )}
       {tab === 'following' && (
         <div className="tabs__view">
-          <div className="heading-tertiary">Following</div>
-          <Feed pageType="profileFavorites" userId={user._id} />
+          {users.map((user) => (
+            <UserItem key={user._id} user={user} />
+          ))}
         </div>
       )}
     </div>
@@ -61,6 +77,7 @@ const ProfileBody = ({ auth, user }) => {
 };
 
 ProfileBody.propTypes = {
+  getUserFollowingList: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
 };
@@ -70,4 +87,4 @@ const mapStateToProps = (state) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps, null)(ProfileBody);
+export default connect(mapStateToProps, { getUserFollowingList })(ProfileBody);
