@@ -10,7 +10,6 @@ const User = require('./../models/userModel');
 const Category = require('./../models/categoryModel');
 
 exports.getAll = factory.getAll(Post, { path: 'comments' });
-exports.getOne = factory.getOne(Post, { path: 'comments' });
 exports.createOne = factory.createOne(Post);
 exports.deleteOne = factory.deleteOne(Post);
 
@@ -107,6 +106,49 @@ exports.getTopPosts = catchAsync(async (req, res, next) => {
  * @function  getFeed
  * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by
  **/
+exports.getOne = catchAsync(async (req, res) => {
+  // 1. Find post given id
+  const doc = await Post.findById(req.params.id).populate('comments');
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 400));
+  }
+
+  // 2. Get self document
+  const self = await User.findById(req.user.id);
+
+  // 2. Loop through comments for any comments from blocked users
+  let filteredComments = doc.comments.filter((comment) => {
+    // if even one of the values is true, we return false
+    const containsBlockTo = self.block_to.some(
+      (userBlocked) =>
+        userBlocked._id.toString() === comment.user._id.toString()
+    );
+
+    const containsBlockFrom = self.block_from.some(
+      (userBlocked) =>
+        userBlocked._id.toString() === comment.user._id.toString()
+    );
+
+    if (containsBlockTo || containsBlockFrom) {
+      return false;
+    }
+    return true;
+  });
+  doc.comments = filteredComments;
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc,
+    },
+  });
+});
+
+/**
+ * @function  getFeed
+ * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by
+ **/
 exports.getFeed = catchAsync(async (req, res) => {
   // 1. Get self document for access to following list
   const self = await User.findById(req.user.id);
@@ -164,22 +206,29 @@ exports.getFeed = catchAsync(async (req, res) => {
     .paginate();
 
   // 4. Execute query
-  const doc = await postsPaginate.query;
+  let doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
+  // 5. Loop through posts and filter its comments for any comments from blocked users
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
       const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
       const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
@@ -205,7 +254,10 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2. Execute request without APIFeatures object to find total number of results
+  // 2. Get self document
+  const self = await User.findById(req.user.id);
+
+  // 3. Execute request without APIFeatures object to find total number of results
   const postsTotal = new APIFeatures(
     Post.find({
       category: cat,
@@ -217,7 +269,7 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
 
   const posts = await postsTotal.query;
 
-  // 3. Create new APIFeatures object and pass in query
+  // 4. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       category: cat,
@@ -228,23 +280,30 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
     .sort()
     .paginate();
 
-  // 4. Execute query
+  // 5. Execute query
   const doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
+  // 6. Filter out any blocked comments
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
       const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
       const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
@@ -274,7 +333,10 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2. Execute request without APIFeatures object to find total number of results
+  // 2. Get self document
+  const self = await User.findById(req.user.id);
+
+  // 3. Execute request without APIFeatures object to find total number of results
   const postsTotal = new APIFeatures(
     Post.find({
       category: cat,
@@ -286,7 +348,7 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
 
   const posts = await postsTotal.query;
 
-  // 3. Create new APIFeatures object and pass in query
+  // 4. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       category: cat,
@@ -297,23 +359,30 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
     .sort()
     .paginate();
 
-  // 4. Execute query
+  // 5. Execute query
   const doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
+  // 6. Filter out any blocked comments
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
       const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
       const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
@@ -348,25 +417,34 @@ exports.getPostsByUser = catchAsync(async (req, res) => {
       user: req.params.userId,
     }).populate('comments'),
     req.query
-  ).paginate();
+  )
+    .sort()
+    .paginate();
 
   // 4. Execute query
   const doc = await postsPaginate.query;
 
   // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
-      const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
+      const containsBlockTo = user.block_to.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+      const containsBlockFrom = user.block_from.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
@@ -399,25 +477,34 @@ exports.getSavedPosts = catchAsync(async (req, res, next) => {
       saves: { $elemMatch: { $eq: user._id } },
     }).populate('comments'),
     req.query
-  ).paginate();
+  )
+    .sort()
+    .paginate();
 
   // 4. Execute query
   const doc = await postsPaginate.query;
 
   // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
-      const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
+      const containsBlockTo = user.block_to.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+      const containsBlockFrom = user.block_from.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
@@ -436,6 +523,7 @@ exports.getSavedPosts = catchAsync(async (req, res, next) => {
 exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
   // 1. Get user object
   const user = await User.findById(req.params.userId);
+
   if (!user) {
     return next(new AppError('User does not exist', 404));
   }
@@ -451,25 +539,34 @@ exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
       saves: { $elemMatch: { $eq: user._id } },
     }).populate('comments'),
     req.query
-  ).paginate();
+  )
+    .sort()
+    .paginate();
 
   // 4. Execute query
   const doc = await postsPaginate.query;
 
   // 5. Filter out any blocked comments
-  doc.map((post) => {
-    post.comments.filter((comment) => {
-      const containsBlockTo = self.block_to.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
+      const containsBlockTo = user.block_to.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      const containsBlockFrom = self.block_from.some(
-        (userBlocked) => userBlocked._id === comment.user._id
+      const containsBlockFrom = user.block_from.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
       );
 
-      return containsBlockTo || containsBlockFrom;
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
     });
-  });
+    doc[i].comments = filteredComments;
+  }
 
   res.status(200).json({
     status: 'success',
