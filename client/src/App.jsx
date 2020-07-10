@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 
 import './App.css';
 
+// Actions to call on application load
+import { getNotifications } from './redux/actions/notifications';
+
 // Utility components
 import Spinner from './components/spinner/spinner';
 import AuthRoute from './utils/routes/AuthRoute';
@@ -30,7 +33,12 @@ const Account = lazy(() => import('./pages/account/account'));
 const Profile = lazy(() => import('./pages/profile/profile'));
 const Notifications = lazy(() => import('./pages/notifications/notifications'));
 
-const App = ({ auth: { isAuthenticated } }) => {
+const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
+  // retrieve notifications when application is loaded so we can display notification count on page load
+  useEffect(() => {
+    getNotifications(1);
+  }, []);
+
   return (
     <div className="App">
       <div className="container">
@@ -90,6 +98,7 @@ const App = ({ auth: { isAuthenticated } }) => {
 };
 
 App.propTypes = {
+  getNotifications: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -97,4 +106,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, {})(App);
+export default connect(mapStateToProps, { getNotifications })(App);
