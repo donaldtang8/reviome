@@ -28,8 +28,6 @@ const Profile = ({
     <div className="section__container profile__container">
       {user === null || loading ? (
         <div>Profile not found</div>
-      ) : errors.length > 0 ? (
-        <div> Something went wrong </div>
       ) : (
         <Fragment>
           <ProfileHeader user={user} />

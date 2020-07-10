@@ -36,11 +36,12 @@ const ProfileHeader = ({
   }, [reportOpen]);
 
   // if confirmData toggle changes, check if confirmData has a value
-  useEffect(() => {
-    if (confirmData) {
-      handleBlock();
-    }
-  }, [confirmData]);
+  // useEffect(() => {
+  //   console.log(confirmData);
+  //   if (confirmData) {
+  //     handleBlock();
+  //   }
+  // }, [confirmData]);
 
   // toggles reportOpen variable
   const reportOpenCallback = (open) => {
@@ -54,9 +55,13 @@ const ProfileHeader = ({
 
   // toggles confirmData variable - if selection in window has been made
   const confirmDataCallback = (data) => {
-    setConfirmData(data);
+    // setConfirmData(data);
+    if (data) {
+      handleBlock();
+    }
   };
 
+  // Handle confirm popup
   const handleConfirmOpen = () => {
     setConfirmOpen(true);
   };
@@ -80,9 +85,7 @@ const ProfileHeader = ({
     }
   };
 
-  // Handle confirm popup
-
-  // block user
+  // Block user
   const handleBlock = () => {
     blockUserById(user._id);
   };
