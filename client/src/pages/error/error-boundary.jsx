@@ -20,7 +20,6 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     this.setState({
-      hasError: true,
       error: error,
       info: info,
     });
@@ -34,7 +33,7 @@ class ErrorBoundary extends Component {
             className="error-boundary__image"
             src="https://i.imgur.com/Q2BAOd2.png"
           />
-          <div className="error-boundary__text">404 - Page not on the map</div>
+          <div className="error-boundary__text">Something went wrong</div>
         </div>
       );
     }
