@@ -173,6 +173,46 @@ export const deleteMe = () => async (dispatch) => {
   }
 };
 
+/**
+ * @action    updateSocials
+ * @description Update social links
+ **/
+export const updateSocials = (formData) => async (dispatch) => {
+  try {
+    //  make api call
+    const res = await axios.patch('/api/users/updateSocials', formData, config);
+    dispatch({
+      type: UPDATE_ME,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
+    dispatch({
+      type: USER_ERROR,
+    });
+  }
+};
+
 // PROFILE PAGE ACTIONS
 /**
  * @action    getUserById
@@ -459,5 +499,71 @@ export const unblockUserById = (id) => async (dispatch) => {
     dispatch({
       type: USER_ERROR,
     });
+  }
+};
+
+/**
+ * @action    banUserById
+ * @description Ban user by id
+ **/
+export const banUserById = (id, formData) => async (dispatch) => {
+  try {
+    // make api call
+    await axios.patch(`/api/users/ban/${id}`, formData, config);
+    dispatch(setAlert('Account successfully banned', 'success'));
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+  }
+};
+
+/**
+ * @action    unbanUserById
+ * @description Unban user by id
+ **/
+export const unbanUserById = (id, formData) => async (dispatch) => {
+  try {
+    // make api call
+    await axios.patch(`/api/users/unban/${id}`, formData, config);
+    dispatch(setAlert('Account successfully unbanned', 'success'));
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
   }
 };
