@@ -102,6 +102,7 @@ const ReportForm = ({
       message: '',
     });
     document.querySelector('select#report_type').selectedIndex = 0;
+    handleClose();
   };
 
   return (
