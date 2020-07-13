@@ -98,72 +98,137 @@ const ProfileHeader = ({
       <div className="profile__header--bio">
         <div className="profile__header--info">
           <div className="profile__header--name">{user.fullName}</div>
+          <div>@{user.uName}</div>
+          <div>{user.followers} followers</div>
           {/* <div className="profile__header--followers">
             {user.followers} followers
           </div> */}
         </div>
-        {auth.user._id !== user._id ? (
-          <div className="profile__header--actions">
-            {/* We do not need to check if user of profile is blocking*/}
-            {auth.user.block_to.some(
-              (userBlocked) => userBlocked === user._id
-            ) ? (
-              <div
-                className="btn__action btn__action--inactive"
-                onClick={() => unblockUserById(user._id)}
-              >
-                Unblock
-              </div>
-            ) : auth.user.following.some(
-                (userFollowed) => userFollowed._id === user._id
-              ) ? (
+        <div className="profile__header--info-bar">
+          <div className="profile__header--links">
+            {user.links && (
               <Fragment>
-                <div
-                  className="btn__action btn__action--inactive"
-                  onClick={() => unfollowUserById(user._id)}
-                >
-                  Unfollow
-                </div>
-                <div
-                  className="btn__action btn__action--active"
-                  onClick={handleConfirmOpen}
-                >
-                  Block
-                </div>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <div
-                  className="btn__action btn__action--active"
-                  onClick={() => followUserById(user._id)}
-                >
-                  Follow
-                </div>
-                <div
-                  className="btn__action btn__action--active"
-                  // onClick={() => blockUserById(user._id)}
-                  onClick={handleConfirmOpen}
-                >
-                  Block
-                </div>
+                {user.links.youtube && (
+                  <a
+                    href={user.links.youtube}
+                    target="_blank"
+                    className="btn__icon"
+                  >
+                    <svg className="btn__icon--svg">
+                      <use xlinkHref={`${sprite}#icon-youtube`}></use>
+                    </svg>
+                  </a>
+                )}
+                {user.links.instagram && (
+                  <a
+                    href={user.links.instagram}
+                    target="_blank"
+                    className="btn__icon"
+                  >
+                    <svg className="btn__icon--svg">
+                      <use xlinkHref={`${sprite}#icon-instagram`}></use>
+                    </svg>
+                  </a>
+                )}
+                {user.links.soundcloud && (
+                  <a
+                    href={user.links.soundcloud}
+                    target="_blank"
+                    className="btn__icon"
+                  >
+                    <svg className="btn__icon--svg">
+                      <use xlinkHref={`${sprite}#icon-soundcloud`}></use>
+                    </svg>
+                  </a>
+                )}
+                {user.links.spotify && (
+                  <a
+                    href={user.links.spotify}
+                    target="_blank"
+                    className="btn__icon"
+                  >
+                    <svg className="btn__icon--svg">
+                      <use xlinkHref={`${sprite}#icon-spotify`}></use>
+                    </svg>
+                  </a>
+                )}
+                {user.links.twitch && (
+                  <a
+                    href={user.links.twitch}
+                    target="_blank"
+                    className="btn__icon"
+                  >
+                    <svg className="btn__icon--svg">
+                      <use xlinkHref={`${sprite}#icon-twitch`}></use>
+                    </svg>
+                  </a>
+                )}
               </Fragment>
             )}
-            <div
-              className="btn__action btn__action--active"
-              onClick={() => setReportOpen(true)}
-            >
-              Report
+          </div>
+          {auth.user._id !== user._id ? (
+            <div className="profile__header--actions">
+              {/* We do not need to check if user of profile is blocking*/}
+              {auth.user.block_to.some(
+                (userBlocked) => userBlocked === user._id
+              ) ? (
+                <div
+                  className="btn__action btn__action--inactive"
+                  onClick={() => unblockUserById(user._id)}
+                >
+                  Unblock
+                </div>
+              ) : auth.user.following.some(
+                  (userFollowed) => userFollowed._id === user._id
+                ) ? (
+                <Fragment>
+                  <div
+                    className="btn__action btn__action--inactive"
+                    onClick={() => unfollowUserById(user._id)}
+                  >
+                    Unfollow
+                  </div>
+                  <div
+                    className="btn__action btn__action--active"
+                    onClick={handleConfirmOpen}
+                  >
+                    Block
+                  </div>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div
+                    className="btn__action btn__action--active"
+                    onClick={() => followUserById(user._id)}
+                  >
+                    Follow
+                  </div>
+                  <div
+                    className="btn__action btn__action--active"
+                    // onClick={() => blockUserById(user._id)}
+                    onClick={handleConfirmOpen}
+                  >
+                    Block
+                  </div>
+                </Fragment>
+              )}
+              <div
+                className="btn__action btn__action--active"
+                onClick={() => setReportOpen(true)}
+              >
+                Report
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="profile__header--actions">
-            <Link to="/account" className="btn__icon">
-              <svg className="btn__icon--svg">
-                <use xlinkHref={`${sprite}#icon-cog`}></use>
-              </svg>
-            </Link>
-          </div>
-        )}
+          ) : (
+            <div className="profile__header--actions">
+              <Link to="/account" className="btn__icon">
+                <svg className="btn__icon--svg">
+                  <use xlinkHref={`${sprite}#icon-cog`}></use>
+                </svg>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
       <ReportForm
         item={user}

@@ -7,7 +7,10 @@ import { resetUsers, getUserFollowingList } from './../../redux/actions/users';
 import Feed from './../../pages/feed/feed';
 import UserItem from './../../components/user/user-item';
 
+import ProfilePostForm from './../../components/profile/profile-post-form';
+
 const ProfileBody = ({
+  resetUsers,
   getUserFollowingList,
   auth,
   users: { users },
@@ -21,6 +24,15 @@ const ProfileBody = ({
       getUserFollowingList(user._id);
     }
   }, [tab]);
+
+  const handlePopup = (e) => {
+    const popup = document.querySelector('#popupPost');
+    const popupContent = document.querySelector('#popupPostContent');
+    popup.style.opacity = '1';
+    popup.style.visibility = 'visible';
+    // popupContent.opacity = "1";
+    // popupContent.transform = "translate(-50%, -50%) scale(1)";
+  };
 
   return auth.user._id !== user._id &&
     auth.user.block_to.some((userBlocked) => userBlocked === user._id) ? (
@@ -37,6 +49,14 @@ const ProfileBody = ({
           onClick={() => setTab('posts')}
         >
           Posts
+        </div>
+        <div
+          className={
+            tab === 'community' ? 'tabs tabs--active' : 'tabs tabs--inactive'
+          }
+          onClick={() => setTab('community')}
+        >
+          Community
         </div>
         <div
           className={
@@ -60,6 +80,20 @@ const ProfileBody = ({
           <Feed pageType="profilePosts" userId={user._id} />
         </div>
       )}
+      {tab === 'community' && (
+        <div className="tabs__view">
+          {auth.user._id === user._id && (
+            <div className="posts__container--form">
+              <img src={user.photo} alt={user.fullName} />
+              <div className="input__btn" onClick={handlePopup}>
+                Create a post
+              </div>
+              <ProfilePostForm />
+            </div>
+          )}
+          <Feed pageType="community" userId={user._id} />
+        </div>
+      )}
       {tab === 'favorites' && (
         <div className="tabs__view">
           <Feed pageType="profileFavorites" userId={user._id} />
@@ -67,9 +101,11 @@ const ProfileBody = ({
       )}
       {tab === 'following' && (
         <div className="tabs__view">
-          {users.map((user) => (
-            <UserItem key={user._id} user={user} />
-          ))}
+          {users.length > 0 ? (
+            users.map((user) => <UserItem key={user._id} user={user} />)
+          ) : (
+            <div className="center padding-small">No users followed!</div>
+          )}
         </div>
       )}
     </div>
@@ -77,6 +113,7 @@ const ProfileBody = ({
 };
 
 ProfileBody.propTypes = {
+  resetUsers: PropTypes.func.isRequired,
   getUserFollowingList: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
@@ -87,4 +124,7 @@ const mapStateToProps = (state) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps, { getUserFollowingList })(ProfileBody);
+export default connect(mapStateToProps, {
+  resetUsers,
+  getUserFollowingList,
+})(ProfileBody);

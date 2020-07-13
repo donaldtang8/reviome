@@ -270,7 +270,6 @@ export const getPostsByCategorySlug = (page, category, history) => async (
   try {
     // create new object 'params'
     let paramObj = {};
-    console.log(history);
     // check if there are any URL params
     if (history.location && history.location.search) {
       // remove initial ? character from query string
@@ -318,10 +317,8 @@ export const getPostsByCategorySlug = (page, category, history) => async (
       type: FETCH_POSTS_END,
     });
   } catch (err) {
-    console.log(err);
     /* back end server-returned errors */
     if (err.response) {
-      console.log(err.response);
       // if user is making unauthorized request or token expired, log out
       if (err.response.status === 401) {
         dispatch(logout());
@@ -848,6 +845,106 @@ export const unsavePostById = (postId) => async (dispatch) => {
     dispatch({
       type: UNSAVE_POST,
       payload: { postId, saves: res.data.data.doc },
+    });
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
+    dispatch({
+      type: POST_ERROR,
+    });
+  }
+};
+
+/**
+ * @action    createCommunityPost
+ * @description Create community post
+ **/
+export const createCommunityPost = (formData) => async (dispatch) => {
+  try {
+    // make api call
+    const res = await axios.post(`/api/posts/community`, formData, config);
+    // dispatch action and update posts
+    dispatch({
+      type: CREATE_POST,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    /* back end server-returned errors */
+    if (err.response) {
+      // if user is making unauthorized request or token expired, log out
+      if (err.response.status === 401) {
+        dispatch(logout());
+      } else if (err.response.status.toString().startsWith('4')) {
+        dispatch(setAlert(err.response.data.message, 'fail'));
+      }
+      // else, display generic error
+      else {
+        dispatch(
+          setAlert('Oh no! Something went wrong, please try again.', 'fail')
+        );
+      }
+    } else {
+      /* front end client errors */
+      dispatch(
+        setAlert('Oh no! Something went wrong, please try again.', 'fail')
+      );
+    }
+    // dispatch post error action type
+    dispatch({
+      type: POST_ERROR,
+    });
+  }
+};
+
+/**
+ * @action    getCommunityPosts
+ * @description Retrieve posts for user's community page
+ **/
+export const getCommunityPosts = (page, userId) => async (dispatch) => {
+  try {
+    // set state loading property to true
+    dispatch({
+      type: FETCH_POSTS_START,
+    });
+    // make api call
+    const res = await axios.get(`/api/posts/community/${userId}?page=${page}`);
+    // dispatch action to update posts if results are returned
+    if (res.data.results > 0) {
+      // Dispatch get action to update posts
+      dispatch({
+        type: GET_POSTS,
+        payload: {
+          posts: res.data.data.doc,
+          results: res.data.results,
+          total: res.data.total,
+        },
+      });
+      dispatch({
+        type: INCREMENT_POSTS_PAGE,
+      });
+    }
+    // set state loading property to false
+    dispatch({
+      type: FETCH_POSTS_END,
     });
   } catch (err) {
     /* back end server-returned errors */

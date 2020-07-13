@@ -9,6 +9,7 @@ import {
   getSavedPosts,
   getPostsByUser,
   getSavedPostsByUser,
+  getCommunityPosts,
   resetPosts,
 } from './../../redux/actions/posts';
 
@@ -24,6 +25,7 @@ const Feed = ({
   getSavedPosts,
   getPostsByUser,
   getSavedPostsByUser,
+  getCommunityPosts,
   resetPosts,
   pageType,
   userId,
@@ -56,6 +58,8 @@ const Feed = ({
         getPostsByUser(page, userId);
       } else if (pageType === 'profileFavorites') {
         getSavedPostsByUser(page, userId);
+      } else if (pageType === 'community') {
+        getCommunityPosts(page, userId);
       }
     }
   }, [stateReset]);
@@ -94,13 +98,15 @@ const Feed = ({
       getPostsByUser(page, userId);
     } else if (pageType === 'profileFavorites') {
       getSavedPostsByUser(page, userId);
+    } else if (pageType === 'community') {
+      getCommunityPosts(page);
     }
   };
 
   return page === 1 && loading ? (
     <Spinner />
   ) : (
-    <div className="section__container posts__container">
+    <div className="section__container">
       {pageType === 'feed' && (
         <div className="posts__container--form">
           <img src={user.photo} alt={user.fullName} />
@@ -113,9 +119,9 @@ const Feed = ({
       {page === 1 && loading ? (
         <Spinner />
       ) : posts.length === 0 ? (
-        <div>No posts here. Please check out the explore page!</div>
+        <div className="center padding-small">No posts here!</div>
       ) : (
-        <Fragment>
+        <div className="posts__container">
           {posts.map((post) => (
             <PostItem
               key={post._id}
@@ -133,7 +139,7 @@ const Feed = ({
                 Load More
               </div>
             ))}
-        </Fragment>
+        </div>
       )}
       {posts.length > 0 && !nextPage && (
         <div className="posts__container--end">No more posts</div>
@@ -159,6 +165,7 @@ Feed.propTypes = {
   getSavedPosts: PropTypes.func.isRequired,
   getPostsByUser: PropTypes.func.isRequired,
   getSavedPostsByUser: PropTypes.func.isRequired,
+  getCommunityPosts: PropTypes.func.isRequired,
   resetPosts: PropTypes.func,
   pageType: PropTypes.string,
   userId: PropTypes.string,
@@ -175,5 +182,6 @@ export default connect(mapStateToProps, {
   getSavedPosts,
   getPostsByUser,
   getSavedPostsByUser,
+  getCommunityPosts,
   resetPosts,
 })(withRouter(Feed));

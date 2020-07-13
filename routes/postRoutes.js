@@ -56,6 +56,14 @@ router.patch('/:id/unsave', postController.unsavePostById);
 
 // Individual post actions
 router
+  .route('/community')
+  .post(
+    postController.setCommunityPostCategoryandUser,
+    postController.createCommunityPost
+  );
+router.route('/community/:id').get(postController.getCommunityPosts);
+
+router
   .route('/:id')
   .get(postController.getOne)
   .delete(

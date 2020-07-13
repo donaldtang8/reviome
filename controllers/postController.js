@@ -10,11 +10,9 @@ const User = require('./../models/userModel');
 const Category = require('./../models/categoryModel');
 
 exports.getAll = factory.getAll(Post, { path: 'comments' });
-exports.createOne = factory.createOne(Post);
 exports.deleteOne = factory.deleteOne(Post);
 
 // MIDDLEWARES
-
 /**
  * @middleware setCategoryToDelete
  * @description Get top posts within a certain time period
@@ -28,6 +26,20 @@ exports.setCategoryToDelete = catchAsync(async (req, res, next) => {
   }
 
   req.body.category = category._id;
+  next();
+});
+
+/**
+ * @middleware setCommunityCategory
+ * @description Set category of a community post to 'community'
+ **/
+exports.setCommunityPostCategoryandUser = catchAsync(async (req, res, next) => {
+  req.body.category = '5f09674d0639e61c78e22e26';
+  req.body.user = req.user.id;
+
+  const user = await User.findById(req.user.id);
+  // since a link is required for a post, we will just provide a placeholder url
+  req.body.link = 'https://www.google.com';
   next();
 });
 
@@ -102,22 +114,43 @@ exports.getTopPosts = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.createOne = catchAsync(async (req, res, next) => {
+  let doc = await Post.create(req.body);
+
+  let popDoc = await Post.findById(doc._id)
+    .populate({
+      path: 'user',
+      select: '-__v -passwordChangedAt',
+    })
+    .populate('comments');
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      doc: popDoc,
+    },
+  });
+});
+
 /**
- * @function  getFeed
- * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by
+ * @function  getOne
+ * @description Find and return post given postId
  **/
 exports.getOne = catchAsync(async (req, res) => {
   // 1. Find post given id
-  const doc = await Post.findById(req.params.id).populate('comments');
+  const doc = await Post.findById(req.params.id)
+    .populate('user')
+    .populate('comments');
 
-  if (!doc) {
+  // 2. Throw error if document doesn't exist or document belongs to inactive user
+  if (!doc || !doc.user.active) {
     return next(new AppError('No document found with that ID', 400));
   }
 
-  // 2. Get self document
+  // 3. Get self document
   const self = await User.findById(req.user.id);
 
-  // 2. Loop through comments for any comments from blocked users
+  // 4. Loop through comments for any comments from blocked users
   let filteredComments = doc.comments.filter((comment) => {
     // if even one of the values is true, we return false
     const containsBlockTo = self.block_to.some(
@@ -147,13 +180,16 @@ exports.getOne = catchAsync(async (req, res) => {
 
 /**
  * @function  getFeed
- * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by
+ * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by,
  **/
 exports.getFeed = catchAsync(async (req, res) => {
   // 1. Get self document for access to following list
   const self = await User.findById(req.user.id);
 
-  // 2. Execute request without APIFeatures object to find total number of results
+  // 2. Get community category document and get ID to filter out any community posts
+  const comCat = await Category.findOne({ name: 'community' });
+
+  // 3. Create new APIFeatures object without pagination (to find total number of results) and pass in query
   const postsTotal = new APIFeatures(
     Post.find({
       $or: [
@@ -162,6 +198,7 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $in: self.following } },
             { user: { $nin: self.block_to } },
             { user: { $nin: self.block_from } },
+            { category: { $ne: comCat._id } },
           ],
         },
         {
@@ -171,15 +208,24 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $nin: self.block_from } },
           ],
         },
-        { user: { $eq: req.user.id } },
+        {
+          $and: [
+            { user: { $eq: req.user.id } },
+            { category: { $ne: comCat._id } },
+          ],
+        },
       ],
-    }).populate('comments'),
+    }).populate('user'),
     req.query
   ).sort();
 
-  const posts = await postsTotal.query;
+  // 4. Execute query
+  let posts = await postsTotal.query;
 
-  // 3. Create new APIFeatures object and pass in query
+  // 5. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 6. Create new APIFeatures object (with pagination) and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       $or: [
@@ -188,6 +234,7 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $in: self.following } },
             { user: { $nin: self.block_to } },
             { user: { $nin: self.block_from } },
+            { category: { $ne: comCat._id } },
           ],
         },
         {
@@ -197,18 +244,32 @@ exports.getFeed = catchAsync(async (req, res) => {
             { user: { $nin: self.block_from } },
           ],
         },
-        { user: { $eq: req.user.id } },
+        {
+          $and: [
+            { user: { $eq: req.user.id } },
+            { category: { $ne: comCat._id } },
+          ],
+        },
       ],
-    }).populate('comments'),
+    })
+      .populate({
+        path: 'user',
+        select:
+          '-__v -passwordChangedAt -wall -categories_following -following -links',
+      })
+      .populate('comments'),
     req.query
   )
     .sort()
     .paginate();
 
-  // 4. Execute query
+  // 7. Execute query
   let doc = await postsPaginate.query;
 
-  // 5. Loop through posts and filter its comments for any comments from blocked users
+  // 8. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 9. Loop through posts and filter its comments for any comments from blocked users
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -257,33 +318,42 @@ exports.getPostsByCategoryId = catchAsync(async (req, res, next) => {
   // 2. Get self document
   const self = await User.findById(req.user.id);
 
-  // 3. Execute request without APIFeatures object to find total number of results
+  // 3. Create new APIFeatures object without pagination (to find total number of results) and pass in query
   const postsTotal = new APIFeatures(
     Post.find({
       category: cat,
-    }).populate('comments'),
+    }).populate('user'),
     req.query
   )
     .filter()
     .sort();
 
-  const posts = await postsTotal.query;
+  // 4. Execute query
+  let posts = await postsTotal.query;
 
-  // 4. Create new APIFeatures object and pass in query
+  // 5. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 6. Create new APIFeatures object (with pagination) and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       category: cat,
-    }).populate('comments'),
+    })
+      .populate('user')
+      .populate('comments'),
     req.query
   )
     .filter()
     .sort()
     .paginate();
 
-  // 5. Execute query
-  const doc = await postsPaginate.query;
+  // 7. Execute query
+  let doc = await postsPaginate.query;
 
-  // 6. Filter out any blocked comments
+  // 8. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 9. Loop through posts and filter its comments for any comments from blocked users
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -336,33 +406,42 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
   // 2. Get self document
   const self = await User.findById(req.user.id);
 
-  // 3. Execute request without APIFeatures object to find total number of results
+  // 3. Create new APIFeatures object without pagination (to find total number of results) and pass in query
   const postsTotal = new APIFeatures(
     Post.find({
       category: cat,
-    }).populate('comments'),
+    }).populate('user'),
     req.query
   )
     .filter()
     .sort();
 
-  const posts = await postsTotal.query;
+  // 4. Execute query
+  let posts = await postsTotal.query;
 
-  // 4. Create new APIFeatures object and pass in query
+  // 5. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 6. Create new APIFeatures object (with pagination) and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       category: cat,
-    }).populate('comments'),
+    })
+      .populate('user')
+      .populate('comments'),
     req.query
   )
     .filter()
     .sort()
     .paginate();
 
-  // 5. Execute query
-  const doc = await postsPaginate.query;
+  // 7. Execute query
+  let doc = await postsPaginate.query;
 
-  // 6. Filter out any blocked comments
+  // 8. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 9. Filter out any blocked comments
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -398,33 +477,43 @@ exports.getPostsByCategorySlug = catchAsync(async (req, res, next) => {
  * @function  getPostsByUser
  * @description Find all posts created by user given by userID
  **/
-exports.getPostsByUser = catchAsync(async (req, res) => {
+exports.getPostsByUser = catchAsync(async (req, res, next) => {
   // 1. Get user document to check if user exists
   const user = await User.findById(req.params.userId);
 
-  if (!user) {
+  // 2. Throw error if user doesn't exist or if user is inactive
+  if (!user || !user.active) {
     return next(new AppError('User does not exist', 404));
   }
 
-  // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
-    user: req.params.userId,
+  // 3. Get community category document and get ID to filter out any community posts
+  const comCat = await Category.findOne({ name: 'community' });
+
+  // 4. Find all post documents that are non community posts made by user who initiated request
+  let posts = await Post.find({
+    $and: [
+      { user: { $eq: req.params.userId } },
+      { category: { $nin: comCat._id } },
+    ],
   });
 
-  // 3. Create new APIFeatures object and pass in query
+  // 5. Create new APIFeatures object (with pagination) and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
-      user: req.params.userId,
+      $and: [
+        { user: { $eq: req.params.userId } },
+        { category: { $nin: comCat._id } },
+      ],
     }).populate('comments'),
     req.query
   )
     .sort()
     .paginate();
 
-  // 4. Execute query
-  const doc = await postsPaginate.query;
+  // 6. Execute query
+  let doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
+  // 7. Loop through posts and filter its comments for any comments from blocked users
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -463,28 +552,38 @@ exports.getPostsByUser = catchAsync(async (req, res) => {
 exports.getSavedPosts = catchAsync(async (req, res, next) => {
   // 1. Get user object
   const user = await User.findById(req.user.id);
+
+  // 2. Throw error if user doesn't exist or if user is inactive
   if (!user) {
     return next(new AppError('User does not exist', 404));
   }
-  // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
+  // 3. Find all post documents that are non community posts made by user who initiated request
+  let posts = await Post.find({
     saves: { $elemMatch: { $eq: user._id } },
-  });
+  }).populate('user');
 
-  // 3. Create new APIFeatures object and pass in query
+  // 4. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 5. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       saves: { $elemMatch: { $eq: user._id } },
-    }).populate('comments'),
+    })
+      .populate('user')
+      .populate('comments'),
     req.query
   )
     .sort()
     .paginate();
 
-  // 4. Execute query
-  const doc = await postsPaginate.query;
+  // 6. Execute query
+  let doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
+  // 7. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 8. Loop through posts and filter its comments for any comments from blocked users
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -524,29 +623,37 @@ exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
   // 1. Get user object
   const user = await User.findById(req.params.userId);
 
-  if (!user) {
+  // 2. Throw error if user doesn't exist or if user is inactive
+  if (!user || !user.active) {
     return next(new AppError('User does not exist', 404));
   }
-
-  // 2. Execute request without APIFeatures object to find total number of results
-  const posts = await Post.find({
+  // 3. Find all post documents that are non community posts made by user who initiated request
+  let posts = await Post.find({
     saves: { $elemMatch: { $eq: user._id } },
-  });
+  }).populate('user');
 
-  // 3. Create new APIFeatures object and pass in query
+  // 4. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 5. Create new APIFeatures object and pass in query
   const postsPaginate = new APIFeatures(
     Post.find({
       saves: { $elemMatch: { $eq: user._id } },
-    }).populate('comments'),
+    })
+      .populate('user')
+      .populate('comments'),
     req.query
   )
     .sort()
     .paginate();
 
-  // 4. Execute query
-  const doc = await postsPaginate.query;
+  // 6. Execute query
+  let doc = await postsPaginate.query;
 
-  // 5. Filter out any blocked comments
+  // 7. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 8. Loop through posts and filter its comments for any comments from blocked users
   for (let i = 0; i < doc.length; i++) {
     let filteredComments = doc[i].comments.filter((comment) => {
       // if even one of the values is true, we return false
@@ -584,21 +691,22 @@ exports.getSavedPostsByUser = catchAsync(async (req, res, next) => {
  **/
 exports.likePostById = catchAsync(async (req, res, next) => {
   // 1. Retrieve post from id
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('user');
 
-  if (!post) {
+  // 2. Throw error if post doesn't exist or post owner is inactive
+  if (!post || !post.user.active) {
     return next(new AppError('No document found with that ID', 404));
   }
 
   // NOTIFICATION - set doc in req.body so notification can access
   req.body.doc = post;
 
-  // 2. Check if user already liked post
+  // 3. Check if user already liked post
   if (post.likedPost(req.user.id)) {
     return next(new AppError('Already liked post', 400));
   }
 
-  // 3. Add user to likes array and update like count
+  // 4. Add user to likes array and update like count
   const newPost = await Post.findByIdAndUpdate(
     req.params.id,
     {
@@ -623,18 +731,19 @@ exports.likePostById = catchAsync(async (req, res, next) => {
  **/
 exports.unlikePostById = catchAsync(async (req, res, next) => {
   // 1. Retrieve post from id
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('user');
 
-  if (!post) {
-    return next(new AppError('No document found with that ID', 400));
+  // 2. Throw error if post doesn't exist or post owner is inactive
+  if (!post || !post.user.active) {
+    return next(new AppError('No document found with that ID', 404));
   }
 
-  // 2. Check if post is liked
+  // 3. Check if post is liked
   if (!post.likedPost(req.user.id)) {
     return next(new AppError('Post has not been liked yet', 400));
   }
 
-  // 3. Decrement like count
+  // 4. Decrement like count
   const newPost = await Post.findByIdAndUpdate(
     req.params.id,
     {
@@ -659,18 +768,19 @@ exports.unlikePostById = catchAsync(async (req, res, next) => {
  **/
 exports.savePostById = catchAsync(async (req, res, next) => {
   // 1. Retrieve post from id
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('user');
 
-  if (!post) {
+  // 2. Throw error if post doesn't exist or post owner is inactive
+  if (!post || !post.user.active) {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  // 2. Check if user already liked post
+  // 3. Check if user already liked post
   if (post.savedPost(req.user.id)) {
     return next(new AppError('Already saved post', 400));
   }
 
-  // 3. Find post by id and update save list
+  // 4. Find post by id and update save list
   const newPost = await Post.findByIdAndUpdate(
     req.params.id,
     {
@@ -694,18 +804,19 @@ exports.savePostById = catchAsync(async (req, res, next) => {
  **/
 exports.unsavePostById = catchAsync(async (req, res, next) => {
   // 1. Retrieve post from id
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('user');
 
-  if (!post) {
+  // 2. Throw error if post doesn't exist or post owner is inactive
+  if (!post || !post.user.active) {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  // 2. Check if user already liked post
+  // 3. Check if user already liked post
   if (!post.savedPost(req.user.id)) {
     return next(new AppError('Post has not been saved yet', 400));
   }
 
-  // 3. Find post by id and update save list
+  // 4. Find post by id and update save list
   const newPost = await Post.findByIdAndUpdate(
     req.params.id,
     {
@@ -731,4 +842,107 @@ exports.removePostComments = catchAsync(async (req, res, next) => {
   // 1. Find and delete all comments with post id of post to be deleted
   await Comment.deleteMany({ post: req.params.id });
   next();
+});
+
+/**
+ * @function  createCommunityPost
+ * @description Create a new community post
+ **/
+exports.createCommunityPost = catchAsync(async (req, res) => {
+  let doc = await Post.create(req.body);
+
+  let popDoc = await Post.findById(doc._id)
+    .populate({
+      path: 'user',
+      select: '-__v -passwordChangedAt',
+    })
+    .populate('comments');
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      doc: popDoc,
+    },
+  });
+});
+
+/**
+ * @function  getCommunityPosts
+ * @description Get community posts
+ **/
+exports.getCommunityPosts = catchAsync(async (req, res) => {
+  // 1. Retrieve self user document
+  let user = await User.findById(req.user.id);
+
+  // 2. Get community category document and get ID to filter out any community posts
+  const comCat = await Category.findOne({ name: 'community' });
+
+  // 3. Create new APIFeatures object without pagination (to find total number of results) and pass in query
+  const postsTotal = new APIFeatures(
+    Post.find({
+      $and: [
+        { category: { $eq: comCat._id } },
+        { user: { $eq: req.params.id } },
+      ],
+    }).populate('user'),
+    req.query
+  ).sort();
+
+  // 4. Execute query
+  let posts = await postsTotal.query;
+
+  // 5. Filter out any posts from inactive or banned users
+  posts = posts.filter((post) => post.user.active === true);
+
+  // 6. Create new APIFeatures object (with pagination) and pass in query
+  const postsPaginate = new APIFeatures(
+    Post.find({
+      $and: [
+        { category: { $eq: comCat._id } },
+        { user: { $eq: req.params.id } },
+      ],
+    })
+      .populate('user')
+      .populate('comments'),
+    req.query
+  )
+    .sort()
+    .paginate();
+
+  // 7. Execute query
+  let doc = await postsPaginate.query;
+
+  // 8. Filter out any posts from inactive or banned users
+  doc = doc.filter((post) => post.user.active === true);
+
+  // 9. Loop through posts and filter its comments for any comments from blocked users
+  for (let i = 0; i < doc.length; i++) {
+    let filteredComments = doc[i].comments.filter((comment) => {
+      // if even one of the values is true, we return false
+      const containsBlockTo = user.block_to.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
+      );
+
+      const containsBlockFrom = user.block_from.some(
+        (userBlocked) =>
+          userBlocked._id.toString() === comment.user._id.toString()
+      );
+
+      if (containsBlockTo || containsBlockFrom) {
+        return false;
+      }
+      return true;
+    });
+    doc[i].comments = filteredComments;
+  }
+
+  res.status(200).json({
+    status: 'success',
+    total: posts.length,
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
 });

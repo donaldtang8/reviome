@@ -69,6 +69,29 @@ const userSchema = new mongoose.Schema(
         ref: 'Category',
       },
     ],
+    community: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Post',
+      },
+    ],
+    links: {
+      youtube: {
+        type: String,
+      },
+      instagram: {
+        type: String,
+      },
+      soundcloud: {
+        type: String,
+      },
+      spotify: {
+        type: String,
+      },
+      twitch: {
+        type: String,
+      },
+    },
     pass: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -89,10 +112,10 @@ const userSchema = new mongoose.Schema(
     passChangedAt: Date,
     passResetToken: String,
     passResetExpires: Date,
+    banExpires: Date,
     active: {
       type: Boolean,
       default: true,
-      select: false,
     },
   },
   {
@@ -153,15 +176,15 @@ userSchema.pre('save', function (next) {
 });
 
 /* QUERY MIDDLEWARE */
-/**
- * @function
- * @description Only query active=true users
- * @this Current query
- **/
-userSchema.pre(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
-  next();
-});
+// /**
+//  * @function
+//  * @description Only query active=true users
+//  * @this Current query
+//  **/
+// userSchema.pre(/^find/, function (next) {
+//   this.find({ active: { $ne: false } });
+//   next();
+// });
 
 /**
  * @function
