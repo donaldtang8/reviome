@@ -5,7 +5,6 @@ const factory = require('./handlerFactory');
 const User = require('./../models/userModel');
 
 exports.getAllUsers = factory.getAll(User);
-exports.getUserById = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
@@ -43,6 +42,44 @@ exports.setMe = (req, res, next) => {
   req.body.user = req.user.id;
   next();
 };
+
+/**
+ * @function  getUserById
+ * @description Retrieve user document given ID
+ **/
+exports.getUserById = catchAsync(async (req, res, next) => {
+  let doc = await User.findById(req.params.id);
+
+  if (!doc || !doc.active) {
+    return next(new AppError('No account found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc,
+    },
+  });
+});
+
+/**
+ * @function  getUserByUsername
+ * @description Retrieve user document given username
+ **/
+exports.getUserByUsername = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ uName: req.params.username });
+
+  if (!user || !user.active) {
+    return next(new AppError('No account found with that username', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: user,
+    },
+  });
+});
 
 /**
  * @function  updateMe
@@ -105,20 +142,38 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @function  getUserByUsername
- * @description Retrieve user document given username
+ * @function  updateSocials
+ * @description Update social links
  **/
-exports.getUserByUsername = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ uName: req.params.username });
+exports.updateSocials = catchAsync(async (req, res, next) => {
+  // 1. Create new social object
+  let social = {
+    links: {
+      youtube: null,
+      instagram: null,
+      soundcloud: null,
+      spotify: null,
+      twitch: null,
+    },
+  };
 
-  if (!user) {
-    return next(new AppError('No document found with that username', 404));
-  }
+  // 2. Populate social object with values from request body
+  if (req.body.youtube) social.links.youtube = req.body.youtube;
+  if (req.body.instagram) social.links.instagram = req.body.instagram;
+  if (req.body.soundcloud) social.links.soundcloud = req.body.soundcloud;
+  if (req.body.spotify) social.links.spotify = req.body.spotify;
+  if (req.body.twitch) social.links.twitch = req.body.twitch;
+
+  // 3. Update user document
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, social, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     status: 'success',
     data: {
-      doc: user,
+      doc: updatedUser,
     },
   });
 });
@@ -131,7 +186,7 @@ exports.getUserFollowingList = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id).populate('following');
 
   if (!user) {
-    return next(new AppError('No document found with that username', 404));
+    return next(new AppError('No account found with that username', 404));
   }
 
   res.status(200).json({
@@ -159,7 +214,7 @@ exports.followUserById = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.params.id);
 
   if (!user) {
-    return next(new AppError('No user found with that id', 404));
+    return next(new AppError('No account found with that ID', 404));
   }
 
   // 4. Check if user who made request is blocking user to be followed
@@ -232,7 +287,7 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.params.id);
 
   if (!user) {
-    return next(new AppError('No document found with that ID', 404));
+    return next(new AppError('No account found with that ID', 404));
   }
 
   // 2. Retrieve self user object
@@ -308,7 +363,7 @@ exports.unblockUserById = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
   if (!user) {
-    return next(new AppError('No document found with that ID', 404));
+    return next(new AppError('No account found with that ID', 404));
   }
 
   // 2. Check to see if we are already blocking user
@@ -341,5 +396,86 @@ exports.unblockUserById = catchAsync(async (req, res, next) => {
       selfFollowing: self.following,
       userFollowing: user.following,
     },
+  });
+});
+
+/**
+ * @function  banUserById
+ * @description Ban user given id and time length
+ **/
+exports.banUserById = catchAsync(async (req, res, next) => {
+  // 1. Retrieve user by ID
+  let user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError('No account found with that ID', 404));
+  }
+
+  // 2. Check to see if user is already banned
+  if (user.banExpires) {
+    return next(new AppError('User is already banned', 400));
+  }
+
+  // 3. Calculate and create ban expires time object
+  // if no time properties are provided, throw error
+  if (!req.body.days && !req.body.hours) {
+    return next(new AppError('Time properties must be provided', 400));
+  }
+  // if there is a days property provided, we use that
+  // ex. if no days provided
+  let days = req.body.days ? req.body.days : 0;
+  // if there is an hours property provided, we use that
+  let hours = req.body.hours ? req.body.hours : 0;
+
+  let banExpiresDate = new Date(
+    Date.now() + days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000
+  );
+
+  // 3. Set banExpires property
+  user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      banExpires: banExpiresDate,
+      active: false,
+    },
+    { new: true }
+  );
+
+  res.clearCookie('jwt');
+
+  res.status(200).json({
+    status: 'success',
+  });
+});
+
+/**
+ * @function  unbanUserById
+ * @description Unban user
+ **/
+exports.unbanUserById = catchAsync(async (req, res, next) => {
+  // 1. Retrieve user by ID
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError('No account found with that ID', 404));
+  }
+
+  // 2. Check to see if user is already banned
+  if (!user.banExpires) {
+    return next(new AppError('User is not banned', 400));
+  }
+
+  // 3. Set banExpires property
+  user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      banExpires: undefined,
+      active: true,
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: 'success',
   });
 });

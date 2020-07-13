@@ -32,9 +32,13 @@ router.get('/me', userController.getMe, userController.getUserById);
 router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 router.patch('/updatePassword', authController.updatePassword);
+router.patch('/updateSocials', userController.updateSocials);
 
 /* ADMIN ROUTES */
 router.use(authController.restrictTo('admin'));
+
+router.route('/ban/:id').patch(userController.banUserById);
+router.route('/unban/:id').patch(userController.unbanUserById);
 
 router
   .route('/:id')

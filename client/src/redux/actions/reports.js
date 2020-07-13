@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setAlert } from './alert';
 
 import {
   RESET_REPORTS,
@@ -50,11 +51,14 @@ export const getReports = () => async (dispatch) => {
 };
 
 /**
- * @action    getReport
+ * @action    getReportById
  * @description Retrieve a report document given ID
  **/
-export const getReport = (id) => async (dispatch) => {
+export const getReportById = (id) => async (dispatch) => {
   try {
+    dispatch({
+      type: FETCH_REPORTS_START,
+    });
     const res = await axios.get(`/api/reports/${id}`);
     dispatch({
       type: GET_REPORT,
@@ -79,11 +83,9 @@ export const createReport = (formData) => async (dispatch) => {
       type: CREATE_REPORT,
       payload: res.data.data.doc,
     });
+    dispatch(setAlert('Report successfully resolved', 'success'));
   } catch (err) {
-    dispatch({
-      type: REPORT_ERROR,
-      payload: err.message,
-    });
+    dispatch(setAlert(err.response.data.message, 'fail'));
   }
 };
 
@@ -96,8 +98,9 @@ export const resolveReport = (id, formData) => async (dispatch) => {
     const res = await axios.patch(`/api/reports/${id}`, formData, config);
     dispatch({
       type: UPDATE_REPORT,
-      payload: res.data.data.doc,
+      payload: { id, report: res.data.data.doc },
     });
+    dispatch(setAlert('Report successfully resolved', 'success'));
   } catch (err) {
     dispatch({
       type: REPORT_ERROR,
@@ -107,15 +110,18 @@ export const resolveReport = (id, formData) => async (dispatch) => {
 };
 
 /**
- * @action      deleteReport
+ * @action      deleteReportById
  * @description Delete report
  **/
-export const deleteReport = (id) => async (dispatch) => {
+export const deleteReportById = (id, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/reports/${id}`);
     dispatch({
       type: DELETE_REPORT,
+      payload: id,
     });
+    history.push('/reports');
+    dispatch(setAlert('Report successfully deleted', 'success'));
   } catch (err) {
     dispatch({
       type: REPORT_ERROR,

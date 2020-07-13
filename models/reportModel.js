@@ -23,7 +23,7 @@ const reportSchema = new mongoose.Schema({
   report_type: {
     type: String,
     enum: {
-      values: ['Feedback', 'Spam', 'Inppropriate', 'Harmful'],
+      values: ['Feedback', 'Spam', 'Inappropriate', 'Harmful'],
       message:
         'Report type is either: feedback, spam, inppropriate, or harmful',
     },
@@ -32,6 +32,12 @@ const reportSchema = new mongoose.Schema({
   message: {
     type: String,
     required: [true, 'Please provide a message'],
+  },
+  link: {
+    type: String,
+  },
+  content: {
+    type: String,
   },
   status: {
     type: String,
@@ -44,7 +50,7 @@ const reportSchema = new mongoose.Schema({
   action: {
     type: String,
     enum: {
-      values: ['none', 'remove', 'mute', 'temp_ban', 'perm_ban'],
+      values: ['none', 'remove', 'temp_ban', 'perm_ban'],
     },
     default: 'none',
   },

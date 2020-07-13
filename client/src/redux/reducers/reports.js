@@ -70,6 +70,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         reports: state.reports.filter((post) => post._id !== payload),
+        report:
+          state.report !== null && state.report._id === payload
+            ? null
+            : state.report,
         loading: false,
       };
     case INCREMENT_REPORTS_PAGE:

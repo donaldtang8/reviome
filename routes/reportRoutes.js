@@ -12,6 +12,7 @@ router.post(
   reportController.setMe,
   reportController.checkDuplicate,
   reportController.validateReport,
+  reportController.retrieveContentAndLink,
   reportController.createOne
 );
 

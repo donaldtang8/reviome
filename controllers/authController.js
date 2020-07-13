@@ -35,7 +35,12 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(
       new AppError('The user belonging to this token does not exist', 401)
     );
-  // 3. Check if user changed password after token was issued
+
+  // 3. Check to see if user is banned
+  if (user.banExpires)
+    return next(new AppError('This account has been suspended', 401));
+
+  // 4. Check if user changed password after token was issued
   if (user.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please log in again', 401)
@@ -103,10 +108,9 @@ const createSendToken = (user, statusCode, res) => {
   // sign token with user id
   const token = signToken(user._id);
   // define cookie options with expires time and httpOnly option
+  let days = 7;
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
     httpOnly: true,
   };
   // in development mode, http is used, so we do not use the secure option in development mode, only in production mode
@@ -154,12 +158,21 @@ exports.login = catchAsync(async (req, res, next) => {
   // 2. Find user associated with email
   const user = await User.findOne({ email: email }).select('+pass');
   if (!user) return next(new AppError('Incorrect email or password', 401));
-  // 3. Check if password is correct
+  // 3. Check if user is banned
+  if (user.banExpires)
+    return next(
+      new AppError(
+        'This account has been suspended until ' +
+          user.banExpires.toLocaleDateString(),
+        401
+      )
+    );
+  // 4. Check if password is correct
   // call the instance method "correctPassword" to check if password is correct
   const correct = await user.correctPassword(password, user.pass);
   if (!correct) return next(new AppError('Incorrect email or password', 401));
 
-  // 4. If correct, send token to client
+  // 5. If correct, send token to client
   createSendToken(user, 200, res);
 });
 
@@ -168,10 +181,11 @@ exports.login = catchAsync(async (req, res, next) => {
  * @description Logout user
  **/
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
+  // res.cookie('jwt', 'loggedout', {
+  //   expires: new Date(Date.now() + 10 * 1000),
+  //   httpOnly: true,
+  // });
+  res.clearCookie('jwt');
   res.status(200).json({ status: 'success' });
 };
 

@@ -1,4 +1,5 @@
 const catchAsync = require('./../utils/catchAsync');
+const APIFeatures = require('./../utils/APIFeatures');
 const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
 
@@ -7,8 +8,6 @@ const Comment = require('./../models/commentModel');
 const Post = require('./../models/postModel');
 const User = require('./../models/userModel');
 
-exports.getAll = factory.getAll(Report);
-exports.getOne = factory.getOne(Report);
 exports.createOne = factory.createOne(Report);
 exports.deleteOne = factory.deleteOne(Report);
 
@@ -69,6 +68,36 @@ exports.validateReport = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @middlewawre retrieveContentAndLink
+ * @description Retrieve content/link for report item type
+ **/
+exports.retrieveContentAndLink = catchAsync(async (req, res, next) => {
+  // 1. First, we want to validate the user fields to ensure that the user exists
+  if (req.body.item_type === 'User') {
+    const user = await User.findById(req.body.item_id);
+    if (!user) {
+      return next(new AppError('Please provide a valid user', 400));
+    }
+    req.body.link = `/profile/${user.uName}`;
+  } else if (req.body.item_type === 'Comment') {
+    const comment = await Comment.findById(req.body.item_id);
+    if (!comment) {
+      return next(new AppError('Please provide a valid comment', 400));
+    }
+    req.body.content = comment.text;
+  } else if (req.body.item_type === 'Post') {
+    const post = await Post.findById(req.body.item_id);
+    if (!post) {
+      return next(new AppError('Please provide a valid post', 400));
+    }
+    req.body.content = post.text;
+    req.body.link = post.link;
+  }
+
+  next();
+});
+
+/**
  * @helper  filterObj
  * @param obj The object that we will filter
  * @param allowedFields A list of fields that will be allowed in object
@@ -84,6 +113,51 @@ const filterObj = (obj, ...allowedFields) => {
   // return new object
   return newObj;
 };
+
+/**
+ * @function  getAll
+ * @description Retrieve all report documents
+ **/
+exports.getAll = catchAsync(async (req, res, next) => {
+  // for searching reviews based on postId
+  let query = Report.find()
+    .populate({ path: 'user_from' })
+    .populate({ path: 'user_to' });
+
+  const features = new APIFeatures(query, req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const doc = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
+});
+
+exports.getOne = catchAsync(async (req, res, next) => {
+  // for searching reviews based on postId
+  let doc = await Report.findById(req.params.id)
+    .populate('user_from')
+    .populate('user_to');
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    results: doc.length,
+    data: {
+      doc,
+    },
+  });
+});
 
 /**
  * @function setStatus
@@ -114,7 +188,9 @@ exports.resolveReport = catchAsync(async (req, res, next) => {
   const report = await Report.findByIdAndUpdate(req.params.id, filteredBody, {
     new: true,
     runValidators: true,
-  });
+  })
+    .populate('user_from')
+    .populate('user_to');
 
   if (!report) {
     return next(new AppError('No document found with that ID', 404));

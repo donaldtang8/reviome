@@ -1,0 +1,22 @@
+/* Reports Page Styles*/
+.reports__container,
+.report__container {
+  margin: 2rem auto;
+}
+
+.report__container {
+  .report__action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+
+    select {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .form__container {
+    width: 50%;
+  }
+}
