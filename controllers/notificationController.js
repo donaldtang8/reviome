@@ -131,12 +131,10 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
 exports.addPostNotification = catchAsync(async (req, res) => {
   // 1. Retrieve self user object
   const self = await User.findById(req.user.id);
-
   // 2. Retrieve all users that are following post creator
   const followingUsers = await User.find({
     following: { $all: [req.body.doc.user] },
   });
-
   // 3. Map through list and create new notification object for each follower
   await Promise.all(
     followingUsers.map(async (user) => {

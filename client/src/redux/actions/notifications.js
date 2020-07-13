@@ -128,7 +128,6 @@ export const setRead = ([...notifications]) => async (dispatch) => {
         const res = await axios.patch(
           `/api/notifications/${notification._id}/read`
         );
-        console.log(res.data);
         // update notification
         dispatch({
           type: UPDATE_NOTIFICATION,
