@@ -1,12 +1,11 @@
 .posts__container {
-  padding: 3rem 0 0 0;
-
   &--title {
     font-size: 1.35rem;
     font-weight: 600;
   }
 
   &--form {
+    margin-top: 1rem;
     background-color: var(--color-form-background);
     display: flex;
     align-items: center;
@@ -22,21 +21,5 @@
   &--end {
     text-align: center;
     font-size: 1rem;
-  }
-
-  .input__btn {
-    background-color: var(--color-input-background);
-    color: var(--color-input-text);
-    display: flex;
-    align-items: center;
-    height: 3rem;
-    width: 100%;
-    margin-left: 1rem;
-    padding: 1rem 1.5rem;
-    border-radius: 0.8rem;
-  }
-
-  .input__btn:hover {
-    cursor: pointer;
   }
 }

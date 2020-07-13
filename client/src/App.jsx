@@ -33,6 +33,10 @@ const Account = lazy(() => import('./pages/account/account'));
 const Profile = lazy(() => import('./pages/profile/profile'));
 const Notifications = lazy(() => import('./pages/notifications/notifications'));
 
+// Admin
+const Reports = lazy(() => import('./pages/reports/reports'));
+const Report = lazy(() => import('./pages/reports/report'));
+
 const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
   // retrieve notifications when application is loaded so we can display notification count on page load
   useEffect(() => {
@@ -74,6 +78,8 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
                       path="/notifications"
                       component={Notifications}
                     />
+                    <AdminRoute exact path="/reports/:id" component={Report} />
+                    <AdminRoute exact path="/reports" component={Reports} />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <Route

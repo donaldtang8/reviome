@@ -1,15 +1,30 @@
-.error__container {
-  grid-column: full-start / full-end;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.error {
+  &__container {
+    grid-column: full-start / full-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-  &--image {
-    height: 20rem;
-    width: 20rem;
+    &--image {
+      height: 20rem;
+      width: 20rem;
+    }
+
+    &--text {
+    }
   }
 
-  &--text {
+  &-boundary {
+    grid-column: full-start / full-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__image {
+      height: 30rem;
+      width: 30rem;
+    }
   }
 }

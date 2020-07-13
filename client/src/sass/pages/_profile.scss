@@ -29,6 +29,26 @@
       width: 100%;
     }
 
+    &--info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &--info-bar {
+      margin-top: 1rem;
+      display: flex;
+    }
+
+    &--links {
+      display: flex;
+
+      .btn__icon {
+        margin-right: 1rem;
+      }
+    }
+
     &--actions {
       width: min-content;
       display: flex;
