@@ -112,6 +112,8 @@
   --shadow-inset: rgba(255, 255, 255, 0.05); }
 
 html {
+  min-width: 360px;
+  width: 100%;
   margin: 0;
   font-size: 62.5%; }
   @media only screen and (min-width: 112.5em) {
@@ -130,8 +132,10 @@ html {
 body {
   margin: 0;
   box-sizing: border-box;
-  min-height: 100vh;
-  color: var(--color-text); }
+  width: 100%;
+  color: var(--color-text);
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); }
 
 ::selection {
   background: var(--color-primary-light); }
@@ -244,7 +248,8 @@ a {
 
 .nav {
   display: flex;
-  align-items: center; }
+  align-items: center;
+  /* RESPONSIVE NAV STYLES */ }
   .nav__item {
     position: relative;
     border-radius: 0.8rem; }
@@ -268,12 +273,75 @@ a {
       align-items: center; }
   .nav__item:not(:last-child) {
     margin-right: 1rem; }
+  .nav__button {
+    display: none; }
+  .nav__checkbox {
+    display: none; }
+  .nav__mobile {
+    display: none; }
+
+@media only screen and (max-width: 68.75rem) {
+  .nav__button {
+    display: block;
+    margin-bottom: 0.5rem; }
+  .nav__button:hover {
+    cursor: pointer; }
+  .nav__icon {
+    position: relative; }
+    .nav__icon, .nav__icon::before, .nav__icon::after {
+      width: 2.5rem;
+      height: 2px;
+      background-color: var(--color-text);
+      display: inline-block; }
+    .nav__icon::before, .nav__icon::after {
+      content: '';
+      position: absolute;
+      transition: all 0.2s; }
+    .nav__icon::before {
+      top: -0.75rem; }
+    .nav__icon::after {
+      top: 0.75rem; }
+  .nav__mobile {
+    padding: 5rem;
+    flex-direction: column;
+    align-items: center;
+    transform: translate(-100%);
+    position: absolute;
+    height: 93vh;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: var(--color-card-background);
+    transition: transform 0.5s cubic-bezier(0.86, 0, 0.07, 1); }
+    .nav__mobile--item {
+      width: 50%;
+      padding: 1rem;
+      font-size: 1.5rem;
+      border-radius: 3px; }
+    .nav__mobile--item:hover {
+      background-color: var(--color-hover-light); }
+    .nav__mobile--item:not(:last-child) {
+      margin-bottom: 0.5rem; }
+  .nav__checkbox:checked ~ .nav__mobile {
+    display: flex;
+    transform: translate(0%); }
+  .nav__checkbox:checked + .nav__button .nav__icon {
+    background-color: transparent; }
+  .nav__checkbox:checked + .nav__button .nav__icon::before {
+    top: 0;
+    transform: rotate(135deg); }
+  .nav__checkbox:checked + .nav__button .nav__icon.nav__icon::after {
+    top: 0;
+    transform: rotate(-135deg); } }
 
 .sidebar__container {
   display: flex;
   flex-direction: column;
   height: 93vh;
   min-width: min-content; }
+  @media only screen and (max-width: 68.75rem) {
+    .sidebar__container {
+      display: none; } }
 
 .sidebar__nav {
   display: flex;
@@ -610,6 +678,9 @@ td {
     grid-template-columns: repeat(auto-fit, 10rem);
     grid-column-gap: 1rem;
     grid-row-gap: 2rem; }
+    @media only screen and (max-width: 36.5rem) {
+      .category-overview__container--body {
+        justify-content: center; } }
 
 .category__container {
   padding: 2rem 0;
@@ -627,10 +698,8 @@ td {
   height: 8rem;
   width: 8rem;
   background-color: var(--color-category-background);
-  border-radius: 0.8rem; }
-
-.category__item:not(:last-child) {
-  margin-right: 2rem; }
+  border-radius: 0.8rem;
+  margin: 0 auto; }
 
 .category__item:hover {
   cursor: pointer;
@@ -1188,6 +1257,9 @@ td {
     border-bottom: 1px solid var(--color-grey-dark-3);
     padding: 0.5rem 0; }
   .profile__body .tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     text-align: center;
     padding: 0.5rem 0;
@@ -1196,6 +1268,18 @@ td {
     .profile__body .tabs--active {
       border-bottom: 3px solid var(--color-primary);
       color: var(--color-primary); }
+    .profile__body .tabs__icon {
+      margin-right: 1rem; }
+      .profile__body .tabs__icon svg {
+        height: 1rem;
+        width: 1rem;
+        fill: var(--color-text); }
+      @media only screen and (max-width: 68.75rem) {
+        .profile__body .tabs__icon {
+          margin: 0; } }
+    @media only screen and (max-width: 68.75rem) {
+      .profile__body .tabs__text {
+        display: none; } }
   .profile__body .tabs:hover {
     cursor: pointer;
     background-color: var(--color-hover-light); }

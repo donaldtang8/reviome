@@ -154,6 +154,9 @@
 }
 
 html {
+  min-width: 360px;
+  width: 100%;
+
   margin: 0;
   font-size: 62.5%;
 
@@ -178,9 +181,12 @@ body {
   margin: 0;
   // background styles
   box-sizing: border-box;
-  min-height: 100vh;
+  width: 100%;
   // text
   color: var(--color-text);
+
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 ::selection {
