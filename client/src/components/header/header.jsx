@@ -29,41 +29,10 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
         <div className="header__logo">
           <Link to="/">REVIO</Link>
         </div>
-        {/* NAV MOBILE BUTTON */}
-        <input
-          type="checkbox"
-          className="nav__checkbox"
-          id="nav-toggle"
-          onChange={handleMobileNav}
-          checked={checked}
-        />
-        <label htmlFor="nav-toggle" className="nav__button">
-          <span className="nav__icon"></span>
-        </label>
-        {/* NAV MOBILE NAVIGATION */}
-        <div className="nav__mobile center">
-          <Link to="/" className="nav__mobile--item" onClick={handleMobileNav}>
-            Feed
-          </Link>
-          <Link
-            to="/explore"
-            className="nav__mobile--item"
-            onClick={handleMobileNav}
-          >
-            Explore
-          </Link>
-          <Link
-            to="/favorites"
-            className="nav__mobile--item"
-            onClick={handleMobileNav}
-          >
-            Favorites
-          </Link>
-        </div>
         {/* NAV BAR */}
-        <nav className="nav">
-          {isAuthenticated ? (
-            <Fragment>
+        {isAuthenticated ? (
+          <Fragment>
+            <nav className="nav">
               <div className="nav__item">
                 <Link to={`/profile/${user.uName}`}>
                   <img className="nav__item--img" src={user.photo} />
@@ -75,18 +44,55 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
               <div className="nav__item">
                 <HeaderDropdown user={user} />
               </div>
-            </Fragment>
-          ) : (
-            <Fragment>
+            </nav>
+            {/* NAV MOBILE BUTTON */}
+            <input
+              type="checkbox"
+              className="nav__checkbox"
+              id="nav-toggle"
+              onChange={handleMobileNav}
+              checked={checked}
+            />
+            <label htmlFor="nav-toggle" className="nav__button">
+              <span className="nav__icon"></span>
+            </label>
+            {/* NAV MOBILE NAVIGATION */}
+            <div className="nav__mobile center">
+              <Link
+                to="/"
+                className="nav__mobile--item"
+                onClick={handleMobileNav}
+              >
+                Feed
+              </Link>
+              <Link
+                to="/explore"
+                className="nav__mobile--item"
+                onClick={handleMobileNav}
+              >
+                Explore
+              </Link>
+              <Link
+                to="/favorites"
+                className="nav__mobile--item"
+                onClick={handleMobileNav}
+              >
+                Favorites
+              </Link>
+            </div>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <nav className="nav">
               <Link to="/login" className="nav__item">
                 Login
               </Link>
               <div className="nav__item">
                 <HeaderDropdown user={user} />
               </div>
-            </Fragment>
-          )}
-        </nav>
+            </nav>
+          </Fragment>
+        )}
       </div>
     </header>
   );

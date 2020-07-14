@@ -40,22 +40,31 @@ const Login = ({ auth: { isAuthenticated, loading }, login, history }) => {
           <Fragment>
             <form className="form__container" onSubmit={handleSubmit}>
               <input
+                className="form__input"
                 type="email"
                 name="email"
+                id="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => handleChange(e)}
                 required
               />
+              <label className="form__label" htmlFor="email">
+                Email
+              </label>
               <input
+                className="form__input"
                 type="password"
                 name="password"
+                id="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => handleChange(e)}
                 required
               />
-
+              <label className="form__label" htmlFor="password">
+                Password
+              </label>
               <input className="input__submit" type="submit" value="Login" />
             </form>
             <Link to="/forgot-password">Forgot Password?</Link>

@@ -43,13 +43,18 @@ const ForgotPassword = ({
           <Fragment>
             <form className="form__container" onSubmit={handleSubmit}>
               <input
+                className="form__input"
                 type="email"
                 name="email"
+                id="email"
                 placeholder="Email"
                 value={email}
                 onChange={handleChange}
                 required
               />
+              <label className="form__label" htmlFor="email">
+                Email
+              </label>
               <input className="input__submit" type="submit" value="Submit" />
             </form>
             <Link to="/login">Back to login</Link>

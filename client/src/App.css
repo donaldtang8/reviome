@@ -450,16 +450,25 @@ textarea {
   background-color: var(--color-form-background);
   padding: 2rem;
   border-radius: 0.8rem; }
-  .form__container:not(:last-child) {
-    margin-bottom: 1rem; }
-  .form__container input {
-    font-family: inherit;
-    padding: 0.5rem 1rem;
-    border: none; }
-  .form__container input:not([type='submit']):focus {
-    outline: none; }
-  .form__container input:not([type='submit']):not(:last-child) {
-    margin-bottom: 1vh; }
+
+.form__label {
+  font-size: 1.2rem;
+  margin-left: 1rem;
+  display: block;
+  transition: all 0.3s; }
+
+.form__input {
+  font-size: 1.2rem;
+  font-family: inherit;
+  color: inherit;
+  border: none;
+  display: block;
+  transition: all 0.3s; }
+
+.form__input:placeholder-shown + .form__label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4rem); }
 
 .table__header {
   background-color: var(--color-card-background); }

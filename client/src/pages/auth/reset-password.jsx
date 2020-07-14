@@ -46,21 +46,31 @@ const ResetPassword = ({
           <Fragment>
             <form className="form__container" onSubmit={handleSubmit}>
               <input
+                className="form__input"
                 type="password"
                 name="password"
+                id="password"
                 placeholder="New Password"
                 value={password}
                 onChange={handleChange}
                 required
               />
+              <label className="form__label" htmlFor="password">
+                Password
+              </label>
               <input
+                className="form__input"
                 type="password"
                 name="passwordConfirm"
+                id="passwordConfirm"
                 placeholder="Confirm New Password"
                 value={passwordConfirm}
                 onChange={handleChange}
                 required
               />
+              <label className="form__label" htmlFor="passwordConfirm">
+                Confirm Password
+              </label>
               <input type="submit" value="Submit" />
             </form>
           </Fragment>

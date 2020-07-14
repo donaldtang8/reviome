@@ -97,26 +97,41 @@ const Account = ({
       <form className="form__container" onSubmit={handleUserSubmit}>
         <div className="heading-1 padding-small">General</div>
         <input
+          className="form__input"
           type="text"
           name="firstName"
+          id="firstName"
           placeholder="First Name"
           value={firstName}
           onChange={handleUserChange}
         />
+        <label className="form__label" htmlFor="firstName">
+          First Name
+        </label>
         <input
+          className="form__input"
           type="text"
           name="lastName"
+          id="lastName"
           placeholder="Last Name"
           value={lastName}
           onChange={handleUserChange}
         />
+        <label className="form__label" htmlFor="lastName">
+          Last Name
+        </label>
         <input
+          className="form__input"
           type="text"
           name="username"
+          id="username"
           placeholder="Username"
           value={username}
           onChange={handleUserChange}
         />
+        <label className="form__label" htmlFor="username">
+          Username
+        </label>
         <div className="account__container--img">
           <img id="form__image" src={user.photo} />
         </div>
@@ -136,29 +151,44 @@ const Account = ({
       <form className="form__container" onSubmit={handlePasswordSubmit}>
         <div className="heading-1 padding-small">Password</div>
         <input
+          className="form__input"
           type="password"
           name="passwordCurrent"
+          id="passwordCurrent"
           placeholder="Current Password"
           value={passwordCurrent}
           onChange={handlePasswordChange}
           minLength="8"
         />
+        <label className="form__label" htmlFor="passwordCurrent">
+          Current Password
+        </label>
         <input
+          className="form__input"
           type="password"
           name="password"
+          id="password"
           placeholder="New Password"
           value={password}
           onChange={handlePasswordChange}
           minLength="8"
         />
+        <label className="form__label" htmlFor="password">
+          New Password
+        </label>
         <input
+          className="form__input"
           type="password"
           name="passwordConfirm"
+          id="passwordConfirm"
           placeholder="Confirm New Password"
           value={passwordConfirm}
           onChange={handlePasswordChange}
           minLength="8"
         />
+        <label className="form__label" htmlFor="passwordConfirm">
+          Confirm New Password
+        </label>
         <input className="input__submit" type="submit" value="Submit" />
       </form>
       <form className="form__container" onSubmit={handleSocialSubmit}>
@@ -167,40 +197,65 @@ const Account = ({
           Ex. https://website.com/username
         </div>
         <input
+          className="form__input"
           type="url"
           name="youtube"
+          id="youtube"
           placeholder="Youtube"
           value={youtube}
           onChange={handleSocialChange}
         />
+        <label className="form__label" htmlFor="youtube">
+          Youtube
+        </label>
         <input
+          className="form__input"
           type="url"
           name="instagram"
+          id="instagram"
           placeholder="Instagram"
           value={instagram}
           onChange={handleSocialChange}
         />
+        <label className="form__label" htmlFor="instagram">
+          Instagram
+        </label>
         <input
+          className="form__input"
           type="url"
           name="soundcloud"
-          placeholder="Soundcloud"
+          id="soundcloud"
+          placeholder="SoundCloud"
           value={soundcloud}
           onChange={handleSocialChange}
         />
+        <label className="form__label" htmlFor="soundcloud">
+          SoundCloud
+        </label>
         <input
+          className="form__input"
           type="url"
           name="spotify"
+          id="spotify"
           placeholder="Spotify"
           value={spotify}
           onChange={handleSocialChange}
         />
+        <label className="form__label" htmlFor="spotify">
+          Spotify
+        </label>
         <input
+          className="form__input"
           type="url"
           name="twitch"
+          id="twitch"
           placeholder="Twitch"
           value={twitch}
           onChange={handleSocialChange}
         />
+        <label className="form__label" htmlFor="twitch">
+          Twitch
+        </label>
         <input className="input__submit" type="submit" value="Submit" />
       </form>
     </div>

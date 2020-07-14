@@ -40,7 +40,9 @@ const Report = lazy(() => import('./pages/reports/report'));
 const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
   // retrieve notifications when application is loaded so we can display notification count on page load
   useEffect(() => {
-    getNotifications(1);
+    if (isAuthenticated) {
+      getNotifications(1);
+    }
   }, []);
 
   return (
@@ -48,7 +50,7 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
       <div className="container">
         <div className="body__container">
           <Header />
-          <div className="main__container">
+          <main className="main__container">
             <Alert />
             {isAuthenticated && <Sidebar />}
             <div className="content__container">
@@ -96,7 +98,7 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
                 </ErrorBoundary>
               </Suspense>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>

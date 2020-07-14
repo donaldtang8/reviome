@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const path = require('path');
 const cors = require('cors');
+const compression = require('compression');
+const enforce = require('express-sslify');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const app = express();
@@ -22,7 +24,12 @@ const userRouter = require('./routes/userRoutes');
 
 /* GLOBAL MIDDLEWARES */
 // serving static files
-app.use(express.static(path.join(__dirname, 'client/build')));
+var options = {
+  setHeaders: function (res, path, stat) {
+    res.set('Cache-Control', 'public, max-age=31557600');
+  },
+};
+app.use(express.static(path.join(__dirname, 'client/build'), options));
 
 // set security HTTP headers
 app.use(helmet());
@@ -37,6 +44,12 @@ app.use('/api', limiter);
 
 // body parser - reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+
+// cors - cross origin request, checks that no exterior front end is trying to access our server
+app.use(cors());
+
+// compression - compress response bodies
+app.use(compression());
 
 // cookie parser
 app.use(cookieParser());
@@ -55,9 +68,19 @@ app.use(
   })
 );
 
-/* TEST MIDDLEWARE */
-app.use((req, res, next) => {
-  next();
+// if application is in production mode
+if (process.env.NODE_ENV === 'production') {
+  app.use(compression());
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
+// return service worker if requests
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'build', 'service-worker.js'));
 });
 
 /* ROUTES */
