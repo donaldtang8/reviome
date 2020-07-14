@@ -9,6 +9,8 @@ import UserItem from './../../components/user/user-item';
 
 import ProfilePostForm from './../../components/profile/profile-post-form';
 
+import sprite from './../../assets/sprite.svg';
+
 const ProfileBody = ({
   resetUsers,
   getUserFollowingList,
@@ -48,7 +50,12 @@ const ProfileBody = ({
           }
           onClick={() => setTab('posts')}
         >
-          Posts
+          <div className="tabs__icon">
+            <svg>
+              <use xlinkHref={`${sprite}#icon-documents`}></use>
+            </svg>
+          </div>
+          <div className="tabs__text">Posts</div>
         </div>
         <div
           className={
@@ -56,7 +63,12 @@ const ProfileBody = ({
           }
           onClick={() => setTab('community')}
         >
-          Community
+          <div className="tabs__icon">
+            <svg>
+              <use xlinkHref={`${sprite}#icon-home2`}></use>
+            </svg>
+          </div>
+          <div className="tabs__text">Community</div>
         </div>
         <div
           className={
@@ -64,7 +76,12 @@ const ProfileBody = ({
           }
           onClick={() => setTab('favorites')}
         >
-          Favorites
+          <div className="tabs__icon">
+            <svg>
+              <use xlinkHref={`${sprite}#icon-star`}></use>
+            </svg>
+          </div>
+          <div className="tabs__text">Favorites</div>
         </div>
         <div
           className={
@@ -72,7 +89,12 @@ const ProfileBody = ({
           }
           onClick={() => setTab('following')}
         >
-          Following
+          <div className="tabs__icon">
+            <svg>
+              <use xlinkHref={`${sprite}#icon-users`}></use>
+            </svg>
+          </div>
+          <div className="tabs__text">Following</div>
         </div>
       </div>
       {tab === 'posts' && (

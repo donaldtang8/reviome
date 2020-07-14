@@ -145,10 +145,9 @@ const PostItem = ({
           >
             <div className="btn__dropdown">
               <svg className="btn__dropdown--svg">
-                <use xlinkHref={`${sprite}#icon-bookmark`}></use>
+                <use xlinkHref={`${sprite}#icon-star-full`}></use>
               </svg>
             </div>
-            Unsave
           </div>
         ) : (
           <div
@@ -157,10 +156,9 @@ const PostItem = ({
           >
             <div className="btn__dropdown">
               <svg className="btn__dropdown--svg">
-                <use xlinkHref={`${sprite}#icon-bookmark`}></use>
+                <use xlinkHref={`${sprite}#icon-star-empty`}></use>
               </svg>
             </div>
-            Save
           </div>
         )}
       </div>
