@@ -46,7 +46,6 @@ const Sidebar = () => {
           </div>
         </Link>
       </div>
-      <div className="sidebar__toggle">Collapse</div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -10,12 +10,57 @@ import NotificationDropdown from './../notification/notification-dropdown';
 import { logout } from './../../redux/actions/auth';
 
 const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
+  // check toggles the checkbox for mobile nav
+  // 1. True - Mobile nav is opened
+  // 2. False - Mobile nav is closed
+  const [checked, setChecked] = useState(false);
+
+  const handleMobileNav = (e) => {
+    if (checked) {
+      setChecked(false);
+    } else {
+      setChecked(true);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header__nav">
         <div className="header__logo">
           <Link to="/">REVIO</Link>
         </div>
+        {/* NAV MOBILE BUTTON */}
+        <input
+          type="checkbox"
+          className="nav__checkbox"
+          id="nav-toggle"
+          onChange={handleMobileNav}
+          checked={checked}
+        />
+        <label htmlFor="nav-toggle" className="nav__button">
+          <span className="nav__icon"></span>
+        </label>
+        {/* NAV MOBILE NAVIGATION */}
+        <div className="nav__mobile center">
+          <Link to="/" className="nav__mobile--item" onClick={handleMobileNav}>
+            Feed
+          </Link>
+          <Link
+            to="/explore"
+            className="nav__mobile--item"
+            onClick={handleMobileNav}
+          >
+            Explore
+          </Link>
+          <Link
+            to="/favorites"
+            className="nav__mobile--item"
+            onClick={handleMobileNav}
+          >
+            Favorites
+          </Link>
+        </div>
+        {/* NAV BAR */}
         <nav className="nav">
           {isAuthenticated ? (
             <Fragment>

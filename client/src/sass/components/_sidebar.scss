@@ -4,6 +4,10 @@
     flex-direction: column;
     height: 93vh;
     min-width: min-content;
+
+    @include respond(tab-square) {
+      display: none;
+    }
   }
 
   &__nav {
