@@ -15,8 +15,6 @@ import {
 } from './../../redux/actions/categories';
 
 import ExplorePost from './../../components/explore/explore-post';
-import FilterBy from './../../components/dropdowns/filterBy';
-import SortBy from './../../components/dropdowns/sortBy';
 import Spinner from '../../components/spinner/spinner';
 
 import sprite from '../../assets/sprite.svg';
