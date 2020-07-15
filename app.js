@@ -24,12 +24,7 @@ const userRouter = require('./routes/userRoutes');
 
 /* GLOBAL MIDDLEWARES */
 // serving static files
-var options = {
-  setHeaders: function (res, path, stat) {
-    res.set('Cache-Control', 'public, max-age=31557600');
-  },
-};
-app.use(express.static(path.join(__dirname, 'client/build'), options));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // set security HTTP headers
 app.use(helmet());
@@ -73,6 +68,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(compression());
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client/build')));
+
   app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
