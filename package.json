@@ -8,7 +8,7 @@
   "description": "Social web application for people to share their creative, artistic, or hobbyist work",
   "main": "server.js",
   "scripts": {
-    "client": "cd client && npm start",
+    "client": "npm start --prefix client",
     "server": "nodemon server.js",
     "build": "cd client && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",

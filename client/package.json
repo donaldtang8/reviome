@@ -29,8 +29,8 @@
   },
   "scripts": {
     "watch:sass": "node-sass src/sass/main.scss src/App.css -w",
-    "dev": "concurrently \" npm run start\" \"npm run watch:sass\"",
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "concurrently \" npm run dev\" \"npm run watch:sass\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
