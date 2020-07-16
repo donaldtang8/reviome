@@ -82,6 +82,7 @@ const sendErrorDev = (err, req, res) => {
  * @description Send error in production environment
  **/
 const sendErrorProd = (err, req, res) => {
+  console.log(err);
   // if call came from API
   if (req.originalUrl && req.originalUrl.startsWith('/api')) {
     // A. API - Operational error - trusted error, show error details
