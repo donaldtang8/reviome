@@ -82,7 +82,6 @@ const sendErrorDev = (err, req, res) => {
  * @description Send error in production environment
  **/
 const sendErrorProd = (err, req, res) => {
-  console.log(err);
   // if call came from API
   if (req.originalUrl && req.originalUrl.startsWith('/api')) {
     // A. API - Operational error - trusted error, show error details
@@ -122,7 +121,6 @@ const sendErrorProd = (err, req, res) => {
  *              function as an error middleware because of the order of the params (err, req, res, next)
  **/
 module.exports = (err, req, res, next) => {
-  console.log(err);
   // if there is no statusCode associated with the error, by default it will be set to 500
   err.statusCode = err.statusCode || 500;
   // if there is no status associated with the error, by default it will be set to 'error'
