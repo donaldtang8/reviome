@@ -83,7 +83,7 @@ const sendErrorDev = (err, req, res) => {
  **/
 const sendErrorProd = (err, req, res) => {
   // if call came from API
-  if (req.originalUrl.startsWith('/api')) {
+  if (req.originalUrl && req.originalUrl.startsWith('/api')) {
     // A. API - Operational error - trusted error, show error details
     if (err.isOperational) {
       return res.status(err.statusCode).json({
@@ -121,6 +121,7 @@ const sendErrorProd = (err, req, res) => {
  *              function as an error middleware because of the order of the params (err, req, res, next)
  **/
 module.exports = (err, req, res, next) => {
+  console.log(err);
   // if there is no statusCode associated with the error, by default it will be set to 500
   err.statusCode = err.statusCode || 500;
   // if there is no status associated with the error, by default it will be set to 'error'
