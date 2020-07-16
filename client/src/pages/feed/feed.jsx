@@ -106,7 +106,11 @@ const Feed = ({
   return page === 1 && loading ? (
     <Spinner />
   ) : (
-    <div className="section__container">
+    <div
+      className={
+        pageType !== 'feed' ? 'profile-posts__container' : 'section__container'
+      }
+    >
       {pageType === 'feed' && (
         <div className="posts__container--form">
           <img src={user.photo} alt={user.fullName} />

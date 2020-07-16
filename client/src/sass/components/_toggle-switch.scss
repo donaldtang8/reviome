@@ -2,6 +2,10 @@
   &__container {
     margin-left: 1rem;
     display: flex;
+
+    @include respond(phone) {
+      margin-left: 0.3rem;
+    }
   }
 
   &--item {
@@ -50,6 +54,20 @@
 
     .slider.round:before {
       border-radius: 50%;
+    }
+
+    @include respond(phone) {
+      height: 1rem;
+      width: 1.7rem;
+
+      input:checked + .slider:before {
+        transform: translateX(0.5rem);
+      }
+
+      .slider:before {
+        bottom: 0;
+        left: 1px;
+      }
     }
   }
 }

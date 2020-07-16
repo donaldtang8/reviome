@@ -22,14 +22,25 @@
 $big-desktop: 112.5em; // 1800px
 $med-desktop: 93.75em; // 1500px
 $tab-land: 75rem; // 1200px
-$bp-large: 68.75rem; // 1100px
+$tab-square: 68.75rem; // 1100px
 $tab-port: 56.25em; //900px
+$large-phone: 43.75em; // 700px
 $phone: 36.5rem; // 600px
 $small-phone: 31.25rem; // 500px
 
 @mixin respond($breakpoint) {
+  @if $breakpoint == small-phone {
+    @media only screen and (max-width: $small-phone) {
+      @content;
+    }
+  }
   @if $breakpoint == phone {
     @media only screen and (max-width: $phone) {
+      @content;
+    }
+  }
+  @if $breakpoint == large-phone {
+    @media only screen and (max-width: $large-phone) {
       @content;
     }
   }
@@ -39,7 +50,7 @@ $small-phone: 31.25rem; // 500px
     }
   }
   @if $breakpoint == tab-square {
-    @media only screen and (max-width: $bp-large) {
+    @media only screen and (max-width: $tab-square) {
       @content;
     }
   }

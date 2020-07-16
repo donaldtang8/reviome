@@ -83,4 +83,16 @@
   &__filter:not(:last-child) {
     margin-right: 1rem;
   }
+
+  @include respond(large-phone) {
+    &__menu {
+      font-size: 1rem;
+    }
+  }
+
+  @include respond(phone) {
+    &__menu {
+      font-size: 0.75rem;
+    }
+  }
 }

@@ -1,19 +1,36 @@
-.account__container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  &--img {
+.account {
+  &__container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 1rem auto;
+    align-items: center;
 
-    img {
-      border-radius: 50%;
-      height: 8rem;
-      width: 8rem;
-      text-align: center;
+    form {
+      margin-bottom: 2rem;
+    }
+
+    &--img {
+      display: flex;
+      justify-content: center;
+      margin: 1rem auto;
+
+      img {
+        border-radius: 50%;
+        height: 8rem;
+        width: 8rem;
+        text-align: center;
+      }
+    }
+  }
+
+  @include respond(phone) {
+    &__container {
+      &--img {
+        img {
+          height: 5rem;
+          width: 5rem;
+        }
+      }
     }
   }
 }

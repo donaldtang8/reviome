@@ -13,7 +13,7 @@ const CategoryOverview = ({
 }) => {
   return (
     <div className="category-overview__container">
-      <div className="heading-1">
+      <div className="heading-1 padding-small">
         <Link to={`/explore/${category.name}`}>{category.name}</Link>
       </div>
       <div className="category-overview__container--body">

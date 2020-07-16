@@ -31,7 +31,7 @@ const Login = ({ auth: { isAuthenticated, loading }, login, history }) => {
   };
 
   return (
-    <div className="section__container auth__container">
+    <div className="auth__container">
       <div className="auth__container--form">
         <div className="auth__container--logo">revio</div>
         {loading ? (

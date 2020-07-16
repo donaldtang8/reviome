@@ -40,6 +40,16 @@
       width: 1.5rem;
       fill: var(--color-text);
     }
+
+    @include respond(phone) {
+      height: 2rem;
+      width: 2rem;
+
+      &--svg {
+        height: 1rem;
+        width: 1rem;
+      }
+    }
   }
 
   &__icon:hover,
@@ -107,5 +117,11 @@
   &__load-more:hover {
     background-color: var(--color-button-hover);
     cursor: pointer;
+  }
+
+  @include respond(phone) {
+    &__action {
+      padding: 0 0.5rem;
+    }
   }
 }

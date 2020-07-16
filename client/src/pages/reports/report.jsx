@@ -65,7 +65,7 @@ const Reports = ({
   ) : !report ? (
     <div>No report found</div>
   ) : (
-    <div className="wide__container report__container">
+    <div className="report__container large__container">
       <div className="table__header">
         <table cellPadding="0" cellSpacing="0" border="0">
           <thead>

@@ -21,9 +21,9 @@
   --color-dark: #000;
 
   /* -----theme colors----- */
-  --color-primary: #eb2f64;
-  --color-primary-light: #ff3366;
-  --color-primary-dark: #e32259;
+  --color-primary: #2fd5eb;
+  --color-primary-light: #45dcf0;
+  --color-primary-dark: #25c2d6;
 
   /* -----layout colors----- */
   // header
@@ -40,7 +40,7 @@
   --color-card-item-hover: #f2f2f2;
   // category
   --color-category-background: #fff;
-  --color-category-hover: #f2f2f2;
+  --color-category-hover: #94949444;
   // dropdown
   --color-dropdown-dot: #7e848a;
   --color-dropdown-background: #fff;
@@ -89,9 +89,9 @@
   --color-light: #242526;
 
   /* -----theme colors----- */
-  --color-primary: #eb2f64;
-  --color-primary-light: #ff3366;
-  --color-primary-dark: #ee205b;
+  --color-primary: #2fd5eb;
+  --color-primary-light: #45dcf0;
+  --color-primary-dark: #25c2d6;
 
   /* -----layout colors----- */
   // header
@@ -154,8 +154,8 @@
 }
 
 html {
-  min-width: 360px;
-  width: 100%;
+  // min-width: 32rem;
+  // width: 100%;
 
   margin: 0;
   font-size: 62.5%;
@@ -171,10 +171,6 @@ html {
   @include respond(tab-land) {
     font-size: 80%;
   }
-
-  @include respond(tab-port) {
-    font-size: 70%;
-  }
 }
 
 body {
@@ -189,9 +185,28 @@ body {
   height: calc(var(--vh, 1vh) * 100);
 }
 
+/* SELECTION COLOR */
 ::selection {
   background: var(--color-primary-light);
 }
+
 ::-moz-selection {
   background: var(--color-primary-light);
+}
+
+/* SCROLLBAR STYLES */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e2e2e2;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #6d6d6d;
 }

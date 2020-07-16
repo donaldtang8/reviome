@@ -43,13 +43,16 @@
   margin-top: 2rem;
   grid-column: center-start / center-end;
 
-  @media only screen and (max-width: 1200px) {
-    .section__container {
-      grid-column: 3 / 13;
-    }
+  @include respond(phone) {
+    grid-column: medium-start / medium-end;
+  }
+
+  @include respond(small-phone) {
+    grid-column: large-start / large-end;
+    padding: 0 3rem;
   }
 }
 
-.wide__container {
+.large__container {
   grid-column: large-start / large-end;
 }

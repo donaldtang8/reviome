@@ -9,7 +9,7 @@ import {
   getSubcategoriesBySlug,
 } from './../../redux/actions/categories';
 
-import CategoryItem from './category-item';
+import CategoryOverview from './category-overview';
 
 const Category = ({
   getCategoryBySlug,
@@ -24,19 +24,9 @@ const Category = ({
   }, []);
 
   return (
-    <div className="category__container">
-      <div className="category__container--title">
-        {category && category.name}
-      </div>
-      <div className="category__container--body">
-        {categories.map((cat) => (
-          <CategoryItem
-            key={cat._id}
-            category={cat}
-            origin="category"
-            history={history}
-          />
-        ))}
+    <div className="explore__container">
+      <div className="explore__categories">
+        {category && <CategoryOverview category={category} history={history} />}
       </div>
     </div>
   );

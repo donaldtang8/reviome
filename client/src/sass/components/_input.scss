@@ -92,3 +92,9 @@ textarea {
   padding: 1rem;
   resize: none;
 }
+
+@include respond(phone) {
+  input[type='submit'] {
+    font-weight: 100;
+  }
+}

@@ -25,7 +25,7 @@ const Profile = ({
   }, [getUserByUsername, match.params.user]);
 
   return (
-    <div className="section__container profile__container">
+    <div className="profile__container">
       {user === null || loading ? (
         <div>Profile not found</div>
       ) : (

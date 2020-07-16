@@ -1,4 +1,5 @@
 .auth__container {
+  grid-column: center-start / center-end;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,5 +19,13 @@
     background-color: var(--color-form-background);
     border-radius: 0.8rem;
     width: 75%;
+  }
+
+  @include respond(large-phone) {
+    grid-column: medium-start / medium-end;
+  }
+
+  @include respond(phone) {
+    grid-column: full-padding-start / full-padding-end;
   }
 }

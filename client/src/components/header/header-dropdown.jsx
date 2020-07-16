@@ -13,9 +13,10 @@ const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
     menuRef: React.createRef(),
+    itemRef: React.createRef(),
   });
 
-  const { btnRef, menuRef } = refs;
+  const { btnRef, menuRef, itemRef } = refs;
 
   useEffect(() => {
     if (visible) {
@@ -101,6 +102,7 @@ const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
             <Link
               to={`/profile/${user.uName}`}
               className="dropdown__menu--item"
+              ref={itemRef}
             >
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
@@ -109,7 +111,7 @@ const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
               </div>
               Profile
             </Link>
-            <Link to="/account" className="dropdown__menu--item">
+            <Link to="/account" className="dropdown__menu--item" ref={itemRef}>
               <div className="btn__dropdown">
                 <svg className="btn__dropdown--svg">
                   <use xlinkHref={`${sprite}#icon-cog`}></use>

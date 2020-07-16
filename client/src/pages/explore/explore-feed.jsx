@@ -66,7 +66,7 @@ const ExploreFeed = ({
   return page === 1 && loading ? (
     <Spinner />
   ) : (
-    <div className="explore-feed__container wide__container">
+    <div className="explore-feed__container large__container">
       <div className="explore-feed__container--top">
         <div className="explore-feed__container--header">
           <div className="explore-feed__container--pic"></div>

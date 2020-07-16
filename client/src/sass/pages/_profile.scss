@@ -112,4 +112,17 @@
       background-color: var(--color-hover-light);
     }
   }
+
+  &__container {
+    grid-column: center-start / center-end;
+
+    @include respond(large-phone) {
+      grid-column: medium-start / medium-end;
+    }
+
+    @include respond(phone) {
+      grid-column: large-start / large-end;
+      padding: 0 2rem;
+    }
+  }
 }

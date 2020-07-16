@@ -17,7 +17,7 @@ const Reports = ({ getReports, reports: { reports, loading } }) => {
   return loading ? (
     <Spinner />
   ) : (
-    <div className="wide__container reports__container">
+    <div className="reports__container large__container ">
       <div className="table__header">
         <table cellPadding="0" cellSpacing="0" border="0">
           <thead>
