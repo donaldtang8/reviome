@@ -79,7 +79,7 @@ module.exports = class Email {
    * @this  Binded email class object
    **/
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to ReviewIO!');
+    await this.send('welcome', 'Welcome to Revio!');
   }
 
   /**
