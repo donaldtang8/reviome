@@ -262,6 +262,7 @@ export const getUserByUsername = (user) => async (dispatch) => {
   try {
     // make api call
     const res = await axios.get(`/api/users/user/${user}`);
+    console.log(res);
     dispatch({
       type: GET_USER,
       payload: res.data.data.doc,
