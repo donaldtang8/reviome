@@ -26,13 +26,13 @@ module.exports = class Email {
    **/
   newTransport() {
     // we will only create transport objects and send emails in the production environment
-    if (process.env.NODE_ENV === 'production ') {
+    if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
         service: 'SendGrid',
         auth: {
           user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD
-        }
+          pass: process.env.SENDGRID_PASSWORD,
+        },
       });
     } else {
       return nodemailer.createTransport({
@@ -40,8 +40,8 @@ module.exports = class Email {
         port: process.env.EMAIL_PORT,
         auth: {
           user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD
-        }
+          pass: process.env.EMAIL_PASSWORD,
+        },
       });
     }
   }
@@ -59,7 +59,7 @@ module.exports = class Email {
       firstName: this.firstName,
       lastName: this.lastName,
       subject: subject,
-      url: this.url
+      url: this.url,
     });
     // 2. Define the email options
     const mailOptions = {
@@ -67,7 +67,7 @@ module.exports = class Email {
       to: this.to,
       subject: subject,
       html: html,
-      text: htmlToText.fromString(html)
+      text: htmlToText.fromString(html),
     };
     // 3. Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
