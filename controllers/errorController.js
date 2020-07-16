@@ -140,7 +140,7 @@ module.exports = (err, req, res, next) => {
   // if we are in the production environment, we let our helper functions create a user friendly error message before showing it to the user
   if (process.env.NODE_ENV === 'production') {
     // use sendErrorProd function for remaining functions that are not explicitly caught
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
   // otherwise, if we are in the developmental environment, we can just show the error details as is
   else {
