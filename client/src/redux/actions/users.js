@@ -267,6 +267,8 @@ export const getUserByUsername = (user) => async (dispatch) => {
       payload: res.data.data.doc,
     });
   } catch (err) {
+    console.log(err);
+    console.log(err.response);
     /* back end server-returned errors */
     if (err.response) {
       // if user is making unauthorized request or token expired, log out
