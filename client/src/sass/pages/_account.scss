@@ -20,6 +20,12 @@
         width: 8rem;
         text-align: center;
       }
+
+      img::before {
+        content: '';
+        display: block;
+        padding-bottom: 100%;
+      }
     }
   }
 

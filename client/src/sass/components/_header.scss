@@ -45,6 +45,12 @@
       margin-right: 0.5rem;
     }
 
+    img::before {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
+    }
+
     &--notification {
       font-size: 0.8rem;
       height: 1.75rem;
@@ -58,6 +64,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    &--notification::before {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
     }
   }
 

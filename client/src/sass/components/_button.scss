@@ -1,7 +1,7 @@
 .btn {
   &__action {
     padding: 0.5rem 1rem;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     width: min-content;
     white-space: nowrap;
 
@@ -120,8 +120,5 @@
   }
 
   @include respond(phone) {
-    &__action {
-      padding: 0 0.5rem;
-    }
   }
 }

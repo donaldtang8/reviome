@@ -40,6 +40,12 @@
         border-radius: 50%;
       }
 
+      &--pic::before {
+        content: '';
+        display: block;
+        padding-bottom: 100%;
+      }
+
       &--actions {
         display: flex;
         justify-content: center;

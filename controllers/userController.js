@@ -73,7 +73,6 @@ exports.getUserByUsername = catchAsync(async (req, res, next) => {
     return next(new AppError('No account found with that username', 404));
   }
 
-  console.log(user);
   res.status(200).json({
     status: 'success',
     data: {

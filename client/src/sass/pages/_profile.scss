@@ -13,6 +13,12 @@
       width: 10rem;
     }
 
+    &--pic > img::before {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
+    }
+
     &--name {
       font-size: 1.5rem;
     }

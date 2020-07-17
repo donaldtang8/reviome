@@ -13,8 +13,28 @@ a {
   text-transform: uppercase;
 }
 
+.bold {
+  font-weight: 600;
+}
+
 .italic {
   font-style: italic;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.spacing-small {
+  letter-spacing: 0.1rem;
+}
+
+.margin-small {
+  margin: 1rem;
+}
+
+.margin-medium {
+  margin: 2rem;
 }
 
 .center {
@@ -30,11 +50,11 @@ a {
 }
 
 .font-big {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
 }
 
 .font-large {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .padding-small {
@@ -42,15 +62,17 @@ a {
 }
 
 .heading-1 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .heading-2 {
-  font-size: 1.35rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 1.5rem;
+}
+
+.heading-3 {
+  font-size: 1.2rem;
 }
 
 .p-small {

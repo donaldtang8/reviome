@@ -16,6 +16,12 @@
         margin-right: 1rem;
       }
 
+      &--pic::before {
+        content: '';
+        display: block;
+        padding-bottom: 100%;
+      }
+
       &--name {
         white-space: nowrap;
       }

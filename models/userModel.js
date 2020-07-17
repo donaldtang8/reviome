@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      default: 'default.jpg',
+      default:
+        'https://firebasestorage.googleapis.com/v0/b/reviewio.appspot.com/o/images%2Fdefault.jpg?alt=media&token=49cf666c-8aad-4158-b9d7-8b3d84ed2f06',
     },
     role: {
       type: String,

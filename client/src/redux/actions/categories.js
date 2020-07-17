@@ -82,7 +82,6 @@ export const getCategoryById = (id) => async (dispatch) => {
  **/
 export const getCategoryBySlug = (category) => async (dispatch) => {
   try {
-    console.log('1');
     let formData = {};
     formData.slug = category;
     const body = JSON.stringify(formData);
