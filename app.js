@@ -43,9 +43,6 @@ app.use(express.json({ limit: '10kb' }));
 // cors - cross origin request, checks that no exterior front end is trying to access our server
 app.use(cors());
 
-// compression - compress response bodies
-app.use(compression());
-
 // cookie parser
 app.use(cookieParser());
 
@@ -68,16 +65,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(compression());
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client/build')));
-
-  app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
 }
-
-// return service worker if requests
-app.get('/service-worker.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'service-worker.js'));
-});
 
 /* ROUTES */
 app.use('/api/categories', categoryRouter);
