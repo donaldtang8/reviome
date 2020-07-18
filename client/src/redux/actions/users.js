@@ -94,7 +94,7 @@ export const updateMe = (formData) => async (dispatch) => {
     // update photo to firebase and retrieve image URL to update user document
     if (formData.photo) {
       // upload to firebase
-      let ref = await uploadImage(formData.photo.name, formData.photo);
+      let ref = await uploadImage(formData.photoName, formData.photo);
       // retrieve image url
       let url = await getImageURL(ref);
       // add photo property in formData and attach url to it
@@ -106,7 +106,9 @@ export const updateMe = (formData) => async (dispatch) => {
       type: UPDATE_ME,
       payload: res.data.data.doc,
     });
+    dispatch(setAlert('Successfully updated', 'success'));
   } catch (err) {
+    console.log(err);
     /* back end server-returned errors */
     if (err.response) {
       // if user is making unauthorized request or token expired, log out

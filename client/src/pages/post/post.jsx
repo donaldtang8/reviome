@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { getPostById } from './../../redux/actions/posts';
@@ -9,7 +10,9 @@ import PostItem from './../../components/post/post-item';
 import Spinner from './../../components/spinner/spinner';
 import ReportForm from './../../components/report/report-form';
 
-const Post = ({ getPostById, posts: { post, loading }, match }) => {
+import sprite from '../../assets/sprite.svg';
+
+const Post = ({ getPostById, posts: { post, loading }, match, history }) => {
   useEffect(() => {
     getPostById(match.params.id);
   }, [getPostById]);
@@ -33,6 +36,11 @@ const Post = ({ getPostById, posts: { post, loading }, match }) => {
     <Spinner />
   ) : (
     <div className="section__container posts__container">
+      <div className="btn__icon" onClick={() => history.goBack()}>
+        <svg className="btn__icon--svg">
+          <use xlinkHref={`${sprite}#icon-back`}></use>
+        </svg>
+      </div>
       {post === null ? (
         <div>No post found.</div>
       ) : (
@@ -66,4 +74,4 @@ const mapStateToProps = (state) => ({
   posts: state.posts,
 });
 
-export default connect(mapStateToProps, { getPostById })(Post);
+export default connect(mapStateToProps, { getPostById })(withRouter(Post));

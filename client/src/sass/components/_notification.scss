@@ -17,12 +17,6 @@
         width: 3rem;
         border-radius: 50%;
       }
-
-      img::before {
-        content: '';
-        display: block;
-        padding-bottom: 100%;
-      }
     }
 
     &--main {
@@ -122,12 +116,6 @@
       border-radius: 50%;
       height: 3rem;
       width: 3rem;
-    }
-
-    img::before {
-      content: '';
-      display: block;
-      padding-bottom: 100%;
     }
 
     &--name {

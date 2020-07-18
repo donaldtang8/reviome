@@ -45,6 +45,10 @@
       display: flex;
       flex-direction: column;
 
+      &--title {
+        font-size: 2rem;
+      }
+
       &--text {
         padding: 0 1rem;
       }

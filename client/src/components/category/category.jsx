@@ -26,7 +26,13 @@ const Category = ({
   return (
     <div className="explore__container">
       <div className="explore__categories">
-        {category && <CategoryOverview category={category} history={history} />}
+        {category && (
+          <CategoryOverview
+            category={category}
+            origin="category"
+            history={history}
+          />
+        )}
       </div>
     </div>
   );

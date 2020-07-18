@@ -67,6 +67,11 @@ const ExploreFeed = ({
     <Spinner />
   ) : (
     <div className="explore-feed__container large__container">
+      <div className="btn__icon" onClick={() => history.goBack()}>
+        <svg className="btn__icon--svg">
+          <use xlinkHref={`${sprite}#icon-back`}></use>
+        </svg>
+      </div>
       <div className="explore-feed__container--top">
         <div className="explore-feed__container--header">
           <div className="explore-feed__container--pic"></div>

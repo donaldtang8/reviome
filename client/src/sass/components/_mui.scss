@@ -1,0 +1,15 @@
+.MuiButton {
+  &-contained {
+    background-color: var(--color-input-background) !important;
+  }
+
+  &-root {
+    color: var(--color-text) !important;
+  }
+}
+
+.MuiSlider {
+  &-root {
+    color: var(--color-text) !important;
+  }
+}

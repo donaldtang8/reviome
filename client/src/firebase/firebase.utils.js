@@ -19,7 +19,8 @@ firebase.initializeApp(config);
 let storageRef = firebase.storage().ref();
 
 export const uploadImage = async (fileName, file) => {
-  const imageRef = storageRef.child(`images/${fileName}`).put(file);
+  let imageFile = new Blob([file], { type: 'image/jpeg' });
+  const imageRef = storageRef.child(`images/${fileName}`).put(imageFile);
   return imageRef;
   // imageRef.on('state_changed', async function () {
   //   let downloadURL = await imageRef.snapshot.ref.getDownloadURL();

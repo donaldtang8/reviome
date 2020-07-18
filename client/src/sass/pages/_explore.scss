@@ -23,11 +23,17 @@
       padding: 1rem;
 
       &--top {
-        width: 80%;
-        margin: 0 auto;
+        padding: 2rem 5rem;
+        border-radius: 3px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background-color: var(--color-card-background);
+        margin: 1rem 0;
+
+        @include respond(phone) {
+          padding: 1rem 2rem;
+        }
       }
 
       &--header {
@@ -38,12 +44,6 @@
         height: 5rem;
         width: 5rem;
         border-radius: 50%;
-      }
-
-      &--pic::before {
-        content: '';
-        display: block;
-        padding-bottom: 100%;
       }
 
       &--actions {

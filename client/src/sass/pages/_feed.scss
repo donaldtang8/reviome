@@ -16,12 +16,6 @@
       width: 3.5rem;
       border-radius: 50%;
     }
-
-    img::before {
-      content: '';
-      display: block;
-      padding-bottom: 100%;
-    }
   }
 
   &--end {
