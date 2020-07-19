@@ -99,15 +99,17 @@ const Account = ({
   const handleUserChange = (e) => {
     setModified(true);
     if (e.target.name === 'photo') {
-      if (!e.target.files[0].type.startsWith('image')) {
-        alert('Only image files are allowed');
-      } else {
-        setFormData({
-          ...formData,
-          photo: e.target.files[0],
-          photoName: `user-${user._id}-${Date.now()}.jpeg`,
-        });
-        readFile(e.target.files[0]);
+      if (e.target.files[0]) {
+        if (!e.target.files[0].type.startsWith('image')) {
+          alert('Only image files are allowed');
+        } else {
+          setFormData({
+            ...formData,
+            photo: e.target.files[0],
+            photoName: `user-${user._id}-${Date.now()}.jpeg`,
+          });
+          readFile(e.target.files[0]);
+        }
       }
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
