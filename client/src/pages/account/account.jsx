@@ -9,8 +9,6 @@ import { updatePassword } from './../../redux/actions/auth';
 
 import CropBox from './../../components/crop-image/index';
 
-import Resizer from 'react-image-file-resizer';
-
 const Account = ({
   updateMe,
   updateSocials,
@@ -77,10 +75,17 @@ const Account = ({
 
   // callback function passed to crop box object that will return the cropped image in a blob object
   const imageCallback = (blobUrl, blobObj) => {
-    // show photoPreview of cropped image
-    setFormData({ ...formData, photoPreview: blobUrl, photo: blobObj });
-    setImageModified(true);
-    setImageModified(false);
+    // check if crop was canceled
+    if (!blobUrl || !blobObj) {
+      // if either parameter is null, then crop was canceled, so we clear imageData
+      setImageData(null);
+      setFormData({ ...formData, photo: null, photoName: null });
+    } else {
+      // else, upload form data and show photoPreview of cropped image
+      setFormData({ ...formData, photoPreview: blobUrl, photo: blobObj });
+      setImageModified(true);
+      setImageModified(false);
+    }
   };
 
   // when original image is uploaded, set 'imageData' in state to the uploaded image and show preview of image in img tag
