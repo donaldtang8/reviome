@@ -22,11 +22,16 @@
     border: none;
     display: block;
     transition: all 0.3s;
+    margin-bottom: 1rem;
   }
 
   &__input:placeholder-shown + &__label {
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4rem);
+  }
+
+  &__input:not(:last-child) {
+    margin-bottom: 1rem;
   }
 }

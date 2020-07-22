@@ -19,4 +19,55 @@
   .form__container {
     width: 50%;
   }
+
+  .form__container:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  &--delete {
+    width: 50%;
+    background-color: var(--color-fail);
+  }
+
+  &--delete:hover {
+    background-color: var(--color-fail);
+  }
+}
+
+/* Categories Page Styles */
+.categories {
+  &__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+
+    &--overview {
+      padding: 2rem;
+    }
+
+    .form__container:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__header {
+    width: 75%;
+    margin: 5rem auto 0 auto;
+  }
+
+  &__manage {
+    &--img {
+      display: flex;
+      justify-content: center;
+      margin: 1rem auto;
+
+      img {
+        border-radius: 1rem;
+        height: 8rem;
+        width: 8rem;
+        text-align: center;
+      }
+    }
+  }
 }

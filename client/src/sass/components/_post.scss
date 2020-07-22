@@ -99,31 +99,6 @@
           margin-bottom: 1rem;
         }
       }
-
-      &--select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background-color: var(--color-input-background);
-        color: var(--color-text);
-        border: none;
-        padding: 1rem;
-      }
-
-      &--select:focus {
-        outline: none;
-      }
-
-      &--option {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        padding: 1rem;
-      }
-
-      &--option:hover {
-        background-color: var(--color-hover-light);
-      }
     }
   }
 }

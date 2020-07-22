@@ -34,8 +34,11 @@ const Profile = lazy(() => import('./pages/profile/profile'));
 const Notifications = lazy(() => import('./pages/notifications/notifications'));
 
 // Admin
-const Reports = lazy(() => import('./pages/reports/reports'));
-const Report = lazy(() => import('./pages/reports/report'));
+const Reports = lazy(() => import('./pages/admin/reports'));
+const Report = lazy(() => import('./pages/admin/report'));
+const Categories = lazy(() => import('./pages/admin/categories'));
+const CategoryForm = lazy(() => import('./pages/admin/category-form'));
+const CategoryItem = lazy(() => import('./pages/admin/category-item'));
 
 const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
   // retrieve notifications when application is loaded so we can display notification count on page load
@@ -82,6 +85,21 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
                     />
                     <AdminRoute exact path="/reports/:id" component={Report} />
                     <AdminRoute exact path="/reports" component={Reports} />
+                    <AdminRoute
+                      exact
+                      path="/manage/categories"
+                      component={Categories}
+                    />
+                    <AdminRoute
+                      exact
+                      path="/manage/categories/create"
+                      component={CategoryForm}
+                    />
+                    <AdminRoute
+                      exact
+                      path="/manage/category/:id"
+                      component={CategoryItem}
+                    />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <Route
