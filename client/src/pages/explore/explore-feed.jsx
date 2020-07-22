@@ -74,7 +74,13 @@ const ExploreFeed = ({
       </div>
       <div className="explore-feed__container--top">
         <div className="explore-feed__container--header">
-          <div className="explore-feed__container--pic"></div>
+          {category && category.photo && (
+            <img
+              src={category.photo}
+              className="explore-feed__container--pic"
+              alt={category.name}
+            />
+          )}
           <div className="explore-feed__container--info">
             <div className="heading-2">{category && category.name}</div>
             <div className="explore-feed__container--stats"></div>
