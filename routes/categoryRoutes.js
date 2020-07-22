@@ -13,20 +13,20 @@ router.get('/sub/slug/:slug*', categoryController.getSubcategoriesBySlug);
 router.post('/slug', categoryController.getOneBySlug);
 router.get('/id/:id', categoryController.getOneById);
 
-router
-  .route('/')
-  .get(categoryController.getAll)
-  .post(
-    authController.protect,
-    authController.restrictTo('admin'),
-    categoryController.getAncestorsAndParent,
-    categoryController.createOne
-  );
+router.route('/').get(categoryController.getAll);
 
 /* AUTHENTICATED ROUTES */
 router.use(authController.protect);
 
 router.patch('/follow/:id', categoryController.followCategoryById);
 router.patch('/unfollow/:id', categoryController.unfollowCategoryById);
+
+router.use(authController.restrictTo('admin'));
+
+router.patch('/id/:id', categoryController.updateCategoryById);
+
+router
+  .route('/')
+  .post(categoryController.getAncestorsAndParent, categoryController.createOne);
 
 module.exports = router;

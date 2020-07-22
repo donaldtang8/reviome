@@ -6,7 +6,7 @@ import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import getCroppedImg from './cropImage';
 
-const CropBox = ({ classes, image, type, callback }) => {
+const CropBox = ({ classes, shape, image, type, callback }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -29,6 +29,10 @@ const CropBox = ({ classes, image, type, callback }) => {
     }
   }, [croppedAreaPixels]);
 
+  const cancelCrop = () => {
+    callback(null, null);
+  };
+
   return (
     <Fragment>
       <div className="crop__container">
@@ -37,7 +41,7 @@ const CropBox = ({ classes, image, type, callback }) => {
           crop={crop}
           zoom={zoom}
           aspect={3 / 3}
-          cropShape="round"
+          cropShape={!shape ? 'round' : shape}
           showGrid={false}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
@@ -55,12 +59,11 @@ const CropBox = ({ classes, image, type, callback }) => {
         />
       </div>
       <div className="crop__button">
-        <Button
-          className="btn__action btn__action--active"
-          onClick={showCroppedImage}
-          variant="contained"
-        >
+        <Button onClick={showCroppedImage} variant="contained">
           Crop Image
+        </Button>
+        <Button onClick={cancelCrop} variant="contained">
+          Cancel
         </Button>
       </div>
     </Fragment>
@@ -69,6 +72,7 @@ const CropBox = ({ classes, image, type, callback }) => {
 
 CropBox.propTypes = {
   image: PropTypes.string.isRequired,
+  shape: PropTypes.string,
   type: PropTypes.string,
   callback: PropTypes.func.isRequired,
 };

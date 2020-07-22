@@ -9,10 +9,10 @@ import {
   getReportById,
   deleteReportById,
   resolveReport,
-} from './../../redux/actions/reports';
-import { banUserById } from './../../redux/actions/users';
+} from '../../redux/actions/reports';
+import { banUserById } from '../../redux/actions/users';
 
-import Spinner from './../../components/spinner/spinner';
+import Spinner from '../../components/spinner/spinner';
 
 const Reports = ({
   getReportById,
@@ -213,6 +213,7 @@ const Reports = ({
           )}
           <label htmlFor="days">Day(s)</label>
           <input
+            className="input__"
             type="number"
             name="days"
             placeholder="Day(s)"
@@ -236,7 +237,7 @@ const Reports = ({
           <input className="input__submit" type="submit" value="Ban Account" />
         </form>
         <div
-          className="btn__action btn__action--active"
+          className="input__submit report__container--delete"
           onClick={() => deleteReportById(report._id, history)}
         >
           Delete Report

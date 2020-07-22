@@ -94,7 +94,7 @@ export const updateMe = (formData) => async (dispatch) => {
     // update photo to firebase and retrieve image URL to update user document
     if (formData.photo) {
       // upload to firebase
-      let ref = await uploadImage(formData.photoName, formData.photo);
+      let ref = await uploadImage(formData.photoName, formData.photo, 'images');
       // retrieve image url
       let url = await getImageURL(ref);
       // add photo property in formData and attach url to it

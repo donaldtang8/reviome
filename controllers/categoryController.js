@@ -7,7 +7,23 @@ const User = require('./../models/userModel');
 
 exports.createOne = factory.createOne(Category);
 
-// MIDDLEWARE
+/**
+ * @helper  filterObj
+ * @param obj The object that we will filter
+ * @param allowedFields A list of fields that will be allowed in object
+ * @description Utility function used to filter out req.body object and only keep fields we allow
+ **/
+const filterObj = (obj, ...allowedFields) => {
+  // new object will contain the new object with all the allowed fields
+  const newObj = {};
+  // loop through each key in object and check if they are allowed
+  Object.keys(obj).forEach((elem) => {
+    if (allowedFields.includes(elem)) newObj[elem] = obj[elem];
+  });
+  // return new object
+  return newObj;
+};
+
 /**
  * @middleware  getAncestorsAndParent
  * @description Automatically update req.body and set parents and ancestors of category based on parentString
@@ -19,6 +35,10 @@ exports.getAncestorsAndParent = catchAsync(async (req, res, next) => {
       name: req.body.parentString,
       genre: false,
     });
+
+    if (!category) {
+      return next(new AppError('There is no category with that name', 404));
+    }
 
     // 2. Add all ancestors of parent to current ancestor list
     let ancestors = category.ancestors;
@@ -64,7 +84,7 @@ exports.decrementPostCount = catchAsync(async (req, res, next) => {
  * @description Finds all categories
  **/
 exports.getAll = catchAsync(async (req, res, next) => {
-  const categories = await Category.find();
+  const categories = await Category.find().populate('parent');
   res.status(200).json({
     status: 'success',
     results: categories.length,
@@ -177,6 +197,29 @@ exports.getSubcategoriesBySlug = catchAsync(async (req, res, next) => {
     results: subcategories.length,
     data: {
       doc: subcategories,
+    },
+  });
+});
+
+/**
+ * @function  updateCategoryById
+ * @description Update category given ID
+ **/
+exports.updateCategoryById = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(req.body, 'name', 'photo', 'slug', 'genre');
+  const updatedCategory = await Category.findByIdAndUpdate(
+    req.params.id,
+    filteredBody,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: updatedCategory,
     },
   });
 });

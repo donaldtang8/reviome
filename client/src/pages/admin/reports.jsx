@@ -75,7 +75,9 @@ const Reports = ({ getReports, reports: { reports, loading } }) => {
                 </tr>
               ))
             ) : (
-              <div className="center padding-small">No Reports</div>
+              <tr>
+                <td className="center padding-small">No Reports</td>
+              </tr>
             )}
           </tbody>
         </table>
