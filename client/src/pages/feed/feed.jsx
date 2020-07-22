@@ -108,7 +108,9 @@ const Feed = ({
   ) : (
     <div
       className={
-        pageType !== 'feed' ? 'profile-posts__container' : 'section__container'
+        pageType !== 'feed' && pageType !== 'favorites'
+          ? 'profile-posts__container'
+          : 'section__container'
       }
     >
       {pageType === 'feed' && (

@@ -27,7 +27,7 @@ const Profile = ({
   return (
     <div className="profile__container">
       {user === null || loading ? (
-        <div>Profile not found</div>
+        <div className="center padding-small">Profile not found</div>
       ) : (
         <Fragment>
           <ProfileHeader user={user} />

@@ -87,7 +87,7 @@ const PostForm = ({
           </div>
         </div>
         <div className="popup__main post-form__container">
-          <form className="post-form__container--form" onSubmit={handleSubmit}>
+          <form className="form__container" onSubmit={handleSubmit}>
             <input
               className="form__input"
               type="text"
@@ -97,6 +97,9 @@ const PostForm = ({
               onChange={handleChange}
               required
             />
+            <label className="form__label" htmlFor="title">
+              Title
+            </label>
             <input
               className="form__input"
               type="text"
@@ -106,6 +109,9 @@ const PostForm = ({
               onChange={handleChange}
               required
             />
+            <label className="form__label" htmlFor="text">
+              Description
+            </label>
             <input
               className="form__input"
               type="text"
@@ -115,7 +121,9 @@ const PostForm = ({
               onChange={handleChange}
               required
             />
-
+            <label className="form__label" htmlFor="link">
+              Media Link
+            </label>
             <label htmlFor="categories">Choose a category:</label>
             <select
               className="input__select"

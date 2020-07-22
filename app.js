@@ -35,7 +35,6 @@ const limiter = rateLimit({
   windowMs: 60 * 50 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 });
-app.use('/api', limiter);
 
 // body parser - reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
@@ -62,6 +61,7 @@ app.use(
 
 // if application is in production mode
 if (process.env.NODE_ENV === 'production') {
+  app.use('/api', limiter);
   app.use(compression());
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client/build')));

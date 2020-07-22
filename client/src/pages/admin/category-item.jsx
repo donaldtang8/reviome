@@ -151,6 +151,7 @@ const CategoryItem = ({
   ) : (
     <div className="section__container">
       <form className="form__container" onSubmit={handleSubmit}>
+        <div className="heading-1 padding-small">Edit Category</div>
         <input
           className="form__input"
           type="text"

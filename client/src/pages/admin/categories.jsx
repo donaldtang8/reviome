@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 
 import { getAllCategories } from './../../redux/actions/categories';
 
-import CategoryItem from './category-item';
-
 const Categories = ({
   getAllCategories,
   categories: { categories },
@@ -19,13 +17,13 @@ const Categories = ({
 
   return (
     <div className="large__container">
-      <Link
-        className="categories__header input__btn"
-        to={'/manage/categories/create'}
-      >
-        Create Category
-      </Link>
       <div className="categories__container">
+        <Link
+          className="categories__header--btn"
+          to={'/manage/categories/create'}
+        >
+          Create Category
+        </Link>
         {categories.map(
           (category, index) =>
             !category.parent && (

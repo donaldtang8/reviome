@@ -52,8 +52,16 @@
   }
 
   &__header {
-    width: 75%;
-    margin: 5rem auto 0 auto;
+    &--btn {
+      margin: 2rem auto 0 auto;
+      padding: 1rem 2rem;
+      background-color: var(--color-button);
+      border-radius: 1rem;
+    }
+
+    &--btn:hover {
+      background-color: var(--color-button-hover);
+    }
   }
 
   &__manage {

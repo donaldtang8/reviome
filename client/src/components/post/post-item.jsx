@@ -90,14 +90,14 @@ const PostItem = ({
         />
       </div>
       <div className="post-item__body">
-        <div className="post-item__body--title">{post.title}</div>
-        <div className="post-item__body--desc">{post.text}</div>
-        {/* <blockquote className="embedly-card">
+        {/* <div className="post-item__body--title">{post.title}</div>
+        <div className="post-item__body--desc">{post.text}</div> */}
+        <blockquote className="embedly-card">
           <h4>
             <a href={post.link}>{post.title.length > 0 && post.title}</a>
           </h4>
           <p>{post.text && post.text}</p>
-        </blockquote> */}
+        </blockquote>
       </div>
       <div className="post-item__actions">
         {post.likes.some((userLiked) => userLiked._id === user._id) ? (

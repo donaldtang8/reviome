@@ -8,16 +8,19 @@ import {
 } from './../../redux/actions/categories';
 import { setAlert } from './../../redux/actions/alert';
 
+import Spinner from './../../components/spinner/spinner';
+
 import CropBox from './../../components/crop-image/index';
 
 const CategoryForm = ({
   getAllCategories,
   createCategory,
   categories: { categories },
+  match,
 }) => {
   useEffect(() => {
     getAllCategories();
-  }, []);
+  }, [match.url, match.params.category]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -134,6 +137,7 @@ const CategoryForm = ({
   return (
     <div className="section__container">
       <form className="form__container" onSubmit={handleSubmit}>
+        <div className="heading-1 padding-small">Create Category</div>
         <input
           className="form__input"
           type="text"
@@ -143,6 +147,9 @@ const CategoryForm = ({
           onChange={handleChange}
           required
         />
+        <label className="form__label" htmlFor="name">
+          Name
+        </label>
         <input
           className="form__input"
           type="text"
@@ -151,6 +158,9 @@ const CategoryForm = ({
           value={parentString}
           onChange={handleChange}
         />
+        <label className="form__label" htmlFor="parentString">
+          Parent String
+        </label>
         <select
           className="form__input"
           id="categories"
@@ -159,15 +169,14 @@ const CategoryForm = ({
           defaultValue={parent}
         >
           <option value="">No Parent</option>
-          {categories &&
-            categories.map(
-              (cat) =>
-                !cat.genre && (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                )
-            )}
+          {categories.map(
+            (cat) =>
+              !cat.genre && (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              )
+          )}
         </select>
         <select
           className="form__input"
@@ -217,7 +226,7 @@ CategoryForm.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  categories: state.auth,
+  categories: state.categories,
 });
 
 export default connect(mapStateToProps, { getAllCategories, createCategory })(
