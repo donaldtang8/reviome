@@ -79,6 +79,24 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
               >
                 Favorites
               </Link>
+              {user.role === 'admin' && (
+                <Fragment>
+                  <Link
+                    to="/reports"
+                    className="nav__mobile--item"
+                    onClick={handleMobileNav}
+                  >
+                    Reports
+                  </Link>
+                  <Link
+                    to="/manage/categories"
+                    className="nav__mobile--item"
+                    onClick={handleMobileNav}
+                  >
+                    Categories
+                  </Link>
+                </Fragment>
+              )}
             </div>
           </Fragment>
         ) : (
