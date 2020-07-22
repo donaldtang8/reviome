@@ -106,7 +106,7 @@ export const updateMe = (formData) => async (dispatch) => {
       type: UPDATE_ME,
       payload: res.data.data.doc,
     });
-    dispatch(setAlert('Successfully updated', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     console.log(err);
     /* back end server-returned errors */
@@ -187,6 +187,7 @@ export const updateSocials = (formData) => async (dispatch) => {
       type: UPDATE_ME,
       payload: res.data.data.doc,
     });
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {
@@ -512,7 +513,7 @@ export const banUserById = (id, formData) => async (dispatch) => {
   try {
     // make api call
     await axios.patch(`/api/users/ban/${id}`, formData, config);
-    dispatch(setAlert('Account successfully banned', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {
@@ -545,7 +546,7 @@ export const unbanUserById = (id, formData) => async (dispatch) => {
   try {
     // make api call
     await axios.patch(`/api/users/unban/${id}`, formData, config);
-    dispatch(setAlert('Account successfully unbanned', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {

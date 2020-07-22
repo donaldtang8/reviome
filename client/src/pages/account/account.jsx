@@ -229,7 +229,11 @@ const Account = ({
           onChange={handleUserChange}
         />
         <label className="form__container--label" htmlFor="photo">
-          {!photo ? 'Choose a photo' : photo.name}
+          {!photo
+            ? 'Choose a photo'
+            : !photo.name
+            ? 'Photo selected'
+            : photo.name}
         </label>
         {imageData !== null && (
           <CropBox image={imageData} callback={imageCallback} />
