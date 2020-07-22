@@ -211,7 +211,7 @@ export const createCategory = (formData) => async (dispatch) => {
       formData.photo = url;
     }
     await axios.post('/api/categories', formData, config);
-    dispatch(setAlert('Successfully created', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     dispatch({
       type: CATEGORY_ERROR,
@@ -245,7 +245,7 @@ export const updateCategoryById = (id, formData) => async (dispatch) => {
       type: UPDATE_CATEGORY,
       payload: res.data.data.doc,
     });
-    dispatch(setAlert('Successfully updated category', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     setAlert(err);
   }

@@ -83,7 +83,7 @@ export const createReport = (formData) => async (dispatch) => {
       type: CREATE_REPORT,
       payload: res.data.data.doc,
     });
-    dispatch(setAlert('Report successfully resolved', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'fail'));
   }
@@ -100,7 +100,7 @@ export const resolveReport = (id, formData) => async (dispatch) => {
       type: UPDATE_REPORT,
       payload: { id, report: res.data.data.doc },
     });
-    dispatch(setAlert('Report successfully resolved', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     dispatch({
       type: REPORT_ERROR,
@@ -121,7 +121,7 @@ export const deleteReportById = (id, history) => async (dispatch) => {
       payload: id,
     });
     history.push('/reports');
-    dispatch(setAlert('Report successfully deleted', 'success'));
+    dispatch(setAlert('Success!', 'success'));
   } catch (err) {
     dispatch({
       type: REPORT_ERROR,
