@@ -75,6 +75,7 @@ const ProfilePostForm = ({ createCommunityPost, history }) => {
         <div className="popup__main post-form__container">
           <form className="post-form__container--form" onSubmit={handleSubmit}>
             <input
+              className="form__input"
               type="text"
               name="title"
               placeholder="Title"
@@ -83,6 +84,7 @@ const ProfilePostForm = ({ createCommunityPost, history }) => {
               required
             />
             <input
+              className="form__input"
               type="text"
               name="text"
               placeholder="Description"
