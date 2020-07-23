@@ -77,6 +77,12 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
           { user_from: { $in: self.following } },
           { type: { $eq: 'Post' } },
         ],
+        $and: [
+          { user_to: { $eq: req.params.id } },
+          { user_from: { $nin: self.block_to } },
+          { user_from: { $nin: self.block_from } },
+          { type: { $eq: 'Like' } },
+        ],
       },
     ],
   });
@@ -99,6 +105,12 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
             { user_from: { $nin: self.block_from } },
             { user_from: { $in: self.following } },
             { type: { $eq: 'Post' } },
+          ],
+          $and: [
+            { user_to: { $eq: req.params.id } },
+            { user_from: { $nin: self.block_to } },
+            { user_from: { $nin: self.block_from } },
+            { type: { $eq: 'Like' } },
           ],
         },
       ],
@@ -128,7 +140,7 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
  * @function addPostNotification
  * @description Create a notification for followers of post creator
  **/
-exports.addPostNotification = catchAsync(async (req, res) => {
+exports.addPostNotification = catchAsync(async (req) => {
   // 1. Retrieve self user object
   const self = await User.findById(req.user.id);
   // 2. Retrieve all users that are following post creator
@@ -205,7 +217,7 @@ exports.addCommentNotification = catchAsync(async (req, res) => {
     // 3. Retrieve self user object
     const self = await User.findById(req.user.id);
     // 4. Create notification object for post creator
-    await Notification.create({
+    const doc = await Notification.create({
       user_from: req.user.id,
       user_to: post.user,
       primary_id: req.params.postId,
@@ -214,6 +226,8 @@ exports.addCommentNotification = catchAsync(async (req, res) => {
       message: self.fullName + ' has commented on your post',
       link: `/post/${req.body.doc.id}`,
     });
+
+    console.log(doc);
   }
 });
 

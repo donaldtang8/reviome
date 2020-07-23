@@ -127,6 +127,21 @@
   &__body {
     position: relative;
     width: 100%;
-    padding: 2rem;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &--message {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@include respond(small-phone) {
+  .notification {
+    &__body {
+      padding: 2rem 3rem 2rem 0;
+    }
   }
 }

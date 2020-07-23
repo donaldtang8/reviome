@@ -8,6 +8,7 @@ const Post = require('./../models/postModel');
 const Comment = require('./../models/commentModel');
 const User = require('./../models/userModel');
 const Category = require('./../models/categoryModel');
+const Notification = require('./../models/notificationModel');
 
 exports.getAll = factory.getAll(Post, { path: 'comments' });
 exports.deleteOne = factory.deleteOne(Post);
@@ -115,8 +116,22 @@ exports.getTopPosts = catchAsync(async (req, res, next) => {
 });
 
 exports.createOne = catchAsync(async (req, res, next) => {
+  // 1. Check if category is valid
+  const category = await Category.findById(req.body.category);
+
+  if (!category) {
+    return next(new AppError('No category found with that ID', 404));
+  }
+
+  // 2. Create post document
   let doc = await Post.create(req.body);
 
+  // 3. Increment category post countU
+  await Category.findByIdAndUpdate(req.body.category, {
+    $inc: { num_posts: 1 },
+  });
+
+  // 4. Populate 'user' property and 'comments' property
   let popDoc = await Post.findById(doc._id)
     .populate({
       path: 'user',
@@ -124,6 +139,7 @@ exports.createOne = catchAsync(async (req, res, next) => {
     })
     .populate('comments');
 
+  // 5. Return response
   res.status(201).json({
     status: 'success',
     data: {

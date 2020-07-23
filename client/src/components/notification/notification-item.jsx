@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Moment from 'react-moment';
+
 import { deleteNotificationById } from './../../redux/actions/notifications';
 
 import sprite from '../../assets/sprite.svg';
@@ -13,6 +15,7 @@ const NotificationItem = ({ deleteNotificationById, notification }) => {
         <img
           className="notification__header--img"
           src={notification.user_from.photo}
+          alt={notification.user_from.fullName}
         />
         <div className="notification__header--name">
           {notification.user_from.fullName}
@@ -32,6 +35,9 @@ const NotificationItem = ({ deleteNotificationById, notification }) => {
         <div className="notification__body--message">
           {notification.message}
         </div>
+        <Moment fromNow className="font-small">
+          {notification.createdAt}
+        </Moment>
       </div>
     </div>
   );

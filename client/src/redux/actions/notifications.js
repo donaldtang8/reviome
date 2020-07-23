@@ -42,7 +42,7 @@ export const getNotifications = (page) => async (dispatch) => {
       type: FETCH_NOTIFICATIONS_START,
     });
     // make api call
-    const res = await axios.get(`/api/notifications/me`);
+    const res = await axios.get(`/api/notifications/me?page=${page}`);
     // only dispatch action if there are results returned
     if (res.data.results > 0) {
       dispatch({
@@ -152,7 +152,7 @@ export const setRead = ([...notifications]) => async (dispatch) => {
  **/
 export const deleteNotificationById = (id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/notifications/${id}`);
+    await axios.delete(`/api/notifications/${id}`);
     dispatch({
       type: DELETE_NOTIFICATION,
       payload: { id },

@@ -13,18 +13,18 @@ import Spinner from './../../components/spinner/spinner';
 const Notifications = ({
   getNotifications,
   resetNotifications,
-  notifications: { notifications, loading },
+  notifications: { notifications, page, loading },
 }) => {
   useEffect(() => {
     resetNotifications();
-    getNotifications();
-  }, []);
+    getNotifications(page);
+  }, [resetNotifications, getNotifications]);
 
   return loading ? (
     <Spinner />
   ) : (
-    <div className="notifications__container">
-      <div className="heading-1 center">Notifications</div>
+    <div className="section__container">
+      <div className="heading-1 center padding-small">Notifications</div>
       {notifications.length > 0 ? (
         notifications.map((notif) => (
           <NotificationItem key={notif._id} notification={notif} />

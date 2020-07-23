@@ -17,13 +17,7 @@ router.use(authController.protect);
 router
   .route('/')
   .get(postController.getAll)
-  .post(
-    userController.setMe,
-    notificationController.setNotif,
-    postController.createOne,
-    categoryController.incrementPostCount,
-    notificationController.addPostNotification
-  );
+  .post(userController.setMe, postController.createOne);
 
 // Retrieve post data based on user
 router.get('/user/:userId/saves', postController.getSavedPostsByUser);

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -20,6 +20,7 @@ const NotificationDropdown = ({
   getNotifications,
   setRead,
   notifications: { notifications, loading, count },
+  history,
 }) => {
   const [visible, setVisible] = useState(false);
   const [refs, setRefs] = useState({
@@ -32,11 +33,17 @@ const NotificationDropdown = ({
   useEffect(() => {
     // when we open up the notification dropdown, we want to set the 'read' property of all of the notifications in the dropdown to 'true' and update the count
     if (visible) {
-      setRead([...notifications]);
       resetNotifications();
-      getNotifications();
+      getNotifications(1);
     }
   }, [visible]);
+
+  // when notifications are loaded, set all of its 'read' property to true
+  useEffect(() => {
+    if (notifications.length > 0) {
+      setRead([...notifications]);
+    }
+  }, [notifications]);
 
   useEffect(() => {
     if (visible) {
@@ -76,6 +83,11 @@ const NotificationDropdown = ({
     }
   };
 
+  const handleClickAll = () => {
+    resetNotifications();
+    history.push('/notifications');
+  };
+
   return (
     <div className={visible ? 'dropdown dropdown__menu--show' : 'dropdown'}>
       <div
@@ -112,9 +124,9 @@ const NotificationDropdown = ({
         {notifications.length > 0 && (
           <Fragment>
             <hr />
-            <Link to="/notifications">
-              <div className="notification__action">See All</div>
-            </Link>
+            <div className="notification__action" onClick={handleClickAll}>
+              See All
+            </div>
           </Fragment>
         )}
       </div>
@@ -137,4 +149,4 @@ export default connect(mapStateToProps, {
   getNotifications,
   resetNotifications,
   setRead,
-})(NotificationDropdown);
+})(withRouter(NotificationDropdown));
