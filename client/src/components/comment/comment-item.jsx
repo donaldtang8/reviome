@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
+import Moment from 'react-moment';
+
 import CommentDropdown from './comment-dropdown';
 
 import { likeCommentById, unlikeCommentById } from '../../redux/actions/posts';
@@ -42,7 +44,12 @@ const CommentItem = ({
             reportItemTypeCallback={reportItemTypeCallback}
           />
         </div>
-        <div className="comment__container--text">{comment.text}</div>
+        <div className="comment__container--body">
+          <div className="comment__container--text">{comment.text}</div>
+          <Moment fromNow className="comment__container--time">
+            {comment.createdAt}
+          </Moment>
+        </div>
       </div>
       <div className="comment__container--actions">
         {comment.likes.some((userLiked) => userLiked._id === user._id) ? (

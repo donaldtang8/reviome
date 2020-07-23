@@ -956,6 +956,8 @@ td {
     display: flex;
     justify-content: space-between;
     align-items: center; }
+  .comment__container--time {
+    font-size: 0.8rem; }
   .comment__container--actions {
     margin-left: 0.5rem; }
   .comment__container--action {
