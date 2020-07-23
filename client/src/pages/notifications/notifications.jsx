@@ -34,7 +34,6 @@ const Notifications = ({
           You're all caught up! No more notifications!
         </div>
       )}
-      {}
     </div>
   );
 };
