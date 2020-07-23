@@ -8,7 +8,7 @@ const Post = require('./../models/postModel');
 const Comment = require('./../models/commentModel');
 const User = require('./../models/userModel');
 const Category = require('./../models/categoryModel');
-const Notification = require('./../models/notificationModel');
+const NotificationController = require('./notificationController');
 
 exports.getAll = factory.getAll(Post, { path: 'comments' });
 exports.deleteOne = factory.deleteOne(Post);
@@ -139,6 +139,8 @@ exports.createOne = catchAsync(async (req, res, next) => {
     })
     .populate('comments');
 
+  req.body.doc = popDoc;
+
   // 5. Return response
   res.status(201).json({
     status: 'success',
@@ -152,7 +154,7 @@ exports.createOne = catchAsync(async (req, res, next) => {
  * @function  getOne
  * @description Find and return post given postId
  **/
-exports.getOne = catchAsync(async (req, res) => {
+exports.getOne = catchAsync(async (req, res, next) => {
   // 1. Find post given id
   const doc = await Post.findById(req.params.id)
     .populate('user')
@@ -198,7 +200,7 @@ exports.getOne = catchAsync(async (req, res) => {
  * @function  getFeed
  * @description Find all posts where: the creator of the post is in user's following array, is not in user's blocked list, and is not being blocked by,
  **/
-exports.getFeed = catchAsync(async (req, res) => {
+exports.getFeed = catchAsync(async (req, res, next) => {
   // 1. Get self document for access to following list
   const self = await User.findById(req.user.id);
 

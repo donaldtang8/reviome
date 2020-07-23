@@ -18,6 +18,12 @@ router
   .route('/')
   .get(postController.getAll)
   .post(userController.setMe, postController.createOne);
+// .post(
+//   userController.setMe,
+//   notificationController.setNotif,
+//   postController.createOne,
+//   notificationController.addPostNotification
+// );
 
 // Retrieve post data based on user
 router.get('/user/:userId/saves', postController.getSavedPostsByUser);
@@ -62,12 +68,19 @@ router
   .get(postController.getOne)
   .delete(
     authController.restrictToMe(Post),
-    notificationController.setNotif,
     postController.removePostComments,
     postController.setCategoryToDelete,
     postController.deleteOne,
-    categoryController.decrementPostCount,
-    notificationController.removePostNotification
+    categoryController.decrementPostCount
   );
+// .delete(
+//   authController.restrictToMe(Post),
+//   notificationController.setNotif,
+//   postController.removePostComments,
+//   postController.setCategoryToDelete,
+//   postController.deleteOne,
+//   categoryController.decrementPostCount,
+//   notificationController.removePostNotification
+// );
 
 module.exports = router;

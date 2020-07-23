@@ -4,6 +4,8 @@ const factory = require('./handlerFactory');
 
 const Comment = require('./../models/commentModel');
 const Post = require('./../models/postModel');
+const Notification = require('./../models/notificationModel');
+const User = require('./../models/userModel');
 
 exports.getAll = factory.getAll(Comment);
 exports.getOne = factory.getOne(Comment);
@@ -25,10 +27,26 @@ exports.setPostAndUserId = (req, res, next) => {
  **/
 exports.createOne = catchAsync(async (req, res, next) => {
   // 1. Find comment by id and delete
-  await Comment.create(req.body);
+  const comment = await Comment.create(req.body);
 
   // 2. Find post given id, populate with comments, and return as response
   const post = await Post.findById(req.params.postId).populate('comments');
+
+  // 3. If comment was made from another user, create a notification
+  if (req.user.id !== post.user) {
+    // 3. Retrieve self user object
+    const self = await User.findById(req.user.id);
+    // 4. Create notification object for post creator
+    await Notification.create({
+      user_from: req.user.id,
+      user_to: post.user,
+      primary_id: req.params.postId,
+      secondary_id: comment._id,
+      type: 'Comment',
+      message: self.fullName + ' has commented on your post',
+      link: `/post/${post._id}`,
+    });
+  }
 
   res.status(200).json({
     status: 'success',
@@ -50,6 +68,12 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
 
   // 2. Find post given id, populate with comments, and return as response
   const post = await Post.findById(req.params.postId).populate('comments');
+
+  // 3. Delete all related notifications
+  await Notification.deleteMany({
+    primary_id: req.params.postId,
+    secondary_id: req.params.id,
+  });
 
   res.status(200).json({
     status: 'success',

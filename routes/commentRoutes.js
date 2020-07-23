@@ -12,12 +12,7 @@ router.use(authController.protect);
 router
   .route('/')
   .get(commentController.getAll)
-  .post(
-    commentController.setPostAndUserId,
-    notificationController.setNotif,
-    commentController.createOne,
-    notificationController.addCommentNotification
-  );
+  .post(commentController.setPostAndUserId, commentController.createOne);
 
 // Comment like actions
 router.patch(
@@ -35,10 +30,6 @@ router.patch(
 router
   .route('/:id')
   .get(commentController.getOne)
-  .delete(
-    notificationController.setNotif,
-    commentController.deleteOne,
-    notificationController.removeCommentNotification
-  );
+  .delete(commentController.deleteOne);
 
 module.exports = router;

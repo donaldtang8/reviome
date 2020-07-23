@@ -62,57 +62,88 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
   const self = await User.findById(req.params.id);
 
   // 2. Execute request without APIFeatures object to find total number of results
+  // const notifications = await Notification.find({
+  //   $or: [
+  //     {
+  //       $and: [
+  //         { user_to: { $eq: req.params.id } },
+  //         { user_from: { $nin: self.block_to } },
+  //         { user_from: { $nin: self.block_from } },
+  //       ],
+  //       // $and: [
+  //       //   { user_to: { $eq: req.params.id } },
+  //       //   { user_from: { $nin: self.block_to } },
+  //       //   { user_from: { $nin: self.block_from } },
+  //       //   { user_from: { $in: self.following } },
+  //       //   { type: { $eq: 'Post' } },
+  //       // ],
+  //       $and: [
+  //         { user_to: { $eq: req.params.id } },
+  //         { user_from: { $nin: self.block_to } },
+  //         { user_from: { $nin: self.block_from } },
+  //         { type: { $eq: 'Comment' } },
+  //       ],
+  //       $and: [
+  //         { user_to: { $eq: req.params.id } },
+  //         { user_from: { $nin: self.block_to } },
+  //         { user_from: { $nin: self.block_from } },
+  //         { type: { $eq: 'Like' } },
+  //       ],
+  //     },
+  //   ],
+  // });
   const notifications = await Notification.find({
-    $or: [
-      {
-        $and: [
-          { user_to: { $eq: req.params.id } },
-          { user_from: { $nin: self.block_to } },
-          { user_from: { $nin: self.block_from } },
-        ],
-        $and: [
-          { user_to: { $eq: req.params.id } },
-          { user_from: { $nin: self.block_to } },
-          { user_from: { $nin: self.block_from } },
-          { user_from: { $in: self.following } },
-          { type: { $eq: 'Post' } },
-        ],
-        $and: [
-          { user_to: { $eq: req.params.id } },
-          { user_from: { $nin: self.block_to } },
-          { user_from: { $nin: self.block_from } },
-          { type: { $eq: 'Like' } },
-        ],
-      },
+    $and: [
+      { user_to: { $eq: req.params.id } },
+      { user_from: { $nin: self.block_to } },
+      { user_from: { $nin: self.block_from } },
     ],
   });
 
   // 3. Create new APIFeatures object and pass in query
   // we want to display all notifications where user_to is the user and where user_from is not blocked or is blocking user_from
   // we only want to display notifications of type 'Post' if user is following user_from
+  // const notificationsPaginate = new APIFeatures(
+  //   Notification.find({
+  //     $or: [
+  //       {
+  //         $and: [
+  //           { user_to: { $eq: req.params.id } },
+  //           { user_from: { $nin: self.block_to } },
+  //           { user_from: { $nin: self.block_from } },
+  //         ],
+  //         $and: [
+  //           { user_to: { $eq: req.params.id } },
+  //           { user_from: { $nin: self.block_to } },
+  //           { user_from: { $nin: self.block_from } },
+  //           { user_from: { $in: self.following } },
+  //           { type: { $eq: 'Post' } },
+  //         ],
+  //         $and: [
+  //           { user_to: { $eq: req.params.id } },
+  //           { user_from: { $nin: self.block_to } },
+  //           { user_from: { $nin: self.block_from } },
+  //           { type: { $eq: 'Comment' } },
+  //         ],
+  //         $and: [
+  //           { user_to: { $eq: req.params.id } },
+  //           { user_from: { $nin: self.block_to } },
+  //           { user_from: { $nin: self.block_from } },
+  //           { type: { $eq: 'Like' } },
+  //         ],
+  //       },
+  //     ],
+  //   }),
+  //   req.query
+  // )
+  //   .sort()
+  //   .paginate();
   const notificationsPaginate = new APIFeatures(
     Notification.find({
-      $or: [
-        {
-          $and: [
-            { user_to: { $eq: req.params.id } },
-            { user_from: { $nin: self.block_to } },
-            { user_from: { $nin: self.block_from } },
-          ],
-          $and: [
-            { user_to: { $eq: req.params.id } },
-            { user_from: { $nin: self.block_to } },
-            { user_from: { $nin: self.block_from } },
-            { user_from: { $in: self.following } },
-            { type: { $eq: 'Post' } },
-          ],
-          $and: [
-            { user_to: { $eq: req.params.id } },
-            { user_from: { $nin: self.block_to } },
-            { user_from: { $nin: self.block_from } },
-            { type: { $eq: 'Like' } },
-          ],
-        },
+      $and: [
+        { user_to: { $eq: req.params.id } },
+        { user_from: { $nin: self.block_to } },
+        { user_from: { $nin: self.block_from } },
       ],
     }),
     req.query
@@ -140,7 +171,8 @@ exports.getNotificationsByUserId = catchAsync(async (req, res) => {
  * @function addPostNotification
  * @description Create a notification for followers of post creator
  **/
-exports.addPostNotification = catchAsync(async (req) => {
+exports.addPostNotification = catchAsync(async (req, res, next) => {
+  console.log('1');
   // 1. Retrieve self user object
   const self = await User.findById(req.user.id);
   // 2. Retrieve all users that are following post creator
@@ -226,8 +258,6 @@ exports.addCommentNotification = catchAsync(async (req, res) => {
       message: self.fullName + ' has commented on your post',
       link: `/post/${req.body.doc.id}`,
     });
-
-    console.log(doc);
   }
 });
 
