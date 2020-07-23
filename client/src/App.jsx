@@ -42,11 +42,11 @@ const CategoryItem = lazy(() => import('./pages/admin/category-item'));
 
 const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
   // retrieve notifications when application is loaded so we can display notification count on page load
-  useEffect(() => {
-    if (isAuthenticated) {
-      getNotifications(1);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     getNotifications(1);
+  //   }
+  // }, []);
 
   return (
     <div className="App">
