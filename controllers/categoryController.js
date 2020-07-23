@@ -57,7 +57,7 @@ exports.getAncestorsAndParent = catchAsync(async (req, res, next) => {
  * @middleware  incrementPostCount
  * @description Increment the post count for category
  **/
-exports.incrementPostCount = catchAsync(async (req, res, next) => {
+exports.incrementPostCount = catchAsync(async (req, next) => {
   // 1. Find category with given ID and update
   await Category.findByIdAndUpdate(req.body.category, {
     $inc: { num_posts: 1 },
@@ -70,7 +70,7 @@ exports.incrementPostCount = catchAsync(async (req, res, next) => {
  * @middleware  decrementPostCount
  * @description Decrement the post count for category
  **/
-exports.decrementPostCount = catchAsync(async (req, res, next) => {
+exports.decrementPostCount = catchAsync(async (req, next) => {
   // 1. Find category with given ID and update
   await Category.findByIdAndUpdate(req.body.category, {
     $inc: { num_posts: -1 },
