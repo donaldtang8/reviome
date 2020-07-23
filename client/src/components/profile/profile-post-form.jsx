@@ -42,10 +42,10 @@ const ProfilePostForm = ({ createCommunityPost, history }) => {
 
   const handlePopup = (e) => {
     const popup = document.querySelector('#popupPost');
-    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '0';
     popup.style.visibility = 'hidden';
     setVisible(false);
+    // const popupContent = document.querySelector('#popupPostContent');
     // popupContent.opacity = "0";
     // popupContent.transform = "translate(0, 0) scale(0)";
   };
@@ -83,15 +83,21 @@ const ProfilePostForm = ({ createCommunityPost, history }) => {
               onChange={handleChange}
               required
             />
+            <label className="form__label" htmlFor="title">
+              Title
+            </label>
             <input
               className="form__input"
               type="text"
               name="text"
-              placeholder="Description"
+              placeholder="Text"
               value={text}
               onChange={handleChange}
               required
             />
+            <label className="form__label" htmlFor="text">
+              Text
+            </label>
             <input className="input__submit" type="submit" value="Post" />
           </form>
         </div>

@@ -5,7 +5,12 @@ import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 
-const middlewares = [thunk];
+let middlewares;
+if (process.env.NODE_ENV === 'production') {
+  middlewares = [];
+} else {
+  middlewares = [thunk];
+}
 
 export const store = createStore(
   rootReducer,

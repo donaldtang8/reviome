@@ -17,7 +17,11 @@ const ExplorePost = ({ post, auth: { user }, history }) => {
     <div className="post-item__container">
       <div className="post-item__header">
         <Link to={`/profile/${post.user.uName}`}>
-          <img className="post-item__header--img" src={post.user.photo} />
+          <img
+            className="post-item__header--img"
+            src={post.user.photo}
+            alt={post.user.fullName}
+          />
         </Link>
         <div className="post-item__header--info">
           <Link to={`/profile/${post.user.uName}`}>
@@ -28,7 +32,7 @@ const ExplorePost = ({ post, auth: { user }, history }) => {
         <PostDropdown post={post} />
       </div>
       <div className="post-item__body">
-        <blockquote className="embedly-card" data-card-via={post.link}>
+        <blockquote className="embedly-card" data-card-controls="0">
           <h4>
             <a href={post.link}>{post.title.length > 0 && post.title}</a>
           </h4>

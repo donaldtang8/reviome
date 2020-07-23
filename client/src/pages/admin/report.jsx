@@ -25,7 +25,7 @@ const Reports = ({
 }) => {
   useEffect(() => {
     getReportById(match.params.id);
-  }, []);
+  }, [getReportById, match.params.id]);
 
   const [timeData, setTimeData] = useState({
     days: 0,
@@ -40,7 +40,7 @@ const Reports = ({
 
   const { days, hours } = timeData;
 
-  const { action, statusMessage } = reportData;
+  const { statusMessage } = reportData;
 
   const handleTimeChange = (e) => {
     setTimeData({ ...timeData, [e.target.name]: e.target.value });
@@ -119,11 +119,19 @@ const Reports = ({
               <td>
                 {report.link &&
                   (report.link === 'user' ? (
-                    <Link to={report.link} target={'_blank'}>
+                    <Link
+                      to={report.link}
+                      target={'_blank'}
+                      rel="noopener noreferrer"
+                    >
                       Open
                     </Link>
                   ) : (
-                    <a href={report.link} target="_blank">
+                    <a
+                      href={report.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Open
                     </a>
                   ))}

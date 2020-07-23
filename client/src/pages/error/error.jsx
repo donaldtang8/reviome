@@ -5,7 +5,7 @@ import image from './../../assets/img/error/oCkEbrA.png';
 const Error = () => {
   return (
     <div className="error__container">
-      <img className="error__container--image" src={image} />
+      <img className="error__container--image" src={image} alt="Error" />
       <div className="error__container--text">
         <div className="error__container--title">404</div>
         <div className="font-large bold">This page got lost in the wind.</div>

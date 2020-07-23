@@ -10,7 +10,7 @@ const CropBox = ({ classes, shape, image, type, callback }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImage, setCroppedImage] = useState(null);
+  // const [croppedImage, setCroppedImage] = useState(null);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -18,16 +18,12 @@ const CropBox = ({ classes, shape, image, type, callback }) => {
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(
-        image,
-        croppedAreaPixels,
-        callback
-      );
-      setCroppedImage(croppedImage);
+      await getCroppedImg(image, croppedAreaPixels, callback);
+      // setCroppedImage(croppedImage);
     } catch (e) {
       console.error(e);
     }
-  }, [croppedAreaPixels]);
+  }, [croppedAreaPixels, image, callback]);
 
   const cancelCrop = () => {
     callback(null, null);

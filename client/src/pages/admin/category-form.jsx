@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import {
   getAllCategories,
   createCategory,
 } from './../../redux/actions/categories';
 import { setAlert } from './../../redux/actions/alert';
-
-import Spinner from './../../components/spinner/spinner';
 
 import CropBox from './../../components/crop-image/index';
 
@@ -20,7 +17,7 @@ const CategoryForm = ({
 }) => {
   useEffect(() => {
     getAllCategories();
-  }, [match.url, match.params.category]);
+  }, [getAllCategories]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -46,7 +43,7 @@ const CategoryForm = ({
       let img = document.getElementById('form__image');
       img.src = formData.photoPreview;
     }
-  }, [imageModified]);
+  }, [imageModified, formData.photoPreview]);
 
   // callback function passed to crop box object that will return the cropped image in a blob object
   const imageCallback = (blobUrl, blobObj) => {
@@ -191,12 +188,11 @@ const CategoryForm = ({
 
         {(photo || imageData) && (
           <div className="categories__manage--img">
-            <img src={photoPreview} id="form__image" />
+            <img src={photoPreview} id="form__image" alt="Upload" />
           </div>
         )}
         <input
           className="form__input"
-          className="form__container--file"
           type="file"
           accept="image/*"
           name="photo"

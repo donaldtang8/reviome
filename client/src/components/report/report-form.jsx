@@ -57,16 +57,16 @@ const ReportForm = ({
   const handlePopup = (e) => {
     if (open) {
       const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReport');
       popup.style.opacity = '1';
       popup.style.visibility = 'visible';
+      // const popupContent = document.querySelector('#popupReport');
       // popupContent.opacity = "1";
       // popupContent.transform = "translate(-50%, -50%) scale(1)";
     } else {
       const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReport');
       popup.style.opacity = '0';
       popup.style.visibility = 'hidden';
+      // const popupContent = document.querySelector('#popupReport');
       // popupContent.opacity = "1";
       // popupContent.transform = "translate(-50%, -50%) scale(1)";
       handleClose();
@@ -85,7 +85,7 @@ const ReportForm = ({
     message: '',
   });
 
-  const { user_to, item_id, item_type, report_type, message } = formData;
+  const { message } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

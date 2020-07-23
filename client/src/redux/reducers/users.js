@@ -6,8 +6,6 @@ import {
   GET_USER,
   FOLLOW_USER,
   UNFOLLOW_USER,
-  BLOCK_USER,
-  UNBLOCK_USER,
   USER_ERROR,
 } from './../actions/types';
 

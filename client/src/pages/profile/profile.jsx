@@ -18,7 +18,7 @@ const Profile = ({
 }) => {
   useEffect(() => {
     resetUsersState();
-  }, []);
+  }, [resetUsersState]);
 
   useEffect(() => {
     getUserByUsername(match.params.user);

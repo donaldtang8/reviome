@@ -15,7 +15,7 @@ const ExploreOverview = ({
 }) => {
   useEffect(() => {
     getAllCategories();
-  }, [match.url, match.params.category]);
+  }, [getAllCategories]);
 
   return (
     <div className="explore__container">

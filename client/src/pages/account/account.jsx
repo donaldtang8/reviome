@@ -62,7 +62,7 @@ const Account = ({
       let img = document.getElementById('form__image');
       img.src = formData.photoPreview;
     }
-  }, [imageModified]);
+  }, [imageModified, formData.photoPreview]);
 
   // const readFile = async (file) => {
   //   let reader = new FileReader();
@@ -218,7 +218,7 @@ const Account = ({
           Username
         </label>
         <div className="account__container--img">
-          <img id="form__image" src={user.photo} />
+          <img id="form__image" src={user.photo} alt={user.fullName} />
         </div>
         <input
           className="form__container--file"

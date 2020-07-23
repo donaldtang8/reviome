@@ -16,7 +16,7 @@ const Register = ({
     if (isAuthenticated) {
       history.push('/');
     }
-  }, []);
+  }, [isAuthenticated, history]);
 
   const [formData, setFormData] = useState({
     firstName: '',

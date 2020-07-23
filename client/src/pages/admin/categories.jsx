@@ -1,19 +1,14 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { getAllCategories } from './../../redux/actions/categories';
 
-const Categories = ({
-  getAllCategories,
-  categories: { categories },
-  match,
-  history,
-}) => {
+const Categories = ({ getAllCategories, categories: { categories } }) => {
   useEffect(() => {
     getAllCategories();
-  }, [match.url, match.params.category]);
+  }, [getAllCategories]);
 
   return (
     <div className="large__container">

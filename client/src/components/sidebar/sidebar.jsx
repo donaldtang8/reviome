@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 const Sidebar = ({ auth }) => {
   const [nav, setNav] = useState('feed');
 
-  const handleClick = (e, item) => {
-    e.preventDefault();
-    setNav(item);
-  };
+  // const handleClick = (e, item) => {
+  //   e.preventDefault();
+  //   setNav(item);
+  // };
 
   return (
     <div className="sidebar__container">

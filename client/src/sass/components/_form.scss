@@ -31,3 +31,11 @@
     margin-bottom: 0.5rem;
   }
 }
+
+@include respond(small-phone) {
+  .form {
+    &__container {
+      padding: 0;
+    }
+  }
+}

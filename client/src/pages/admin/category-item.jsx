@@ -22,7 +22,7 @@ const CategoryItem = ({
 }) => {
   useEffect(() => {
     getCategoryById(match.params.id);
-  }, []);
+  }, [getCategoryById, match.params.id]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -61,7 +61,7 @@ const CategoryItem = ({
       let img = document.getElementById('form__image');
       img.src = formData.photoPreview;
     }
-  }, [imageModified]);
+  }, [imageModified, formData.photoPreview]);
 
   // callback function passed to crop box object that will return the cropped image in a blob object
   const imageCallback = (blobUrl, blobObj) => {
@@ -200,7 +200,7 @@ const CategoryItem = ({
         </select>
         {(category.photo || imageData) && (
           <div className="categories__manage--img">
-            <img src={category.photo} id="form__image" />
+            <img src={category.photo} id="form__image" alt="Upload" />
           </div>
         )}
         <input

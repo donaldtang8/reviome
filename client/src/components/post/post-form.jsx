@@ -15,7 +15,7 @@ const PostForm = ({
 }) => {
   useEffect(() => {
     getAllCategories();
-  }, []);
+  }, [getAllCategories]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -56,10 +56,10 @@ const PostForm = ({
 
   const handlePopup = (e) => {
     const popup = document.querySelector('#popupPost');
-    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '0';
     popup.style.visibility = 'hidden';
     setVisible(false);
+    // const popupContent = document.querySelector('#popupPostContent');
     // popupContent.opacity = "0";
     // popupContent.transform = "translate(0, 0) scale(0)";
   };

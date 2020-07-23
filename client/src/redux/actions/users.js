@@ -12,7 +12,6 @@ import {
   BLOCK_USER,
   UNBLOCK_USER,
   LOGOUT,
-  AUTH_ERROR,
   USER_ERROR,
 } from './types';
 

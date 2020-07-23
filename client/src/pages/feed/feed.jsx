@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -18,8 +18,6 @@ import PostItem from '../../components/post/post-item';
 import Spinner from '../../components/spinner/spinner';
 import ReportForm from './../../components/report/report-form';
 
-import debounce from 'lodash.debounce';
-
 const Feed = ({
   getFeed,
   getSavedPosts,
@@ -30,8 +28,7 @@ const Feed = ({
   pageType,
   userId,
   auth: { user },
-  posts: { posts, loading, page, nextPage, errors },
-  match,
+  posts: { posts, loading, page, nextPage },
 }) => {
   //  if posts state has been reset, we can then retrieve posts for feed
   const [stateReset, setStateReset] = useState(false);
@@ -45,7 +42,7 @@ const Feed = ({
   useEffect(() => {
     resetPosts();
     setStateReset(true);
-  }, []);
+  }, [resetPosts]);
 
   // we only want useEffect to fire when nav link for feed has been clicked
   useEffect(() => {
@@ -62,7 +59,14 @@ const Feed = ({
         getCommunityPosts(page, userId);
       }
     }
-  }, [stateReset]);
+  }, [
+    stateReset,
+    getFeed,
+    getSavedPosts,
+    getPostsByUser,
+    getSavedPostsByUser,
+    getCommunityPosts,
+  ]);
 
   // Callback to toggle report open property
   const reportOpenCallback = (open) => {
@@ -81,9 +85,9 @@ const Feed = ({
 
   const handlePopup = (e) => {
     const popup = document.querySelector('#popupPost');
-    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '1';
     popup.style.visibility = 'visible';
+    // const popupContent = document.querySelector('#popupPostContent');
     // popupContent.opacity = "1";
     // popupContent.transform = "translate(-50%, -50%) scale(1)";
   };
@@ -128,15 +132,27 @@ const Feed = ({
         <div className="center padding-small">No posts here!</div>
       ) : (
         <div className="posts__container">
-          {posts.map((post) => (
-            <PostItem
-              key={post._id}
-              post={post}
-              reportOpenCallback={reportOpenCallback}
-              reportItemCallback={reportItemCallback}
-              reportItemTypeCallback={reportItemTypeCallback}
-            />
-          ))}
+          {posts.map((post) =>
+            pageType === 'community' ? (
+              <PostItem
+                key={post._id}
+                type="Text"
+                post={post}
+                reportOpenCallback={reportOpenCallback}
+                reportItemCallback={reportItemCallback}
+                reportItemTypeCallback={reportItemTypeCallback}
+              />
+            ) : (
+              <PostItem
+                key={post._id}
+                type="Link"
+                post={post}
+                reportOpenCallback={reportOpenCallback}
+                reportItemCallback={reportItemCallback}
+                reportItemTypeCallback={reportItemTypeCallback}
+              />
+            )
+          )}
           {nextPage &&
             (page > 1 && loading ? (
               <div className="btn__load-more">Loading...</div>

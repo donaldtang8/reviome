@@ -25,13 +25,13 @@ const ProfileBody = ({
       resetUsers();
       getUserFollowingList(user._id);
     }
-  }, [tab]);
+  }, [tab, getUserFollowingList, resetUsers, user._id]);
 
   const handlePopup = (e) => {
     const popup = document.querySelector('#popupPost');
-    const popupContent = document.querySelector('#popupPostContent');
     popup.style.opacity = '1';
     popup.style.visibility = 'visible';
+    // const popupContent = document.querySelector('#popupPostContent');
     // popupContent.opacity = "1";
     // popupContent.transform = "translate(-50%, -50%) scale(1)";
   };

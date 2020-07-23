@@ -13,7 +13,11 @@ const UserItem = ({ resetUsersState, user }) => {
       className="user-item__container"
       onClick={() => resetUsersState()}
     >
-      <img className="user-item__container--pic" src={user.photo} />
+      <img
+        className="user-item__container--pic"
+        src={user.photo}
+        alt={user.fullName}
+      />
       <div className="user-item__container--name">{user.fullName}</div>
     </Link>
   );

@@ -12,7 +12,7 @@ const Login = ({ auth: { isAuthenticated, loading }, login, history }) => {
     if (isAuthenticated) {
       history.push('/');
     }
-  }, []);
+  }, [isAuthenticated, history]);
 
   const [formData, setFormData] = useState({
     email: '',

@@ -8,7 +8,6 @@ import {
   DELETE_REPORT,
   INCREMENT_REPORTS_PAGE,
   RESET_REPORTS_PAGE,
-  SET_REPORT_LIMIT,
   REPORT_ERROR,
 } from './../actions/types';
 

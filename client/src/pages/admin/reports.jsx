@@ -12,7 +12,7 @@ import Spinner from './../../components/spinner/spinner';
 const Reports = ({ getReports, reports: { reports, loading } }) => {
   useEffect(() => {
     getReports();
-  }, []);
+  }, [getReports]);
 
   return loading ? (
     <Spinner />

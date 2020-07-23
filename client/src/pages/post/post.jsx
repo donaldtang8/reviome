@@ -15,7 +15,7 @@ import sprite from '../../assets/sprite.svg';
 const Post = ({ getPostById, posts: { post, loading }, match, history }) => {
   useEffect(() => {
     getPostById(match.params.id);
-  }, [getPostById]);
+  }, [getPostById, match.params.id]);
 
   // reportOpen will toggle report form
   const [reportOpen, setReportOpen] = useState(false);
@@ -48,6 +48,7 @@ const Post = ({ getPostById, posts: { post, loading }, match, history }) => {
           <PostItem
             key={post._id}
             post={post}
+            type="Link"
             reportOpenCallback={reportOpenCallback}
             reportItemCallback={reportItemCallback}
           />

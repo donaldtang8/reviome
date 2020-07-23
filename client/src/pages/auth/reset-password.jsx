@@ -18,7 +18,7 @@ const ResetPassword = ({
     if (isAuthenticated) {
       history.push('/');
     }
-  }, []);
+  }, [isAuthenticated, history]);
 
   const [formData, setFormData] = useState({
     password: '',

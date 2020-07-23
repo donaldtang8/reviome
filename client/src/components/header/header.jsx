@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -35,7 +35,11 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
             <nav className="nav">
               <div className="nav__item">
                 <Link to={`/profile/${user.uName}`}>
-                  <img className="nav__item--img" src={user.photo} />
+                  <img
+                    className="nav__item--img"
+                    src={user.photo}
+                    alt={user.fullName}
+                  />
                 </Link>
               </div>
               <div className="nav__item">

@@ -32,6 +32,7 @@ class ErrorBoundary extends Component {
           <img
             className="error-boundary__image"
             src="https://i.imgur.com/Q2BAOd2.png"
+            alt="Error"
           />
           <div className="error-boundary__text">Something went wrong</div>
         </div>

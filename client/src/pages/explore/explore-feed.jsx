@@ -42,7 +42,7 @@ const ExploreFeed = ({
     getCategoryBySlug(url.split('/explore/')[1]);
     toggleGenreIsSet(true);
     resetPosts();
-  }, []);
+  }, [setGenre]);
 
   // if genre has been set, send api call to retrieve posts
   useEffect(() => {

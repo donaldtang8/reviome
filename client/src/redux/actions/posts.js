@@ -468,6 +468,7 @@ export const createPost = (formData) => async (dispatch) => {
   try {
     // make api call
     const res = await axios.post('/api/posts', formData, config);
+    console.log(res.data);
     // dispatch action and update posts
     dispatch({
       type: CREATE_POST,

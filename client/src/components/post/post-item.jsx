@@ -24,8 +24,9 @@ const PostItem = ({
   unlikePostById,
   savePostById,
   unsavePostById,
-  post,
   auth: { user },
+  post,
+  type,
   reportOpenCallback,
   reportItemCallback,
   reportItemTypeCallback,
@@ -36,7 +37,11 @@ const PostItem = ({
     <div className="post-item__container">
       <div className="post-item__header">
         <Link to={`/profile/${post.user.uName}`}>
-          <img className="post-item__header--img" src={post.user.photo} />
+          <img
+            className="post-item__header--img"
+            src={post.user.photo}
+            alt={post.user.fullName}
+          />
         </Link>
         <div className="post-item__header--info">
           {user._id === post.user._id ? (
@@ -56,7 +61,7 @@ const PostItem = ({
               <Moment fromNow>{post.createdAt}</Moment>
             </Link>
           ) : user.categories_following.some(
-              (category) => category == post.category._id
+              (category) => category === post.category._id
             ) ? (
             <Fragment>
               <div>
@@ -90,14 +95,23 @@ const PostItem = ({
         />
       </div>
       <div className="post-item__body">
-        {/* <div className="post-item__body--title">{post.title}</div>
-        <div className="post-item__body--desc">{post.text}</div> */}
-        <blockquote className="embedly-card">
-          <h4>
-            <a href={post.link}>{post.title.length > 0 && post.title}</a>
-          </h4>
-          <p>{post.text && post.text}</p>
-        </blockquote>
+        {type === 'Text' ? (
+          <Fragment>
+            <div className="post-item__body--title">{post.title}</div>
+            <div className="post-item__body--desc">{post.text}</div>
+          </Fragment>
+        ) : (
+          <blockquote
+            className="embedly-card"
+            data-card-controls="0"
+            data-card-width="100%"
+          >
+            <h4>
+              <a href={post.link}>{post.title.length > 0 && post.title}</a>
+            </h4>
+            <p>{post.text && post.text}</p>
+          </blockquote>
+        )}
       </div>
       <div className="post-item__actions">
         {post.likes.some((userLiked) => userLiked._id === user._id) ? (
@@ -202,6 +216,7 @@ PostItem.propTypes = {
   savePostById: PropTypes.func.isRequired,
   unsavePostById: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
   reportOpenCallback: PropTypes.func,
   reportItemCallback: PropTypes.func,
   reportItemTypeCallback: PropTypes.func,

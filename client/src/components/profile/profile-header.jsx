@@ -70,16 +70,16 @@ const ProfileHeader = ({
   const handleReportPopup = () => {
     if (reportOpen) {
       const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReport');
       popup.style.opacity = '1';
       popup.style.visibility = 'visible';
+      // const popupContent = document.querySelector('#popupReport');
       // popupContent.opacity = "1";
       // popupContent.transform = "translate(-50%, -50%) scale(1)";
     } else if (!reportOpen) {
       const popup = document.querySelector('#popupReport');
-      const popupContent = document.querySelector('#popupReportContent');
       popup.style.opacity = '0';
       popup.style.visibility = 'hidden';
+      // const popupContent = document.querySelector('#popupReportContent');
       // popupContent.opacity = "0";
       // popupContent.transform = "translate(0, 0) scale(0)";
     }
@@ -112,6 +112,7 @@ const ProfileHeader = ({
                   <a
                     href={user.links.youtube}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="btn__icon"
                   >
                     <svg className="btn__icon--svg">
@@ -123,6 +124,7 @@ const ProfileHeader = ({
                   <a
                     href={user.links.instagram}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="btn__icon"
                   >
                     <svg className="btn__icon--svg">
@@ -134,6 +136,7 @@ const ProfileHeader = ({
                   <a
                     href={user.links.soundcloud}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="btn__icon"
                   >
                     <svg className="btn__icon--svg">
@@ -145,6 +148,7 @@ const ProfileHeader = ({
                   <a
                     href={user.links.spotify}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="btn__icon"
                   >
                     <svg className="btn__icon--svg">
@@ -156,6 +160,7 @@ const ProfileHeader = ({
                   <a
                     href={user.links.twitch}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="btn__icon"
                   >
                     <svg className="btn__icon--svg">

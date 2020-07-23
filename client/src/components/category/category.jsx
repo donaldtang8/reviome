@@ -21,7 +21,7 @@ const Category = ({
   useEffect(() => {
     getCategoryBySlug(match.params.category);
     getSubcategoriesBySlug(match.params.category);
-  }, []);
+  }, [getCategoryBySlug, getSubcategoriesBySlug, match.params.category]);
 
   return (
     <div className="explore__container">
