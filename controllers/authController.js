@@ -142,8 +142,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     pass: req.body.password,
     passConfirm: req.body.passwordConfirm,
   });
-  const URL = `${req.protocol}://${req.headers['x-forwarded-host']}/account`;
-  await new Email(newUser, URL).sendWelcome();
+  // const URL = `${req.protocol}://${req.headers['x-forwarded-host']}/account`;
+  // await new Email(newUser, URL).sendWelcome();
   createSendToken(newUser, 201, res);
 });
 
