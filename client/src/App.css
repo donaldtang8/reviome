@@ -1611,7 +1611,8 @@ td {
   /* JUMBOTRON STYLES */
   /* STORY STYLES */
   /* FEATURES STYLES */
-  /* BUTTON */ }
+  /* BUTTON STYLES */
+  /* FOOTER STYLES */ }
   .splash__full {
     height: 100vh !important; }
   .splash__container {
@@ -1711,7 +1712,7 @@ td {
           grid-column: 1 / -1;
           grid-row: 3 / 4; } }
     .splash__story--text {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-style: italic;
       margin-bottom: 4rem; }
     @media only screen and (max-width: 56.25em) {
@@ -1780,6 +1781,45 @@ td {
         margin-top: 10rem; } }
   .splash__btn:hover {
     animation: pulsate 0.8s infinite; }
+  .splash__footer {
+    background-color: #1a1c20;
+    font-size: 1rem;
+    color: var(--color-white);
+    padding: 0 5rem;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    .splash__footer--menu {
+      width: 85%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      grid-gap: 1.5rem;
+      text-align: center; }
+      .splash__footer--menu-item {
+        display: grid;
+        grid-template-rows: min-content min-content;
+        justify-content: center;
+        justify-items: center;
+        padding: 2rem;
+        text-align: center;
+        font-family: "Josefin Sans", sans-serif;
+        color: var(--color-white); }
+    .splash__footer--title {
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      font-family: "Josefin Sans", sans-serif;
+      font-weight: 700;
+      margin-bottom: 1rem; }
+    .splash__footer--text {
+      text-align: left; }
+    .splash__footer--description {
+      padding: 0 3rem; }
+    .splash__footer--copyright {
+      margin-top: 3rem;
+      text-align: center;
+      font-family: "Josefin Sans", sans-serif; }
 
 @media only screen and (max-width: 31.25rem) {
   .splash__navbar {

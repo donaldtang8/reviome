@@ -4,6 +4,7 @@ import SplashHeader from './splash-header';
 import SplashJumbotron from './splash-jumbotron';
 import SplashStory from './splash-story';
 import SplashFeatures from './splash-features';
+import SplashFooter from './splash-footer';
 
 const Splash = () => {
   return (
@@ -14,6 +15,7 @@ const Splash = () => {
       </div>
       <SplashStory />
       <SplashFeatures />
+      <SplashFooter />
     </div>
   );
 };

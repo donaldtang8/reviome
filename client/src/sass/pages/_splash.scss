@@ -145,7 +145,7 @@
     }
 
     &--text {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-style: italic;
       margin-bottom: 4rem;
     }
@@ -220,7 +220,7 @@
     }
   }
 
-  /* BUTTON */
+  /* BUTTON STYLES */
   &__btn {
     color: var(--color-white);
     font-family: $font-display;
@@ -245,6 +245,60 @@
 
   &__btn:hover {
     animation: pulsate 0.8s infinite;
+  }
+
+  /* FOOTER STYLES */
+  &__footer {
+    background-color: #1a1c20;
+    font-size: 1rem;
+    color: var(--color-white);
+    padding: 0 5rem;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--menu {
+      width: 85%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      grid-gap: 1.5rem;
+      text-align: center;
+
+      &-item {
+        display: grid;
+        grid-template-rows: min-content min-content;
+        justify-content: center;
+        justify-items: center;
+        padding: 2rem;
+        text-align: center;
+        font-family: $font-display;
+        color: var(--color-white);
+      }
+    }
+
+    &--title {
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      font-family: $font-display;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    &--text {
+      text-align: left;
+    }
+
+    &--description {
+      padding: 0 3rem;
+    }
+
+    &--copyright {
+      margin-top: 3rem;
+      text-align: center;
+      font-family: $font-display;
+    }
   }
 }
 
