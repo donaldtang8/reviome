@@ -10,9 +10,6 @@ import NotificationDropdown from './../notification/notification-dropdown';
 import { logout } from './../../redux/actions/auth';
 
 const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
-  useEffect(() => {
-    console.log(window.location.pathname);
-  }, []);
   // check toggles the checkbox for mobile nav
   // 1. True - Mobile nav is opened
   // 2. False - Mobile nav is closed

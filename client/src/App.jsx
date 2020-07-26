@@ -52,11 +52,22 @@ const App = ({
   auth: { isAuthenticated, user },
   history,
 }) => {
+  // Redirects  non-authenticated users to root URL if user attempts to visit authenticated page
   useEffect(() => {
     if (!isAuthenticated) {
-      history.push('/');
+      if (
+        window.location.pathname !== '/login' &&
+        window.location.pathname !== '/register' &&
+        window.location.pathname !== '/forgot-password' &&
+        !window.location.pathname.startsWith('/reset-password')
+      ) {
+        history.push('/');
+      } else {
+        history.push(window.location.pathname);
+      }
     }
-  }, []);
+  }, [window.location.pathname]);
+
   // retrieve notifications when application is loaded so we can display notification count on page load
   // useEffect(() => {
   //   if (isAuthenticated) {
@@ -135,7 +146,6 @@ const App = ({
                       path="/reset-password/:token"
                       component={ResetPassword}
                     />
-                    <Route path="/" component={Splash} />
                     <Route component={Error} />
                   </Switch>
                 </ErrorBoundary>
