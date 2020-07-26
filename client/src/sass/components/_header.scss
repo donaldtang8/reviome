@@ -19,7 +19,7 @@
   }
 
   &__logo > a {
-    font-weight: 600;
+    font-weight: 800;
     font-size: 1.5rem;
     color: var(--color-primary);
   }
@@ -30,6 +30,7 @@
   align-items: center;
 
   &__item {
+    font-weight: 700;
     position: relative;
     // padding: 0.75rem;
     border-radius: 0.8rem;
