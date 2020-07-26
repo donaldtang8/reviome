@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -10,6 +10,9 @@ import NotificationDropdown from './../notification/notification-dropdown';
 import { logout } from './../../redux/actions/auth';
 
 const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
+  useEffect(() => {
+    console.log(window.location.pathname);
+  }, []);
   // check toggles the checkbox for mobile nav
   // 1. True - Mobile nav is opened
   // 2. False - Mobile nav is closed
@@ -24,7 +27,15 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
   };
 
   return (
-    <header className="header">
+    <header
+      className={
+        !isAuthenticated
+          ? window.location.pathname === '/'
+            ? 'hidden'
+            : 'header'
+          : 'header'
+      }
+    >
       <div className="header__nav">
         <div className="header__logo">
           <Link to="/">REVIO</Link>
@@ -107,7 +118,7 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
           <Fragment>
             <nav className="nav">
               <Link to="/login" className="nav__item">
-                Login
+                LOGIN
               </Link>
               <div className="nav__item">
                 <HeaderDropdown user={user} />

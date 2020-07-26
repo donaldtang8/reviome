@@ -5,6 +5,7 @@ import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Spinner from './../../components/spinner/spinner';
+import Splash from './../../pages/splash/splash';
 
 const AdminRoute = ({
   component: Component,
@@ -12,18 +13,16 @@ const AdminRoute = ({
   ...rest
 }) => {
   return !loading ? (
-    <Route
-      {...rest}
-      render={(props) =>
-        !isAuthenticated ? (
-          <Redirect to="/login" />
-        ) : user.role === 'admin' ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/" />
-        )
-      }
-    />
+    !isAuthenticated ? (
+      <Splash />
+    ) : (
+      <Route
+        {...rest}
+        render={(props) =>
+          user.role === 'admin' ? <Component {...props} /> : <Redirect to="/" />
+        }
+      />
+    )
   ) : (
     <Spinner />
   );

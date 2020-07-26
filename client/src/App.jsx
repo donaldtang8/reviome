@@ -56,7 +56,15 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
           <main className="main__container">
             <Alert />
             {isAuthenticated && <Sidebar />}
-            <div className="content__container">
+            <div
+              className={
+                !isAuthenticated
+                  ? window.location.pathname === '/'
+                    ? 'content__container splash__full'
+                    : 'content__container'
+                  : 'content__container'
+              }
+            >
               <Suspense fallback={<Spinner />}>
                 <ErrorBoundary>
                   <Switch>

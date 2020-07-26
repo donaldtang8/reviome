@@ -5,6 +5,7 @@ import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Spinner from './../../components/spinner/spinner';
+import Splash from './../../pages/splash/splash';
 
 const AuthRoute = ({
   component: Component,
@@ -12,12 +13,11 @@ const AuthRoute = ({
   ...rest
 }) => {
   return !loading ? (
-    <Route
-      {...rest}
-      render={(props) =>
-        !isAuthenticated ? <Redirect to="/login" /> : <Component {...props} />
-      }
-    />
+    !isAuthenticated ? (
+      <Splash />
+    ) : (
+      <Route {...rest} render={(props) => <Component {...props} />} />
+    )
   ) : (
     <Spinner />
   );
