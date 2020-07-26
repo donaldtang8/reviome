@@ -684,6 +684,7 @@ td {
 .btn__action {
   padding: 0.5rem 1rem;
   border-radius: 1.2rem;
+  height: min-content;
   width: min-content;
   white-space: nowrap; }
   .btn__action--active {

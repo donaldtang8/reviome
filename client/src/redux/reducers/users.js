@@ -6,6 +6,8 @@ import {
   GET_USER,
   FOLLOW_USER,
   UNFOLLOW_USER,
+  BLOCK_USER,
+  UNBLOCK_USER,
   USER_ERROR,
 } from './../actions/types';
 
@@ -57,7 +59,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        user: { ...state.user, following: payload.blocking },
+        user: { ...state.user, following: payload },
+      };
+    case BLOCK_USER:
+    case UNBLOCK_USER:
+      return {
+        ...state,
+        loading: false,
+        user: {
+          ...state.user,
+          following: payload.following,
+          block_to: payload.blocking,
+        },
       };
     case USER_ERROR:
       return {

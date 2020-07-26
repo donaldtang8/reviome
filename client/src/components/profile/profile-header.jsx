@@ -99,7 +99,7 @@ const ProfileHeader = ({
         <div className="profile__header--info">
           <div className="profile__header--name">{user.fullName}</div>
           <div>@{user.uName}</div>
-          <div>{user.followers} followers</div>
+          <div>{user.following.length} followers</div>
           {/* <div className="profile__header--followers">
             {user.followers} followers
           </div> */}
