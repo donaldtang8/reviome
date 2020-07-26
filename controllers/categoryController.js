@@ -84,7 +84,10 @@ exports.decrementPostCount = catchAsync(async (req, next) => {
  * @description Finds all categories
  **/
 exports.getAll = catchAsync(async (req, res, next) => {
-  const categories = await Category.find().populate('parent');
+  const categories = await Category.find({
+    name: { $ne: 'community' },
+  }).populate('parent');
+
   res.status(200).json({
     status: 'success',
     results: categories.length,
