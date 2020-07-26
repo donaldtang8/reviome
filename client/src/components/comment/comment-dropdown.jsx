@@ -106,7 +106,7 @@ const CommentDropdown = ({
                       <use xlinkHref={`${sprite}#icon-flag`}></use>
                     </svg>
                   </div>
-                  Report
+                  <div className="dropdown__menu--text">Report</div>
                 </div>
                 <div className="dropdown__menu--item" onClick={handleBlock}>
                   <div className="btn__dropdown">
@@ -114,7 +114,7 @@ const CommentDropdown = ({
                       <use xlinkHref={`${sprite}#icon-block`}></use>
                     </svg>
                   </div>
-                  Block
+                  <div className="dropdown__menu--text">Block</div>
                 </div>
                 <div
                   className="dropdown__menu--item"
@@ -125,7 +125,7 @@ const CommentDropdown = ({
                       <use xlinkHref={`${sprite}#icon-trash`}></use>
                     </svg>
                   </div>
-                  Delete
+                  <div className="dropdown__menu--text">Delete</div>
                 </div>
               </Fragment>
             ) : (
@@ -138,7 +138,7 @@ const CommentDropdown = ({
                     <use xlinkHref={`${sprite}#icon-trash`}></use>
                   </svg>
                 </div>
-                Delete
+                <div className="dropdown__menu--text">Delete</div>
               </div>
             )}
           </Fragment>
@@ -150,7 +150,7 @@ const CommentDropdown = ({
                   <use xlinkHref={`${sprite}#icon-flag`}></use>
                 </svg>
               </div>
-              Report
+              <div className="dropdown__menu--text">Report</div>
             </div>
             <div className="dropdown__menu--item" onClick={handleBlock}>
               <div className="btn__dropdown">
@@ -158,7 +158,7 @@ const CommentDropdown = ({
                   <use xlinkHref={`${sprite}#icon-block`}></use>
                 </svg>
               </div>
-              Block
+              <div className="dropdown__menu--text">Block</div>
             </div>
           </Fragment>
         )}

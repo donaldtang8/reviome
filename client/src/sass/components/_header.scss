@@ -97,6 +97,59 @@
   }
 }
 
+@include respond(small-phone) {
+  .header {
+    &__nav {
+      width: 40%;
+    }
+  }
+}
+
+@include respond(phone) {
+  .header {
+    &__nav {
+      width: 50%;
+    }
+  }
+
+  .nav {
+    &__icon,
+    &__icon::before,
+    &__icon::after {
+      width: 2rem;
+      height: 1px;
+    }
+
+    &__item {
+      &--img {
+        height: 2rem;
+        width: 2rem;
+        margin-right: 0;
+      }
+    }
+
+    &__item:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+@include respond(large-phone) {
+  .header {
+    &__nav {
+      width: 55%;
+    }
+  }
+}
+
+@include respond(tab-port) {
+  .header {
+    &__nav {
+      width: 60%;
+    }
+  }
+}
+
 @include respond(tab-square) {
   .nav {
     &__button {
@@ -183,29 +236,6 @@
     &__checkbox:checked + &__button &__icon.nav__icon::after {
       top: 0;
       transform: rotate(-135deg);
-    }
-  }
-}
-
-@include respond(phone) {
-  .nav {
-    &__icon,
-    &__icon::before,
-    &__icon::after {
-      width: 2rem;
-      height: 1px;
-    }
-
-    &__item {
-      &--img {
-        height: 2rem;
-        width: 2rem;
-        margin-right: 0;
-      }
-    }
-
-    &__item:not(:last-child) {
-      margin-right: 0.5rem;
     }
   }
 }

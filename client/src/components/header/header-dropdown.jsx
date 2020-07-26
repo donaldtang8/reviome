@@ -115,7 +115,7 @@ const HeaderDropdown = ({
                   <use xlinkHref={`${sprite}#icon-user`}></use>
                 </svg>
               </div>
-              Profile
+              <div className="dropdown__menu--text">Profile</div>
             </Link>
             <Link to="/account" className="dropdown__menu--item" ref={itemRef}>
               <div className="btn__dropdown">
@@ -123,7 +123,7 @@ const HeaderDropdown = ({
                   <use xlinkHref={`${sprite}#icon-cog`}></use>
                 </svg>
               </div>
-              Account
+              <div className="dropdown__menu--text">Account</div>
             </Link>
             <div className="dropdown__menu--item">
               <div className="btn__dropdown">
@@ -131,7 +131,7 @@ const HeaderDropdown = ({
                   <use xlinkHref={`${sprite}#icon-moon`}></use>
                 </svg>
               </div>
-              <div>Dark Mode</div>
+              <div className="dropdown__menu--text">Dark Mode</div>
               <div className="toggle-switch__container">
                 <label className="toggle-switch--item" htmlFor="checkbox">
                   <input type="checkbox" id="checkbox" onChange={handleTheme} />
@@ -145,7 +145,7 @@ const HeaderDropdown = ({
                   <use xlinkHref={`${sprite}#icon-exit`}></use>
                 </svg>
               </div>
-              Logout
+              <div className="dropdown__menu--text">Logout</div>
             </div>
           </Fragment>
         ) : (
@@ -156,7 +156,7 @@ const HeaderDropdown = ({
                   <use xlinkHref={`${sprite}#icon-moon`}></use>
                 </svg>
               </div>
-              <div>Dark Mode</div>
+              <div className="dropdown__menu--text">Dark Mode</div>
               <div className="toggle-switch__container">
                 <label className="toggle-switch--item" htmlFor="checkbox">
                   <input type="checkbox" id="checkbox" onChange={handleTheme} />

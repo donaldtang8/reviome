@@ -99,7 +99,7 @@ const PostDropdown = ({
               <use xlinkHref={`${sprite}#icon-share-alternitive`}></use>
             </svg>
           </div>
-          Open
+          <div className="dropdown__menu--text">Open</div>
         </Link>
         {user._id !== post.user._id ? (
           <Fragment>
@@ -109,7 +109,7 @@ const PostDropdown = ({
                   <use xlinkHref={`${sprite}#icon-flag`}></use>
                 </svg>
               </div>
-              Report
+              <div className="dropdown__menu--text">Report</div>
             </div>
             <div className="dropdown__menu--item" onClick={handleBlock}>
               <div className="btn__dropdown">
@@ -117,7 +117,7 @@ const PostDropdown = ({
                   <use xlinkHref={`${sprite}#icon-block`}></use>
                 </svg>
               </div>
-              Block
+              <div className="dropdown__menu--text">Block</div>
             </div>
           </Fragment>
         ) : (
@@ -130,7 +130,7 @@ const PostDropdown = ({
                 <use xlinkHref={`${sprite}#icon-trash`}></use>
               </svg>
             </div>
-            Delete
+            <div className="dropdown__menu--text">Delete</div>
           </div>
         )}
       </div>

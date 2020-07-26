@@ -71,6 +71,12 @@
     &--item:hover {
       background-color: var(--color-dropdown-item-hover);
     }
+
+    &--text {
+      @include respond(small-phone) {
+        display: none;
+      }
+    }
   }
 
   &__menu:focus {

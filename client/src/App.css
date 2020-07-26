@@ -391,6 +391,31 @@ a {
     -ms-user-select: none;
     user-select: none; }
 
+@media only screen and (max-width: 31.25rem) {
+  .header__nav {
+    width: 40%; } }
+
+@media only screen and (max-width: 36.5rem) {
+  .header__nav {
+    width: 50%; }
+  .nav__icon, .nav__icon::before, .nav__icon::after {
+    width: 2rem;
+    height: 1px; }
+  .nav__item--img {
+    height: 2rem;
+    width: 2rem;
+    margin-right: 0; }
+  .nav__item:not(:last-child) {
+    margin-right: 0.5rem; } }
+
+@media only screen and (max-width: 43.75em) {
+  .header__nav {
+    width: 55%; } }
+
+@media only screen and (max-width: 56.25em) {
+  .header__nav {
+    width: 60%; } }
+
 @media only screen and (max-width: 68.75rem) {
   .nav__button {
     display: block;
@@ -441,17 +466,6 @@ a {
   .nav__checkbox:checked + .nav__button .nav__icon.nav__icon::after {
     top: 0;
     transform: rotate(-135deg); } }
-
-@media only screen and (max-width: 36.5rem) {
-  .nav__icon, .nav__icon::before, .nav__icon::after {
-    width: 2rem;
-    height: 1px; }
-  .nav__item--img {
-    height: 2rem;
-    width: 2rem;
-    margin-right: 0; }
-  .nav__item:not(:last-child) {
-    margin-right: 0.5rem; } }
 
 .sidebar__container {
   display: flex;
@@ -843,6 +857,9 @@ td {
       padding: 0.5rem; }
     .dropdown__menu--item:hover {
       background-color: var(--color-dropdown-item-hover); }
+    @media only screen and (max-width: 31.25rem) {
+      .dropdown__menu--text {
+        display: none; } }
   .dropdown__menu:focus {
     outline: none; }
   .dropdown__filter {
