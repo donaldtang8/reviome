@@ -1,5 +1,11 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  Redirect,
+  withRouter,
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -20,6 +26,7 @@ import Header from './components/header/header';
 import Sidebar from './components/sidebar/sidebar';
 
 // Pages
+const Splash = lazy(() => import('./pages/splash/splash'));
 const Login = lazy(() => import('./pages/auth/login'));
 const Register = lazy(() => import('./pages/auth/register'));
 const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
@@ -40,7 +47,16 @@ const Categories = lazy(() => import('./pages/admin/categories'));
 const CategoryForm = lazy(() => import('./pages/admin/category-form'));
 const CategoryItem = lazy(() => import('./pages/admin/category-item'));
 
-const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
+const App = ({
+  getNotifications,
+  auth: { isAuthenticated, user },
+  history,
+}) => {
+  useEffect(() => {
+    if (!isAuthenticated) {
+      history.push('/');
+    }
+  }, []);
   // retrieve notifications when application is loaded so we can display notification count on page load
   // useEffect(() => {
   //   if (isAuthenticated) {
@@ -119,6 +135,7 @@ const App = ({ getNotifications, auth: { isAuthenticated, user } }) => {
                       path="/reset-password/:token"
                       component={ResetPassword}
                     />
+                    <Route path="/" component={Splash} />
                     <Route component={Error} />
                   </Switch>
                 </ErrorBoundary>
@@ -140,4 +157,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getNotifications })(App);
+export default connect(mapStateToProps, { getNotifications })(withRouter(App));

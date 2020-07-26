@@ -113,12 +113,13 @@ export const login = (formData, history) => async (dispatch) => {
  * @action      Logout
  * @description Log out existing user
  **/
-export const logout = () => async (dispatch) => {
+export const logout = (history) => async (dispatch) => {
   try {
     await axios.get('/api/users/logout');
     dispatch({
       type: LOGOUT,
     });
+    history.push('/');
   } catch (err) {
     console.log(err);
   }

@@ -8,7 +8,13 @@ import { logout } from './../../redux/actions/auth';
 
 import sprite from './../../assets/sprite.svg';
 
-const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
+const HeaderDropdown = ({
+  auth: { isAuthenticated },
+  logout,
+  user,
+  match,
+  history,
+}) => {
   const [visible, setVisible] = useState(false);
   const [refs, setRefs] = useState({
     btnRef: React.createRef(),
@@ -73,7 +79,7 @@ const HeaderDropdown = ({ auth: { isAuthenticated }, logout, user, match }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    logout();
+    logout(history);
   };
 
   return (
