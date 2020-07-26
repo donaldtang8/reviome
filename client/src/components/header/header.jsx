@@ -30,9 +30,12 @@ const Header = ({ auth: { isAuthenticated, user }, logout, match }) => {
     <header
       className={
         !isAuthenticated
-          ? window.location.pathname === '/'
-            ? 'hidden'
-            : 'header'
+          ? window.location.pathname === '/login' ||
+            window.location.pathname === '/register' ||
+            window.location.pathname === '/forgot-password' ||
+            window.location.pathname === '/reset-password'
+            ? 'header'
+            : 'hidden'
           : 'header'
       }
     >
