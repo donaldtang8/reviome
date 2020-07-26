@@ -21,6 +21,7 @@
 
   /* HEADER STYLES */
   &__header {
+    @extend %primary;
     background: transparent;
 
     width: 100%;
@@ -83,6 +84,7 @@
 
   /* STORY STYLES */
   &__story {
+    @extend %primary;
     background-color: var(--color-white);
     color: var(--color-black);
     display: grid;

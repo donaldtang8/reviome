@@ -6,6 +6,7 @@
   align-items: center;
 
   &--logo {
+    @extend %primary;
     font-size: 2.5rem;
     text-transform: lowercase;
     font-weight: 600;
