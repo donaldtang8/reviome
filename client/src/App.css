@@ -207,6 +207,10 @@ body {
   font-weight: 400;
   line-height: 1.7; }
 
+input,
+select {
+  font-family: "Nunito", sans-serif; }
+
 a {
   text-decoration: none;
   color: var(--color-text); }
@@ -821,6 +825,7 @@ td {
       pointer-events: auto; }
     .dropdown__menu--item {
       color: var(--color-text) !important;
+      font-weight: 400;
       display: flex;
       align-items: center;
       background: none;
@@ -884,7 +889,12 @@ td {
   width: 8rem;
   background-color: var(--color-category-background);
   border-radius: 0.8rem;
-  margin: 0 auto; }
+  margin: 0 auto;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
   .category__item--title {
     text-align: center; }
 

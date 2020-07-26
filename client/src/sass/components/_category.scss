@@ -43,6 +43,13 @@
     border-radius: 0.8rem;
     margin: 0 auto;
 
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    -ms-user-select: none;
+    user-select: none;
+
     &--title {
       text-align: center;
     }
