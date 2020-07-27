@@ -33,7 +33,7 @@ exports.createOne = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.postId).populate('comments');
 
   // 3. If comment was made from another user, create a notification
-  if (req.user.id !== post.user) {
+  if (req.user.id !== post.user.id) {
     // 3. Retrieve self user object
     const self = await User.findById(req.user.id);
     // 4. Create notification object for post creator
