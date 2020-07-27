@@ -70,7 +70,11 @@ export default function (state = initialState, action) {
     case UNFOLLOW_USER:
       return {
         ...state,
-        user: { ...state.user, following: payload },
+        user: {
+          ...state.user,
+          following: payload.following,
+          followers: payload.followers,
+        },
         loading: false,
       };
     case BLOCK_USER:

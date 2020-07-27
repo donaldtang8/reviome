@@ -59,7 +59,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        user: { ...state.user, following: payload },
+        user: {
+          ...state.user,
+          following: payload.following,
+          followers: payload.followers,
+        },
       };
     case BLOCK_USER:
     case UNBLOCK_USER:

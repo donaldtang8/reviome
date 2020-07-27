@@ -37,19 +37,21 @@
     }
 
     &--info-bar {
-      margin-top: 1rem;
       display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     &--links {
       display: flex;
 
-      .btn__icon {
+      .btn__icon:not(:last-child) {
         margin-right: 1rem;
       }
     }
 
     &--actions {
+      margin-top: 0.8rem;
       width: min-content;
       display: flex;
       justify-content: space-between;

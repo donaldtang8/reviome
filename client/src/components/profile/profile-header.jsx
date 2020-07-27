@@ -99,7 +99,7 @@ const ProfileHeader = ({
         <div className="profile__header--info">
           <div className="profile__header--name">{user.fullName}</div>
           <div>@{user.uName}</div>
-          <div>{user.following.length} followers</div>
+          <div>{user.followers} followers</div>
           {/* <div className="profile__header--followers">
             {user.followers} followers
           </div> */}
@@ -170,69 +170,66 @@ const ProfileHeader = ({
                 )}
               </Fragment>
             )}
-          </div>
-          {auth.user._id !== user._id ? (
-            <div className="profile__header--actions">
-              {/* We do not need to check if user of profile is blocking*/}
-              {auth.user.block_to.some(
-                (userBlocked) => userBlocked === user._id
-              ) ? (
-                <div
-                  className="btn__action btn__action--inactive"
-                  onClick={() => unblockUserById(user._id)}
-                >
-                  Unblock
-                </div>
-              ) : auth.user.following.some(
-                  (userFollowed) => userFollowed._id === user._id
-                ) ? (
-                <Fragment>
-                  <div
-                    className="btn__action btn__action--inactive"
-                    onClick={() => unfollowUserById(user._id)}
-                  >
-                    Unfollow
-                  </div>
-                  <div
-                    className="btn__action btn__action--active"
-                    onClick={handleConfirmOpen}
-                  >
-                    Block
-                  </div>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <div
-                    className="btn__action btn__action--active"
-                    onClick={() => followUserById(user._id)}
-                  >
-                    Follow
-                  </div>
-                  <div
-                    className="btn__action btn__action--active"
-                    // onClick={() => blockUserById(user._id)}
-                    onClick={handleConfirmOpen}
-                  >
-                    Block
-                  </div>
-                </Fragment>
-              )}
-              <div
-                className="btn__action btn__action--active"
-                onClick={() => setReportOpen(true)}
-              >
-                Report
-              </div>
-            </div>
-          ) : (
-            <div className="profile__header--actions">
+            {auth.user._id === user._id && (
               <Link to="/account" className="btn__icon">
                 <svg className="btn__icon--svg">
                   <use xlinkHref={`${sprite}#icon-cog`}></use>
                 </svg>
               </Link>
+            )}
+          </div>
+          <div className="profile__header--actions">
+            {/* We do not need to check if user of profile is blocking*/}
+            {auth.user.block_to.some(
+              (userBlocked) => userBlocked === user._id
+            ) ? (
+              <div
+                className="btn__action btn__action--inactive"
+                onClick={() => unblockUserById(user._id)}
+              >
+                Unblock
+              </div>
+            ) : auth.user.following.some(
+                (userFollowed) => userFollowed._id === user._id
+              ) ? (
+              <Fragment>
+                <div
+                  className="btn__action btn__action--inactive"
+                  onClick={() => unfollowUserById(user._id)}
+                >
+                  Unfollow
+                </div>
+                <div
+                  className="btn__action btn__action--active"
+                  onClick={handleConfirmOpen}
+                >
+                  Block
+                </div>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <div
+                  className="btn__action btn__action--active"
+                  onClick={() => followUserById(user._id)}
+                >
+                  Follow
+                </div>
+                <div
+                  className="btn__action btn__action--active"
+                  // onClick={() => blockUserById(user._id)}
+                  onClick={handleConfirmOpen}
+                >
+                  Block
+                </div>
+              </Fragment>
+            )}
+            <div
+              className="btn__action btn__action--active"
+              onClick={() => setReportOpen(true)}
+            >
+              Report
             </div>
-          )}
+          </div>
         </div>
       </div>
       <ReportForm

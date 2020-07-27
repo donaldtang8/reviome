@@ -239,7 +239,8 @@ exports.followUserById = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      doc: self.following,
+      following: self.following,
+      followers: self.followers,
     },
   });
 });
@@ -273,7 +274,8 @@ exports.unfollowUserById = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      doc: self.following,
+      following: self.following,
+      followers: self.followers,
     },
   });
 });

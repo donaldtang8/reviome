@@ -346,7 +346,10 @@ export const followUserById = (id) => async (dispatch) => {
     const res = await axios.patch(`/api/users/follow/${id}`);
     dispatch({
       type: FOLLOW_USER,
-      payload: res.data.data.doc,
+      payload: {
+        following: res.data.data.following,
+        followers: res.data.data.followers,
+      },
     });
   } catch (err) {
     /* back end server-returned errors */
@@ -386,7 +389,10 @@ export const unfollowUserById = (id) => async (dispatch) => {
     const res = await axios.patch(`/api/users/unfollow/${id}`);
     dispatch({
       type: UNFOLLOW_USER,
-      payload: res.data.data.doc,
+      payload: {
+        following: res.data.data.following,
+        followers: res.data.data.followers,
+      },
     });
   } catch (err) {
     /* back end server-returned errors */

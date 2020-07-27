@@ -1547,13 +1547,15 @@ td {
     justify-content: center;
     align-items: center; }
   .profile__header--info-bar {
-    margin-top: 1rem;
-    display: flex; }
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
   .profile__header--links {
     display: flex; }
-    .profile__header--links .btn__icon {
+    .profile__header--links .btn__icon:not(:last-child) {
       margin-right: 1rem; }
   .profile__header--actions {
+    margin-top: 0.8rem;
     width: min-content;
     display: flex;
     justify-content: space-between; }
