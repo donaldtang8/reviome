@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import './App.css';
 
 // Actions to call on application load
-import { getNotifications } from './redux/actions/notifications';
+import { getNotificationCount } from './redux/actions/notifications';
 
 // Utility components
 import Spinner from './components/spinner/spinner';
@@ -26,7 +26,6 @@ import Header from './components/header/header';
 import Sidebar from './components/sidebar/sidebar';
 
 // Pages
-const Splash = lazy(() => import('./pages/splash/splash'));
 const Login = lazy(() => import('./pages/auth/login'));
 const Register = lazy(() => import('./pages/auth/register'));
 const ForgotPassword = lazy(() => import('./pages/auth/forgot-password'));
@@ -48,10 +47,15 @@ const CategoryForm = lazy(() => import('./pages/admin/category-form'));
 const CategoryItem = lazy(() => import('./pages/admin/category-item'));
 
 const App = ({
-  getNotifications,
+  getNotificationCount,
   auth: { isAuthenticated, user },
   history,
 }) => {
+  // THEME - Automatically set to 'dark' by default
+  useEffect(() => {
+    localStorage.setItem('theme', 'dark');
+  }, []);
+
   // Redirects  non-authenticated users to root URL if user attempts to visit authenticated page
   useEffect(() => {
     if (!isAuthenticated) {
@@ -69,11 +73,11 @@ const App = ({
   }, [window.location.pathname]);
 
   // retrieve notifications when application is loaded so we can display notification count on page load
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     getNotifications(1);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isAuthenticated) {
+      getNotificationCount(user._id);
+    }
+  }, []);
 
   return (
     <div className="App">
@@ -159,7 +163,7 @@ const App = ({
 };
 
 App.propTypes = {
-  getNotifications: PropTypes.func.isRequired,
+  getNotificationCount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -167,4 +171,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getNotifications })(withRouter(App));
+export default connect(mapStateToProps, { getNotificationCount })(
+  withRouter(App)
+);

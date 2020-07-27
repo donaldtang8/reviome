@@ -4,6 +4,7 @@ import {
   FETCH_NOTIFICATIONS_END,
   GET_NOTIFICATIONS,
   GET_NOTIFICATION,
+  GET_NOTIFICATION_COUNT,
   UPDATE_NOTIFICATION,
   DELETE_NOTIFICATION,
   INCREMENT_NOTIFICATIONS_PAGE,
@@ -58,6 +59,11 @@ export default function (state = initialState, action) {
         ...state,
         notification: payload,
         loading: false,
+      };
+    case GET_NOTIFICATION_COUNT:
+      return {
+        ...state,
+        count: payload,
       };
     case UPDATE_NOTIFICATION:
       return {

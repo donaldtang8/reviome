@@ -54,6 +54,25 @@ exports.setUserId = (req, res, next) => {
 };
 
 /**
+ * @function getTotalUnreadCount
+ * @description Retrieve count of total unread notifications
+ **/
+exports.getTotalUnreadCount = catchAsync(async (req, res, next) => {
+  const notifications = await Notification.find({
+    user_to: { $eq: req.params.id },
+  });
+
+  const count = countUnreadNotifications(notifications);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      doc: count,
+    },
+  });
+});
+
+/**
  * @function getNotificationsByUser
  * @description Retrieve all notifications to specified user
  **/

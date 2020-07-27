@@ -17,6 +17,8 @@ router.get(
   notificationController.getNotificationsByUserId
 );
 
+router.get('/count/:id', notificationController.getTotalUnreadCount);
+
 router.route('/:id/open').patch(notificationController.setOpen);
 router.route('/:id/read').patch(notificationController.setRead);
 

@@ -5,6 +5,7 @@ import {
   FETCH_NOTIFICATIONS_END,
   GET_NOTIFICATIONS,
   GET_NOTIFICATION,
+  GET_NOTIFICATION_COUNT,
   UPDATE_NOTIFICATION,
   DELETE_NOTIFICATION,
   INCREMENT_NOTIFICATIONS_PAGE,
@@ -29,6 +30,23 @@ export const incrementNotificationsPage = () => async (dispatch) => {
   dispatch({
     type: INCREMENT_NOTIFICATIONS_PAGE,
   });
+};
+
+/**
+ * @action    getNotificationCount
+ * @description Retrieve count of total unread notifications
+ **/
+export const getNotificationCount = (userId) => async (dispatch) => {
+  try {
+    // make api call
+    const res = await axios.get(`/api/notifications/count/${userId}`);
+    dispatch({
+      type: GET_NOTIFICATION_COUNT,
+      payload: res.data.data.doc,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
