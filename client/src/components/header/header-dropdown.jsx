@@ -32,6 +32,19 @@ const HeaderDropdown = ({
     }
   }, [visible]);
 
+  // 'Initialize' theme to dark if no theme is set yet
+  useEffect(() => {
+    const currentTheme = localStorage.getItem('theme');
+    if (!currentTheme) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      const toggleSwitch = document.querySelector(
+        '.toggle-switch--item input[type="checkbox"]'
+      );
+      toggleSwitch.checked = true;
+    }
+  }, []);
+
+  // 'Preload' theme if set in local storage already
   useEffect(() => {
     const toggleSwitch = document.querySelector(
       '.toggle-switch--item input[type="checkbox"]'
@@ -39,7 +52,6 @@ const HeaderDropdown = ({
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme) {
       document.documentElement.setAttribute('data-theme', currentTheme);
-
       if (currentTheme === 'dark') {
         toggleSwitch.checked = true;
       }
@@ -52,16 +64,6 @@ const HeaderDropdown = ({
       setVisible(true);
     } else {
       setVisible(false);
-    }
-  };
-
-  const handleTheme = (e) => {
-    if (e.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
     }
   };
 
@@ -80,6 +82,16 @@ const HeaderDropdown = ({
   const handleLogout = (e) => {
     e.preventDefault();
     logout(history);
+  };
+
+  const handleTheme = (e) => {
+    if (e.target.checked) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
   return (
