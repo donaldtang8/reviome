@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -11,7 +12,10 @@ import sprite from '../../assets/sprite.svg';
 const NotificationItem = ({ deleteNotificationById, notification }) => {
   return (
     <div className="notification__container">
-      <div className="notification__header">
+      <Link
+        to={`/profile/${notification.user_from.uName}`}
+        className="notification__header"
+      >
         <img
           className="notification__header--img"
           src={notification.user_from.photo}
@@ -20,7 +24,7 @@ const NotificationItem = ({ deleteNotificationById, notification }) => {
         <div className="notification__header--name">
           {notification.user_from.fullName}
         </div>
-      </div>
+      </Link>
       <div className="notification__body">
         <div
           className="notification__item--action"

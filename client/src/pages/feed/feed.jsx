@@ -129,7 +129,9 @@ const Feed = ({
       {page === 1 && loading ? (
         <Spinner />
       ) : posts.length === 0 ? (
-        <div className="center padding-small">No posts here!</div>
+        <div className="center padding-small">
+          No posts here, perhaps you should check the explore page!
+        </div>
       ) : (
         <div className="posts__container">
           {posts.map((post) =>

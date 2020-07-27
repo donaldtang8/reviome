@@ -134,7 +134,7 @@ const ExploreFeed = ({
         <Spinner />
       ) : posts.length === 0 ? (
         <div className="center padding-small">
-          No posts here. Please check out the explore page!
+          No posts yet. Be the first one to make a post!
         </div>
       ) : (
         <Fragment>
