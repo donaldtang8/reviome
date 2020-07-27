@@ -3,30 +3,30 @@ const mongoose = require('mongoose');
 const commentSchema = new mongoose.Schema({
   post: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Post'
+    ref: 'Post',
   },
   text: {
     type: String,
-    required: [true, 'Text is required']
+    required: [true, 'Text is required'],
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   likes: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   ],
   likeCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   createdAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now,
+  },
 });
 
 // INDEX
@@ -42,17 +42,17 @@ commentSchema.index({ post: 1, user: 1 });
  * @function
  * @description Populate user details on post
  **/
-commentSchema.pre(/^find/, function(next) {
+commentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: '-__v -passwordChangedAt'
+    select: '-__v -passwordChangedAt',
   }).populate('likes');
   next();
 });
 
 // INSTANCE/STATIC METHODS
-commentSchema.methods.likedComment = function(userId) {
-  const found = this.likes.filter(like => like._id.toString() === userId);
+commentSchema.methods.likedComment = function (userId) {
+  const found = this.likes.filter((like) => like._id.toString() === userId);
   return found.length > 0;
 };
 

@@ -59,7 +59,7 @@ const reportSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   resolvedAt: {
     type: Date,
