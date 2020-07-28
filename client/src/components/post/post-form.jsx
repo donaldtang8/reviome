@@ -51,7 +51,6 @@ const PostForm = ({
     setFormData({ title: '', text: '', link: '', category: '' });
     document.querySelector('select#categories').selectedIndex = 0;
     handlePopup();
-    history.push('/');
   };
 
   const handlePopup = (e) => {
