@@ -119,7 +119,7 @@ export const logout = (history) => async (dispatch) => {
     dispatch({
       type: LOGOUT,
     });
-    history.push('/');
+    history.push('/login');
   } catch (err) {
     console.log(err);
   }
