@@ -211,3 +211,9 @@ body {
   border-radius: 10px;
   background: #6d6d6d;
 }
+
+@include respond(phone) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
