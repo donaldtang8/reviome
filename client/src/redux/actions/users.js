@@ -351,6 +351,7 @@ export const followUserById = (id) => async (dispatch) => {
         followers: res.data.data.followers,
       },
     });
+    console.log(res.data);
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {

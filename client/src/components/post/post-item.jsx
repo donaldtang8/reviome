@@ -1,14 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
-
+// redux
+import { connect } from 'react-redux';
+// imports
 import Moment from 'react-moment';
-
+// components
 import CommentForm from './../comment/comment-form';
 import CommentItem from './../comment/comment-item';
 import PostDropdown from './post-dropdown';
+// gtag
+import TagManager from 'react-gtm-module';
 
 import {
   likePostById,
@@ -32,6 +34,14 @@ const PostItem = ({
   reportItemTypeCallback,
 }) => {
   const [showComments, toggleShowComments] = useState(false);
+
+  let tagManagerArgs = {
+    dataLayer: {
+      userId: user._id,
+      event: 'like_post',
+    },
+    dataLayerName: 'PageDataLayer',
+  };
 
   return (
     <div className="post-item__container">

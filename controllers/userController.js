@@ -240,7 +240,7 @@ exports.followUserById = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       following: self.following,
-      followers: self.followers,
+      followers: user.followers,
     },
   });
 });
@@ -258,12 +258,12 @@ exports.unfollowUserById = catchAsync(async (req, res, next) => {
   }
 
   // 2. Find user from given id and update follower count
-  await User.findByIdAndUpdate(req.params.id, {
+  let user = await User.findByIdAndUpdate(req.params.id, {
     $inc: { followers: -1 },
   });
 
   // 3. Remove followed user from self's following list
-  self = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     req.user.id,
     {
       $pull: { following: req.params.id },
@@ -275,7 +275,7 @@ exports.unfollowUserById = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       following: self.following,
-      followers: self.followers,
+      followers: user.followers,
     },
   });
 });

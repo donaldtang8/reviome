@@ -7,10 +7,19 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 // REDUX PERSIST
 import { PersistGate } from 'redux-persist/integration/react';
+// GTM
+import TagManager from 'react-gtm-module';
 
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+const tagManagerArgs = {
+  gtmId: 'GTM-T8V295T',
+  dataLayerName: 'PageDataLayer',
+};
+
+TagManager.initialize(tagManagerArgs);
 
 ReactDOM.render(
   <Provider store={store}>
