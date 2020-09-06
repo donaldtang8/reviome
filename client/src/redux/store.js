@@ -9,8 +9,8 @@ let middlewares = [thunk];
 
 export const store = createStore(
   rootReducer,
-  applyMiddleware(...middlewares)
-  // composeWithDevTools(applyMiddleware(...middlewares))
+  // applyMiddleware(...middlewares)
+  composeWithDevTools(applyMiddleware(...middlewares))
 );
 
 export const persistor = persistStore(store);

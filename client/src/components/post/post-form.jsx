@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
-
+import { withRouter } from 'react-router-dom';
+// redux
+import { connect } from 'react-redux';
 import { getAllCategories } from './../../redux/actions/categories';
+// components
 import { createPost } from './../../redux/actions/posts';
+// gtag
+import TagManager from 'react-gtm-module';
 
 const PostForm = ({
   getAllCategories,
   createPost,
+  auth: { user },
   categories: { categories },
   history,
 }) => {
   useEffect(() => {
     getAllCategories();
   }, [getAllCategories]);
+
+  let tagManagerArgs = {
+    dataLayer: {
+      userId: user._id,
+      event: 'create_post',
+    },
+    dataLayerName: 'PageDataLayer',
+  };
 
   const [formData, setFormData] = useState({
     title: '',
@@ -51,6 +62,7 @@ const PostForm = ({
     setFormData({ title: '', text: '', link: '', category: '' });
     document.querySelector('select#categories').selectedIndex = 0;
     handlePopup();
+    TagManager.dataLayer(tagManagerArgs);
   };
 
   const handlePopup = (e) => {
@@ -170,6 +182,7 @@ PostForm.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   categories: state.categories,
 });
 

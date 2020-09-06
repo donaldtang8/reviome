@@ -25,6 +25,7 @@ module.exports = class Email {
    * @this  Binded email class object
    **/
   newTransport() {
+    console.log("Creating new transport");
     // we will only create transport objects and send emails in the production environment
     if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
@@ -71,6 +72,7 @@ module.exports = class Email {
     };
     // 3. Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
+    console.log("Sent email");
   }
 
   /**

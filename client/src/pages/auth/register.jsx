@@ -1,14 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import { Link, withRouter } from 'react-router-dom';
+// redux
+import { connect } from 'react-redux';
 import { register } from './../../redux/actions/auth';
-
+// components
 import Spinner from './../../components/spinner/spinner';
+// gtag
+import TagManager from 'react-gtm-module';
 
 const Register = ({
-  auth: { isAuthenticated, loading },
+  auth: { isAuthenticated, loading, user },
   register,
   history,
 }) => {
@@ -35,6 +37,23 @@ const Register = ({
     password,
     passwordConfirm,
   } = formData;
+
+  let tagManagerArgs = {
+    dataLayer: {
+      userId: null,
+      event: 'register_user',
+      page: 'register',
+    },
+    dataLayerName: 'PageDataLayer',
+  };
+
+  useEffect(() => {
+    if (user != null) {
+      tagManagerArgs.dataLayer.userId = user._id;
+      TagManager.dataLayer(tagManagerArgs);
+      history.push('/');
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
