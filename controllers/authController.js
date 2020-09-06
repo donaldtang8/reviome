@@ -92,7 +92,9 @@ exports.restrictToMe = (Model) =>
  * @return  Returns signed JWT token
  **/
 const signToken = (id) => {
-  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+  return jwt.sign({
+    id: id
+  }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
@@ -152,20 +154,25 @@ exports.signup = catchAsync(async (req, res, next) => {
  * @description Login user
  **/
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password
+  } = req.body;
   // 1. check if email and passsword exist in request body
   if (!email || !password) {
     return next(new AppError('Please provide an email and password', 400));
   }
   // 2. Find user associated with email
-  const user = await User.findOne({ email: email }).select('+pass');
+  const user = await User.findOne({
+    email: email
+  }).select('+pass');
   if (!user) return next(new AppError('Incorrect email or password', 401));
   // 3. Check if user is banned
   if (user.banExpires)
     return next(
       new AppError(
         'This account has been suspended until ' +
-          user.banExpires.toLocaleDateString(),
+        user.banExpires.toLocaleDateString(),
         401
       )
     );
@@ -188,7 +195,9 @@ exports.logout = (req, res) => {
   //   httpOnly: true,
   // });
   res.clearCookie('jwt');
-  res.status(200).json({ status: 'success' });
+  res.status(200).json({
+    status: 'success'
+  });
 };
 
 /**
@@ -197,17 +206,20 @@ exports.logout = (req, res) => {
  **/
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1. Get user based on POSTed email
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({
+    email: req.body.email
+  });
   if (!user) {
     return res.status(200).json({
       status: 'success',
-      message:
-        'If there was an email associated with the account, a reset password email has been sent',
+      message: 'If there was an email associated with the account, a reset password email has been sent',
     });
   }
   // 2. Generate random reset password Token
   const resetToken = user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
+  await user.save({
+    validateBeforeSave: false
+  });
 
   // 3. Send it to user's email
   try {
@@ -216,13 +228,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      message:
-        'If there was an email associated with the account, a reset password email has been sent',
+      message: 'If there was an email associated with the account, a reset password email has been sent',
     });
   } catch (err) {
     user.passResetToken = undefined;
     user.passResetExpires = undefined;
-    await user.save({ validateBeforeSave: false });
+    await user.save({
+      validateBeforeSave: false
+    });
     return next(
       new AppError(
         'There was an error sending the email. Please try again later!',
@@ -246,7 +259,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 2. Find a user with that reset token and valid password expires at
   const user = await User.findOne({
     passResetToken: hashedToken,
-    passResetExpires: { $gt: Date.now() },
+    passResetExpires: {
+      $gt: Date.now()
+    },
   });
 
   if (!user) {

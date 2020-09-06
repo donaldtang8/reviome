@@ -1,6 +1,10 @@
 import axios from 'axios';
-import { setAlert } from './alert';
-import { logout } from './auth';
+import {
+  setAlert
+} from './alert';
+import {
+  logout
+} from './auth';
 import {
   RESET_USERS_STATE,
   RESET_USERS,
@@ -15,7 +19,10 @@ import {
   USER_ERROR,
 } from './types';
 
-import { uploadImage, getImageURL } from './../../firebase/firebase.utils';
+import {
+  uploadImage,
+  getImageURL
+} from './../../firebase/firebase.utils';
 
 const config = {
   headers: {
@@ -351,7 +358,6 @@ export const followUserById = (id) => async (dispatch) => {
         followers: res.data.data.followers,
       },
     });
-    console.log(res.data);
   } catch (err) {
     /* back end server-returned errors */
     if (err.response) {

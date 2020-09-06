@@ -23,7 +23,10 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  const { type, payload } = action;
+  const {
+    type,
+    payload
+  } = action;
 
   switch (type) {
     // Authentication related actions
@@ -43,50 +46,49 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
-        user: payload,
+          loading: false,
+          user: payload,
       };
     case LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
-        loading: false,
-        user: null,
-        errors: [],
+          loading: false,
+          user: null,
+          errors: [],
       };
     case AUTH_ERROR:
       return {
         ...state,
         loading: false,
       };
-    // User related actions
+      // User related actions
     case UPDATE_ME:
       return {
         ...state,
         user: payload,
-        loading: false,
+          loading: false,
       };
     case FOLLOW_USER:
     case UNFOLLOW_USER:
       return {
         ...state,
         user: {
-          ...state.user,
-          following: payload.following,
-          followers: payload.followers,
-        },
-        loading: false,
+            ...state.user,
+            following: payload.following,
+          },
+          loading: false,
       };
     case BLOCK_USER:
     case UNBLOCK_USER:
       return {
         ...state,
         loading: false,
-        user: {
-          ...state.user,
-          following: payload.following,
-          block_to: payload.blocking,
-        },
+          user: {
+            ...state.user,
+            following: payload.following,
+            block_to: payload.blocking,
+          },
       };
     case FOLLOW_CATEGORY:
     case UNFOLLOW_CATEGORY:

@@ -37,7 +37,9 @@ const limiter = rateLimit({
 });
 
 // body parser - reading data from body into req.body
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({
+  limit: '10kb'
+}));
 
 // cors - cross origin request, checks that no exterior front end is trying to access our server
 app.use(cors());
@@ -63,7 +65,9 @@ app.use(
 if (process.env.NODE_ENV === 'production') {
   app.use('/api', limiter);
   app.use(compression());
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(enforce.HTTPS({
+    trustProtoHeader: true
+  }));
   app.use(express.static(path.join(__dirname, 'client/build')));
 }
 

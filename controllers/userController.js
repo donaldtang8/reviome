@@ -67,7 +67,9 @@ exports.getUserById = catchAsync(async (req, res, next) => {
  * @description Retrieve user document given username
  **/
 exports.getUserByUsername = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ uName: req.params.username });
+  const user = await User.findOne({
+    uName: req.params.username
+  });
 
   if (!user || !user.active) {
     return next(new AppError('No account found with that username', 404));
@@ -133,7 +135,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
  * @description Set user to inactive
  **/
 exports.deleteMe = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false });
+  await User.findByIdAndUpdate(req.user.id, {
+    active: false
+  });
 
   res.status(204).json({
     status: 'success',
@@ -208,9 +212,13 @@ exports.followUserById = catchAsync(async (req, res, next) => {
   }
 
   // 2. Retrieve self user object
-  const self = await User.findById(req.user.id);
+  let self = await User.findById(req.user.id);
 
-  // 3. Retrieve user object from  user params and check if it is a real user
+  if (self.isFollowingUser(req.params.id)) {
+    return next(new AppError('Already following user', 400));
+  }
+
+  // 3. Retrieve user from given id and update follower count
   let user = await User.findById(req.params.id);
 
   if (!user) {
@@ -229,12 +237,16 @@ exports.followUserById = catchAsync(async (req, res, next) => {
 
   // 6. Find user from given id and update follower count
   user = await User.findByIdAndUpdate(req.params.id, {
-    $inc: { followers: 1 },
+    $inc: {
+      followers: 1
+    },
   });
 
   // 7. Add followed user to self's following list
   self.following.push(req.params.id);
-  await self.save({ validateBeforeSave: false });
+  await self.save({
+    validateBeforeSave: false
+  });
 
   res.status(200).json({
     status: 'success',
@@ -250,7 +262,12 @@ exports.followUserById = catchAsync(async (req, res, next) => {
  * @description Unfollow user by id
  **/
 exports.unfollowUserById = catchAsync(async (req, res, next) => {
-  // 1. Check to see if we are already following user
+  // 1. Check if user params is user itself
+  if (req.user.id === req.params.id) {
+    return next(new AppError('Not following user', 400));
+  }
+
+  // 2. Retrieve self user object
   let self = await User.findById(req.user.id);
 
   if (!self.isFollowingUser(req.params.id)) {
@@ -258,17 +275,27 @@ exports.unfollowUserById = catchAsync(async (req, res, next) => {
   }
 
   // 2. Find user from given id and update follower count
-  let user = await User.findByIdAndUpdate(req.params.id, {
-    $inc: { followers: -1 },
+  let user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError('No account found with that ID', 404));
+  }
+
+  user = await User.findByIdAndUpdate(req.params.id, {
+    $inc: {
+      followers: -1
+    },
   });
 
   // 3. Remove followed user from self's following list
-  await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $pull: { following: req.params.id },
-    },
-    { new: true }
+  self = await User.findByIdAndUpdate(
+    req.user.id, {
+      $pull: {
+        following: req.params.id
+      },
+    }, {
+      new: true
+    }
   );
 
   res.status(200).json({
@@ -303,48 +330,60 @@ exports.blockUserById = catchAsync(async (req, res, next) => {
   // 4. If user who made request is following user to be blocked, remove user who made request from following list and decrement follower count from user to be blocked
   if (self.isFollowingUser(req.params.id)) {
     self = await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $pull: { following: req.params.id },
-      },
-      { new: true }
+      req.user.id, {
+        $pull: {
+          following: req.params.id
+        },
+      }, {
+        new: true
+      }
     );
 
     await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $inc: { followers: -1 },
-      },
-      { new: true }
+      req.params.id, {
+        $inc: {
+          followers: -1
+        },
+      }, {
+        new: true
+      }
     );
   }
 
   // 5. If user to be blocked is following user who made request, remove user to be blocked from following list and decrement follower count from user who made request
   if (user.isFollowingUser(req.user.id)) {
     user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $pull: { following: req.user.id },
-      },
-      { new: true }
+      req.params.id, {
+        $pull: {
+          following: req.user.id
+        },
+      }, {
+        new: true
+      }
     );
 
     await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $inc: { followers: -1 },
-      },
-      { new: true }
+      req.user.id, {
+        $inc: {
+          followers: -1
+        },
+      }, {
+        new: true
+      }
     );
   }
 
   // 6. Add user to self user object's block_to list
   self.block_to.push(req.params.id);
-  await self.save({ validateBeforeSave: false });
+  await self.save({
+    validateBeforeSave: false
+  });
 
   // 7. Add self to user object's block_from list
   user.block_from.push(req.user.id);
-  await user.save({ validateBeforeSave: false });
+  await user.save({
+    validateBeforeSave: false
+  });
 
   res.status(200).json({
     status: 'success',
@@ -376,19 +415,23 @@ exports.unblockUserById = catchAsync(async (req, res, next) => {
 
   // 3. Remove followed user from self's following list
   self = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $pull: { block_to: req.params.id },
-    },
-    { new: true }
+    req.user.id, {
+      $pull: {
+        block_to: req.params.id
+      },
+    }, {
+      new: true
+    }
   );
 
   await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      $pull: { block_from: req.user.id },
-    },
-    { new: true }
+    req.params.id, {
+      $pull: {
+        block_from: req.user.id
+      },
+    }, {
+      new: true
+    }
   );
 
   res.status(200).json({
@@ -435,12 +478,12 @@ exports.banUserById = catchAsync(async (req, res, next) => {
 
   // 3. Set banExpires property
   user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
+    req.params.id, {
       banExpires: banExpiresDate,
       active: false,
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 
   res.clearCookie('jwt');
@@ -469,12 +512,12 @@ exports.unbanUserById = catchAsync(async (req, res, next) => {
 
   // 3. Set banExpires property
   user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
+    req.params.id, {
       banExpires: undefined,
       active: true,
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 
   res.status(200).json({

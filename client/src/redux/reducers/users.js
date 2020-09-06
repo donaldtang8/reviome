@@ -19,62 +19,72 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  const { type, payload } = action;
+  const {
+    type,
+    payload
+  } = action;
 
   switch (type) {
     case RESET_USERS_STATE:
       return {
         ...state,
         users: [],
-        user: null,
-        loading: false,
-        errors: [],
+          user: null,
+          loading: false,
+          errors: [],
       };
     case RESET_USERS:
       return {
         ...state,
         users: [],
-        loading: false,
+          loading: false,
       };
     case RESET_USER:
       return {
         ...state,
         user: null,
-        loading: false,
+          loading: false,
       };
     case GET_USERS:
       return {
         ...state,
         users: payload,
-        loading: false,
+          loading: false,
       };
     case GET_USER:
       return {
         ...state,
         user: payload,
-        loading: false,
+          loading: false,
       };
     case FOLLOW_USER:
+      return {
+        ...state,
+        loading: false,
+          user: {
+            ...state.user,
+            followers: state.user.followers + 1
+          },
+      };
     case UNFOLLOW_USER:
       return {
         ...state,
         loading: false,
-        user: {
-          ...state.user,
-          following: payload.following,
-          followers: payload.followers,
-        },
+          user: {
+            ...state.user,
+            followers: state.user.followers - 1
+          },
       };
     case BLOCK_USER:
     case UNBLOCK_USER:
       return {
         ...state,
         loading: false,
-        user: {
-          ...state.user,
-          following: payload.following,
-          block_to: payload.blocking,
-        },
+          user: {
+            ...state.user,
+            following: payload.following,
+            block_to: payload.blocking,
+          },
       };
     case USER_ERROR:
       return {
