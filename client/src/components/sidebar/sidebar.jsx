@@ -47,6 +47,17 @@ const Sidebar = ({ auth }) => {
             Favorites
           </div>
         </Link>
+        <Link to="/search" onClick={() => setNav('search')}>
+          <div
+            className={
+              nav === 'search'
+                ? 'sidebar__nav--item sidebar__nav--selected'
+                : 'sidebar__nav--item'
+            }
+          >
+            Search
+          </div>
+        </Link>
         {auth.user.role === 'admin' && (
           <Fragment>
             <Link to="/reports" onClick={() => setNav('reports')}>
