@@ -17,7 +17,7 @@
     "firebase": "^7.14.6",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.26.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-easy-crop": "^3.1.0",
